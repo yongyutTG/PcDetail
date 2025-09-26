@@ -1,0 +1,26 @@
+/*ขนาดความกว้างจอ */
+.container-fluid {
+    width: 100%;
+    max-width: 1600px;
+    /* กำหนดความกว้างสูงสุด */
+    min-width: 0px;
+    /* ความกว้างต่ำสุด */
+
+}
+
+.search-container {
+    display: flex;
+    flex-direction: column;
+    padding: 10px; 
+    align-items: center;
+    text-align: center;
+    margin-top: -60px;  /* เปลี่ยนจาก 0px เป็น -20px */
+    height: 140px;
+    /* border: 1px solid #b4b4b4; */
+}
+.search-container label {
+    font-size: 16px;
+    font-weight: 500;
+    color: #420c61;
+    margin-bottom: 8px;
+}

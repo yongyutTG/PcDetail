@@ -1,0 +1,266 @@
+/*ขนาดความกว้างจอ */
+.container-fluid {
+    width: 100%;
+    max-width: 1600px;
+    /* กำหนดความกว้างสูงสุด */
+    min-width: 0px;
+    /* ความกว้างต่ำสุด */
+    margin: 0 auto;
+
+
+}
+
+.table-responsive-custom {
+    overflow-x: auto;     /* เลื่อนซ้ายขวา */
+    overflow-y: auto;     /* เลื่อนขึ้นลง */
+    max-height: 500px;    /* จำกัดความสูงของตาราง */
+    width: 100%;
+    border: 1px solid #ddd;
+}
+
+.all-member-container {
+    width: 1000px;
+    height: 60px;
+    background-color: #f8f9fa;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    border-radius: 6px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+    margin-top: -60px;
+    padding: 0px;
+    position: relative;
+
+}
+
+/* ปรับแต่ง form elements */
+.form-label {
+    font-weight: 1500;
+    margin-bottom: 5.5rem;
+    color: #495057;
+}
+
+.form-select,
+.form-control {
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+    padding: 0.5rem 0.75rem;
+    transition: all 0.2s;
+}
+
+.form-select:focus,
+.form-control:focus {
+    border-color: #beaed9;
+    box-shadow: 0 0 0 0.2rem rgba(61, 33, 107, 0.25);
+}
+
+/* ปรับแต่งปุ่ม */
+.btn.btn-success.search-btn {
+    background-color: #3d216b;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s;
+    font-size: 14px;
+}
+
+.d-flex.gap-2 {
+    gap: 0.2rem !important;
+}
+
+.btn {
+    min-width: 100px;
+}
+
+.btn.btn-success.search-btn:hover {
+    background-color: #3d216b;
+    transform: translateY(-1px);
+}
+
+.btn.btn-success.search-btn:active {
+    transform: translateY(0);
+}
+
+.btn-reset {
+    background-color: #a9a7ac;
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s;
+    font-size: 14px;
+}
+
+.btn-reset:hover {
+    background-color: #b3b2b4;
+    transform: translateY(-1px);
+}
+
+.btn-reset:active {
+    transform: translateY(0);
+}
+
+/* ปรับแต่งหัวข้อ */
+h5 {
+    color: #141415;
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+/* ปรับระยะห่างระหว่าง elements */
+.row.align-items-center {
+    gap: 0.5rem;
+}
+
+/* ปรับขนาดและสไตล์ของ label */
+.col-form-label {
+    /* padding-top: 0; */
+    padding-bottom: 0;
+    /* margin-bottom: 0; */
+    font-weight: 500;
+
+    white-space: nowrap;
+}
+
+.report-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .search-container {
+        padding: 1rem;
+    }
+
+    h5 {
+        margin-bottom: 1rem !important;
+        text-align: center;
+    }
+
+    .col-md-3,
+    .col-md-2 {
+        margin-bottom: 1rem;
+    }
+}
+
+
+.report-container {
+    margin-top: 20px;
+}
+
+.table th,
+.table td {
+    vertical-align: middle;
+    /* background-color: #ffffff; */
+    text-align: center;
+    font-size: 14.4px;
+    /* ปรับขนาดฟอนต์ตามต้องการ */
+    border: 1px solid #989898;
+    padding: 8px;
+    /* ปรับระยะห่างภายในเซลล์ */
+    white-space: nowrap;
+    /* ป้องกันการตัดคำ */
+    overflow: hidden;
+    /* ป้องกันการแสดงผลเกินขอบเขต */
+    text-overflow: ellipsis;
+
+
+}
+
+
+.table-responsive {
+    min-height: 300px;
+}
+
+
+.table th,
+.table td {
+    vertical-align: middle;
+    /* background-color: #ffffff; */
+    text-align: center;
+    /* font-size: 16px; ปรับขนาดฟอนต์ตามต้องการ */
+    border: 1px solid #989898;
+    padding: 8px;
+    /* ปรับระยะห่างภายในเซลล์ */
+    white-space: nowrap;
+    /* ป้องกันการตัดคำ */
+    overflow: hidden;
+    /* ป้องกันการแสดงผลเกินขอบเขต */
+    text-overflow: ellipsis;
+    /* แสดง ... เมื่อข้อความยาวเกินไป */
+}
+
+
+
+
+@media print {
+    .pdf-header {
+        display: table-header-group !important;
+    }
+
+   /* ซ่อนไว้ตอนแสดงหน้าจอ */
+.print-only {
+    display: none !important;
+}
+
+@media print {
+    /* ซ่อนทุกอย่างก่อน */
+    body * {
+        visibility: hidden !important;
+    }
+
+    /* แสดงเฉพาะส่วนรายงาน */
+    .report-container,
+    .report-container * {
+        visibility: visible !important;
+    }
+
+    /* จัดการตำแหน่งให้แสดงเต็มหน้ากระดาษ */
+    .report-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+    }
+
+    /* ซ่อนปุ่ม/หัวเมนู */
+    .card-header .btn,
+    .card-header button {
+        display: none !important;
+    }
+
+    /* ปรับฟอนต์และตารางให้ดูดีตอนพิมพ์ */
+    .table {
+        width: 100% !important;
+        font-size: 14px !important;
+        border-collapse: collapse !important;
+    }
+
+    .table th,
+    .table td {
+        border: 1px solid #000 !important;
+        padding: 6px 8px !important;
+        text-align: center;
+    }
+
+   /* แสดง tfoot เฉพาะหน้าสุดท้าย */
+    .print-only {
+        display: table-footer-group !important;
+    }
+    /* ป้องกันการตัดแถวข้ามหน้า */
+    tfoot tr {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+    }
+
+    /* ปรับ margin กระดาษ */
+    @page {
+        margin: 1.5cm;
+    }
+}
+
+}

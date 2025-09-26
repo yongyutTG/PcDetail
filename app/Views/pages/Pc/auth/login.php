@@ -14,7 +14,7 @@
 
               <div class="mb-3">
 
-                <label class="form-label">ชื่อผู้ใช้งาน</label>
+                <label class="form-label">ชื่อผู้ใช้งาน(production)</label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
                   <input type="text" name="USER_NAME" class="form-control">

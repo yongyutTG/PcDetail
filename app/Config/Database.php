@@ -36,7 +36,7 @@ public array $default = [
         'DBDriver'     => 'sqlsrv',
         'DBPrefix'     => '',
         'pConnect'     => false,
-        'DBDebug'      => true,
+        'DBDebug'  => (ENVIRONMENT !== 'production'),
         'charset'      => 'utf8',
         'DBCollat'     => 'utf8_general_ci',
         'swapPre'      => '',
@@ -53,26 +53,25 @@ public array $default = [
      *
      * @var array<string, mixed>
      */
-    public array $tests = [
-        'DSN'         => '',
-        'hostname'    => '127.0.0.1',
-        'username'    => '',
-        'password'    => '',
-        'database'    => ':memory:',
-        'DBDriver'    => 'SQLite3',
-        'DBPrefix'    => 'db_',  // Needed to ensure we're working correctly with prefixes live. DO NOT REMOVE FOR CI DEVS
-        'pConnect'    => false,
-        'DBDebug'     => true,
-        'charset'     => 'utf8',
-        'DBCollat'    => 'utf8_general_ci',
-        'swapPre'     => '',
-        'encrypt'     => false,
-        'compress'    => false,
-        'strictOn'    => false,
-        'failover'    => [],
-        'port'        => 3306,
-        'foreignKeys' => true,
-        'busyTimeout' => 1000,
+    public array $test = [
+       'DSN'          => '',
+        'hostname'     => '172.17.1.152',
+        'username'     => 'user_webapi',
+        'password'     => 'rB#$6add2fSX&^Dt',
+        'database'     => 'coop_test2',
+        'DBDriver'     => 'sqlsrv',
+        'DBPrefix'     => '',
+        'pConnect'     => false,
+        'DBDebug'      => true,
+        'charset'      => 'utf8',
+        'DBCollat'     => 'utf8_general_ci',
+        'swapPre'      => '',
+        'encrypt'      => false,
+        'compress'     => false,
+        'strictOn'     => false,
+        'failover'     => [],
+        'port'         => 1433,
+        'numberNative' => false,
     ];
 
     public function __construct()

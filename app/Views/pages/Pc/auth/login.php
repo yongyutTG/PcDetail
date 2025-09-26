@@ -8,7 +8,7 @@
       <div class="col-md-5 col-lg-4">
         <div class="card shadow-lg">
           <div class="card-body p-4">
-            <h4 class="text-center mb-4"><i class="bi bi-person-circle"></i> เข้าสู่ระบบ PC Detail</h4>
+            <h4 class="text-center mb-4"><i class="bi bi-person-circle"></i>เข้าสู่ระบบ PC Detail</h4>
             <form id="loginForm" method="post">
               <div class="mb-3">
                 <label class="form-label">ชื่อผู้ใช้งาน</label>

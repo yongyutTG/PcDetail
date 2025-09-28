@@ -1,0 +1,107 @@
+    /*ขนาดความกว้างจอ */
+.container-fluid {
+    width: 100%;
+    max-width: 1600px;
+    /* กำหนดความกว้างสูงสุด */
+    min-width: 0px;
+    /* ความกว้างต่ำสุด */
+    margin: 0 auto;
+    
+
+}
+
+.search-container {
+    display: flex;
+    flex-direction: column;
+    padding: 3px; 
+    align-items: center;
+    text-align: center;
+    margin-top: -60px;  /* เปลี่ยนจาก 0px เป็น -20px */
+    height: 70px;
+    /* border: 1px solid #b4b4b4; */
+}
+.search-container label {
+    font-size: 16px;
+    font-weight: 500;
+    color: #420c61;
+    margin-bottom: 8px;
+}
+.search-input {
+    font-size: 14px;
+    width: 300px; /* กำหนดขนาดของ Textbox */
+    padding: 8px; /* ระยะห่างภายในของ Textbox */
+    border-radius: 5px; /* มุมโค้งมน */
+    background-color: #fffdfd;
+    border: 1px solid #ccc; /* เส้นขอบ */
+}
+.button-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px; /* ระยะห่างระหว่างปุ่ม */
+    margin-top: 10px;
+}
+
+.btn-custom {
+    font-size: 14px;
+    padding: 8px 25px;
+    background-color: #3d216b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.btn-custom-clear {
+    font-size: 14px;
+    padding: 8px 25px;
+    background-color: #3d216b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.btn-custom:hover {
+    
+    background-color: #3d216b;
+}
+
+
+.tab-show {
+    /* background-color: #f2f2f2; */
+    padding: 20px;
+   
+    margin-bottom: 20px;
+    /* border: 1px solid #b4b4b4; */
+}
+
+.tab-content label {
+    font-weight: bold;
+    /* text-align: center; */
+    display: block;
+    }
+.nav-tabs .nav-link {
+    font-size: 14px; /* ปรับขนาดตัวอักษร */
+    
+    /* font-weight: bold;  */
+}
+    /* สีพื้นหลังและข้อความของแท็บ */
+    .nav-pills .nav-link {
+        color: #333;
+        background-color: #f1f1f1;
+        margin-right: 5px;
+    }
+
+    /* สีของแท็บที่ active */
+    .nav-pills .nav-link.active {
+        color: #fff !important;
+        background-color: #3d216b !important;
+    }
+
+    /* เพิ่ม hover effect */
+    .nav-pills .nav-link:hover {
+        background-color: #e2e6ea;
+    }
+
+    /* ปรับไอคอนให้มีช่องว่าง */
+    .nav-pills .nav-link i {
+        margin-right: 5px;
+    }

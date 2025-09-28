@@ -1,0 +1,339 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit&display=swap');
+* {
+    font-family: 'Kanit', sans-serif;
+    box-sizing: border-box;
+    font-style: normal;
+    font-weight: 100;
+    /* font-weight: 300; */
+    font-style: normal;
+}
+
+/*ขนาดความกว้างจอ */
+.container-fluid {
+    width: 100%; 
+    max-width: 1600px; /* กำหนดความกว้างสูงสุด */
+    min-width: 0px; /* ความกว้างต่ำสุด */
+    padding: 30px; /* เพิ่มระยะห่างภายใน */
+    margin: 0 auto; /* จัดให้อยู่ตรงกลาง */
+    background-color: #ffffff;
+    border-radius: 10px; /* มุมโค้ง */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* เพิ่มเงา */
+}
+
+/* Navbar */
+.navbar.navbar-dark.bg-dark  {
+    color: #fff;
+    background: #3d216b !important;
+    padding: 15px 46px;
+    border-radius: 0;
+    border: none;
+    box-shadow: 0 0 4px rgba(0, 0, 0, .1);
+}
+.dropdown-menu {
+    font-size: 12px;
+}
+
+.navbar img {
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    margin-right: 10px;
+}
+
+.navbar .navbar-brand {
+    color: #efe5ff;
+    padding-left: 0;
+    padding-right: 50px;
+    font-size: 16px;
+}
+
+.navbar .navbar-brand i {
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+
+.navbar .nav-item i {
+    font-size: 14px;
+
+}
+
+.navbar .nav-item span {
+    position: relative;
+    top: 3px;
+}
+/* .navbar-nav .nav-link:hover {
+    background-color: #fffeff;
+    color: rgb(67, 5, 115) !important;
+    border-radius: 5px;
+} */
+.navbar .navbar-nav>a {
+    color: #4c199c;
+    padding: 8px 15px;
+    font-size: 14px;
+}
+
+
+.navbar .navbar-nav>a>i {
+    display: block;
+    text-align: center;
+}
+
+.navbar .dropdown-item i {
+    font-size: 14px;
+    min-width: 22px;
+}
+
+.navbar .dropdown-item .material-icons {
+    font-size: 14px;
+    line-height: 16px;
+    vertical-align: middle;
+    margin-top: -2px;
+}
+
+
+.navbar .dropdown-menu {
+    border-radius: 1px;
+    border-color: #3d216b;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .05);
+}
+
+.navbar .dropdown-menu a {
+    color: #3d216b !important;
+    padding: 8px 20px;
+    line-height: normal;
+    font-size: 15px;
+}
+
+.navbar .navbar-nav .user-action {
+    padding: 9px 15px;
+    font-size: 15px;
+}
+
+.navbar .navbar-toggle {
+    border-color: #fff;
+}
+
+.navbar .navbar-toggle .icon-bar {
+    background: #fff;
+}
+
+.navbar .navbar-toggle:focus,
+.navbar .navbar-toggle:hover {
+    background: transparent;
+}
+
+.navbar .divider {
+    background-color: #e9ecef !important;
+}
+
+.loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+}
+
+
+
+
+
+.search-container {
+    display: flex;
+    flex-direction: column;
+    padding: 8px; 
+    align-items: center;
+    text-align: center;
+    margin-top: 60px;
+    /* background-color: #f2f2f2; */
+    height: 140px;
+    border: 1px solid  #b4b4b4;
+}
+.search-input {
+    font-size: 14px;
+    width: 300px; /* กำหนดขนาดของ Textbox */
+    padding: 8px; /* ระยะห่างภายในของ Textbox */
+    border-radius: 5px; /* มุมโค้งมน */
+    /* background-color: #f2f2f2; */
+    border: 1px solid #ccc; /* เส้นขอบ */
+}
+.button-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px; /* ระยะห่างระหว่างปุ่ม */
+    margin-top: 10px;
+}
+
+.btn-custom {
+    font-size: 14px;
+    padding: 8px 25px;
+    background-color: #3d216b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.btn-custom-clear {
+    font-size: 14px;
+    padding: 8px 25px;
+    background-color: #3d216b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.btn-custom:hover {
+    background-color: #3d216b;
+}
+
+
+.tab-show {
+    /* background-color: #f2f2f2; */
+    padding: 20px;
+   
+    margin-bottom: 20px;
+    border: 1px solid #b4b4b4;
+}
+
+.nav-tabs .nav-link {
+    font-size: 14px; /* ปรับขนาดตัวอักษร */
+    font-weight: bold; /* ทำให้ตัวอักษรหนาขึ้น */
+}
+
+
+
+.navbar-nav .nav-link:hover {
+    background-color: #fffeff;
+    color: rgb(67, 5, 115) !important;
+    border-radius: 5px;
+}
+.navbar .navbar-nav>a {
+    color: #4c199c;
+    padding: 8px 15px;
+    font-size: 14px;
+}
+
+
+.navbar .navbar-nav>a>i {
+    display: block;
+    text-align: center;
+}
+
+.navbar .dropdown-item i {
+    font-size: 14px;
+    min-width: 22px;
+}
+
+
+
+.navbar .dropdown-menu {
+    border-radius: 1px;
+    border-color: #3d216b;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .05);
+}
+
+.navbar .dropdown-menu a {
+    color: #3d216b !important;
+    padding: 8px 20px;
+    line-height: normal;
+    font-size: 15px;
+}
+
+.navbar .dropdown-menu a:hover,
+.navbar .dropdown-menu a:focus {
+    color: #f3f3f2 !important;
+    background:  #3d216b!important;
+}
+
+.navbar .navbar-nav .user-action {
+    padding: 9px 15px;
+    font-size: 15px;
+}
+
+.navbar .navbar-toggle {
+    border-color: #fff;
+}
+
+.navbar .navbar-toggle .icon-bar {
+    background: #fff;
+}
+
+.navbar .navbar-toggle:focus,
+.navbar .navbar-toggle:hover {
+    background: transparent;
+}
+
+
+
+.navbar .divider {
+    background-color: #e9ecef !important;
+}
+
+@media (min-width: 1200px) {
+    .form-inline .input-group {
+        width: 350px;
+        margin-left: 30px;
+    }
+}
+
+@media (max-width: 1199px) {
+    .navbar .navbar-nav>a>i {
+        display: inline-block;
+        text-align: left;
+        min-width: 30px;
+        position: relative;
+        top: 4px;
+    }
+    .navbar .navbar-collapse {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+    }
+    .navbar .navbar-form {
+        border: none;
+        display: block;
+        margin: 10px 0;
+        padding: 0;
+    }
+    .navbar .navbar-nav {
+        margin: 8px 0;
+    }
+    .navbar .navbar-toggle {
+        margin-right: 0;
+    }
+    .input-group {
+        width: 100%;
+    }
+    
+    .icon-large {
+        font-size: 20px; /* ปรับขนาดไอคอน */
+    }
+
+    footer{
+        background:#0f579b;
+        padding: 10px 0;
+        text-align: center;
+        color: #bb5454;
+    }
+    footer p{
+        margin:0;
+    }
+
+
+    .loader::after {
+        content: "";
+        width: 30px;
+        height: 30px;
+        border: 4px solid #007bff;
+        border-top: 4px solid transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+}
+

@@ -29,11 +29,12 @@ class Database extends Config
 
 public array $default = [
     'DSN'          => '',
-        'hostname'     => '172.17.1.152',
-        'username'     => 'user_webapi',
-        'password'     => 'rB#$6add2fSX&^Dt',
-        'database'     => 'coop_test2', // เปลี่ยนชื่อฐานข้อมูลเป็น coop_test สำหรับทดสอบ
-        'DBDriver'     => 'sqlsrv',
+        'hostname' => env('database.default.hostname'),
+        'username' => env('database.default.username'),
+        'password' => env('database.default.password'),
+        'database' => env('database.default.database'),
+        'DBDriver' => env('database.default.DBDriver'),
+        'port'     => env('database.default.port'),
         'DBPrefix'     => '',
         'pConnect'     => false,
         'DBDebug'      => true,
@@ -44,7 +45,6 @@ public array $default = [
         'compress'     => false,
         'strictOn'     => false,
         'failover'     => [],
-        'port'         => 1433,
         'numberNative' => false,
 ];
     /**

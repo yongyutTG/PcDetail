@@ -10,8 +10,9 @@ use CodeIgniter\Database\Config;
 class Database extends Config
 {
  
-    public string $filesPath = APPPATH . 'Database' . DIRECTORY_SEPARATOR;
-    public string $defaultGroup = 'default';
+public $filesPath = APPPATH . 'Database' . DIRECTORY_SEPARATOR;
+public $defaultGroup = 'default';
+
 
 public $default = [
     'DSN'      => '',
@@ -35,15 +36,15 @@ public $default = [
 
 ];
 
-    public function __construct()
-    {
-        parent::__construct();
+    // public function __construct()
+    // {
+    //     parent::__construct();
 
-        // Ensure that we always set the database group to 'tests' if
-        // we are currently running an automated test suite, so that
-        // we don't overwrite live data on accident.
-        if (ENVIRONMENT === 'testing') {
-            $this->defaultGroup = 'tests';
-        }
-    }
+    //     // Ensure that we always set the database group to 'tests' if
+    //     // we are currently running an automated test suite, so that
+    //     // we don't overwrite live data on accident.
+    //     if (ENVIRONMENT === 'testing') {
+    //         $this->defaultGroup = 'tests';
+    //     }
+    // }
 }

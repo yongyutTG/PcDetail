@@ -16,12 +16,12 @@ public $defaultGroup = 'default';
 
 public $default = [
     'DSN'      => '',
-    'hostname' => env('database.default.hostname'),
-    'username' => env('database.default.username'),
-    'password' => env('database.default.password'),
-    'database' => env('database.default.database'),
-    'DBDriver' => env('database.default.DBDriver'),
-    'port'     => env('database.default.port'),
+    'hostname' => '',
+    'username' => '',
+    'password' => '',
+    'database' => '',
+    'DBDriver' => '',
+    'port'     => '',
     'DBPrefix' => '',
     'pConnect' => false,
     'DBDebug'  => true,
@@ -33,12 +33,18 @@ public $default = [
     'strictOn' => false,
     'failover' => [],
     'numberNative' => false,
-
 ];
 
     public function __construct()
     {
         parent::__construct();
+
+        $this->default['hostname'] = env('database.default.hostname');
+        $this->default['username'] = env('database.default.username');
+        $this->default['password'] = env('database.default.password');
+        $this->default['database'] = env('database.default.database');
+        $this->default['DBDriver'] = env('database.default.DBDriver');
+        $this->default['port']     = env('database.default.port');
 
         // Ensure that we always set the database group to 'tests' if
         // we are currently running an automated test suite, so that

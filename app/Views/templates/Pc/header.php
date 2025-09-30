@@ -86,7 +86,6 @@
                 </a>
                 <p class="tool">ScanIP</p>
             </li>
-           
             <li>
                 <a href="javascript:void(0)" onclick="confirmLogout()">
                     <i class="fa-solid fa-right-from-bracket"></i>

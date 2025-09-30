@@ -26,7 +26,6 @@ class Database extends Config
      *
      * @var array<string, mixed>
      */
-
 public array $default = [
     'DSN'          => '',
         'hostname' => env('database.default.hostname'),

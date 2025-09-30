@@ -10,8 +10,6 @@
           <div class="card-body p-4">
           <h4 class="text-center mb-4"><i class="bi bi-laptop"></i>ระบบ PC Detail</h4>
 
-            <h4 class="text-center mb-4"><i class="bi bi-laptop"></i>เข้าสู่ระบบ PC Detail(test)</h4>
-
             <form id="loginForm" method="post">
 
               <div class="mb-3">

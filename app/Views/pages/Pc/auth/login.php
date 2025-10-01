@@ -33,12 +33,34 @@
               <button type="submit" id="loginBtn" class="btn btn-login w-100">
                 <i class="bi bi-box-arrow-in-right"></i> เข้าสู่ระบบ
               </button>
-              <div class="d-flex justify-content-between mt-2">
-                <button type="button" class="btn btn-link" id="forgotPasswordBtn">ลืมรหัสผ่าน?</button>
-                <!-- <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#registerModal">
-                  สมัครสมาชิก
-                </button> -->
-              </div>
+              <!-- ปุ่มลืมรหัสผ่าน -->
+<div class="d-flex justify-content-between mt-2">
+    <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">
+        ลืมรหัสผ่าน?
+    </button>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="forgotPasswordModalLabel">ลืมรหัสผ่าน</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="forgotPasswordForm">
+          <div class="mb-3">
+            <label for="emailInput" class="form-label">กรุณาใส่อีเมลของคุณ</label>
+            <input type="email" class="form-control" id="emailInput" placeholder="example@email.com" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">ส่งคำขอรีเซ็ตรหัสผ่าน</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
           </div>
         </div>
       </div>

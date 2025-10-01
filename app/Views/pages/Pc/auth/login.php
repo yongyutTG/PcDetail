@@ -37,11 +37,11 @@
                 <i class="bi bi-box-arrow-in-right"></i> เข้าสู่ระบบ
               </button>
               <!-- ปุ่มลืมรหัสผ่าน -->
-<div class="d-flex justify-content-between mt-2">
+<!-- <div class="d-flex justify-content-between mt-2">
     <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">
         ลืมรหัสผ่าน?
     </button>
-</div>
+</div> -->
 
           </div>
         </div>

@@ -7,19 +7,10 @@
     <div class="row justify-content-center align-items-center vh-100">
       <div class="col-md-5 col-lg-4">
         <div class="card shadow-lg">
-<<<<<<< HEAD
-<<<<<<< HEAD
+
           <div class="card-body p-4">       
             <h4 class="text-center mb-4"><i class="bi bi-laptop"></i>ระบบ PC Detail</h4>
 
-=======
-          <div class="card-body p-4">
-            <h4 class="text-center mb-4"><i class="bi bi-laptop"></i>เข้าสู่ระบบ PC Detail (ทดสอบ)</h4>
->>>>>>> c849b0d (edit)
-=======
-          <div class="card-body p-4">
-            <h4 class="text-center mb-4"><i class="bi bi-laptop"></i>เข้าสู่ระบบ PC Detail (ทดสอบ)</h4>
->>>>>>> bc9c86d (Save my changes before pull)
             <form id="loginForm" method="post">
 
               <div class="mb-3">

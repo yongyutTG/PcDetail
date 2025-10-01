@@ -71,7 +71,7 @@
                   </thead>
                   <tbody id="resultBody">
                      <tr>
-                         <td colspan="3" class="text-muted text-center align-middle">กรุณากดสแกนเพื่อแสดงผลลัพธ์</td>
+                         <td colspan="4" class="text-muted text-center align-middle">กรุณากดสแกนเพื่อแสดงผลลัพธ์</td>
                     </tr>
                 </tbody>
                 </table>

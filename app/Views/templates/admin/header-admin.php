@@ -86,11 +86,11 @@
                 <p class="tool">ScanIP</p>
             </li>
             <li>
-                <a href="<?= base_url('register') ?>">
+                <a href="<?= base_url('admin/admin') ?>">
                     <i class="fa-solid fa-gear"></i>
-                    <span class="link-name">register</span>
+                    <span class="link-name">admin</span>
                 </a>
-                <p class="tool">register</p>
+                <p class="tool">admin</p>
             </li>
             <li>
                 <a href="javascript:void(0)" onclick="confirmLogout()">

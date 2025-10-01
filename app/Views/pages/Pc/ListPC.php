@@ -34,9 +34,9 @@
                 <label for="statusFilter" class="mb-0 fw-bold">สถานะ: </label>
                 <select id="statusFilter"
                   style="padding:6px; font-size: 14px; font-weight: bold; border-radius:6px; border:1px solid #ccc;">
-                  <option value="">ทั้งหมด</option>
                   <option value="A">ใช้งาน</option>
                   <option value="N">ไม่ใช้งาน</option>
+                  <option value="">ทั้งหมด</option>
                 </select>
                 <br>
                 <button type="button" id="resetBtn" class="btn btn-reset">

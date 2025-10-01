@@ -67,7 +67,6 @@
                       <th style="width: 10%;">Status</th>
                       <th style="width: 10%;">ชื่อเครื่อง</th>
                       <th style="width: 10%;">ผู้ใช้</th>
-                      <th style="width: 10%;">MAC Address</th>
                     </tr>
                   </thead>
                   <tbody id="resultBody">
@@ -248,7 +247,6 @@ function renderPage(page = 1) {
           : '<span class="badge bg-danger">Offline</span>'}</td>
         <td>${result.computer_name || '-'}</td>
         <td>${result.username || '-'}</td>
-        <td>${result.mac || '-'}</td>
       `;
       tbody.appendChild(tr);
     });

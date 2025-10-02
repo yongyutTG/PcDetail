@@ -19,7 +19,7 @@
   border-radius: 50px !important;
   font-weight: 600;
   transition: 0.3s;
-  padding: 12px 20px;   /* ปรับความสูง/ความกว้าง */
+  padding: 22px 30px;   /* ปรับความสูง/ความกว้าง */
 }
 .btn-login .spinner-border {
   color: #fff !important; /* สปินเนอร์ก็ขาว */

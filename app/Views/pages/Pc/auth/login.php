@@ -157,7 +157,7 @@
       });
     }
 
-     if (forgotForm) {
+    //  if (forgotForm) {
     forgotForm.addEventListener("submit", async function (e) {
       e.preventDefault();
 
@@ -215,7 +215,7 @@
         console.error(err);
       }
     });
-  }
+  //}
   });
 
 </script>

@@ -35,14 +35,23 @@
             <div class="text-center mt-3">
               <a href="#" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">ลืมรหัสผ่าน?</a>
             </div>
+
+
           </div>
-          <!-- Modal ลืมรหัสผ่าน -->
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+
+  
+            <!-- Modal ลืมรหัสผ่าน -->
             <div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordLabel"
               aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                  <div class="modal-header custom-header">
-                  <!-- <div class="modal-header bg-primary text-white"> -->
+                  <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title" id="forgotPasswordLabel"><i class="bi bi-key-fill"></i> ลืมรหัสผ่าน</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                       aria-label="ปิด"></button>
@@ -61,11 +70,6 @@
                 </div>
               </div>
             </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  </div>
 </section>
 
 

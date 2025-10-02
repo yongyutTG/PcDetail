@@ -26,7 +26,7 @@
                 </div>
               </div>
 
-              <button type="submit" id="loginBtn" class="btn-login w-100">
+              <button type="submit" id="loginBtn" class="btn-login">
                 <i class="bi bi-box-arrow-in-right"></i> เข้าสู่ระบบ
               </button>
               

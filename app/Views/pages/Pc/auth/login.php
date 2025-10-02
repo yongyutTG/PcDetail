@@ -2,6 +2,9 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
+
 <section>
   <div class="container">
     <div class="row justify-content-center align-items-center vh-100">
@@ -61,7 +64,11 @@
                     <form id="forgotForm">
                       <div class="mb-3">
                         <label class="form-label">กรอกเลขพนักงาน</label>
-                        <input type="text" name="forgot_input" class="form-control" placeholder="กรอกเลขพนักงาน">
+                        <input type="text" name="forgot_input" class="form-control">
+                        <label class="form-label">ตั้งรหัสผ่านใหม่</label>
+                        <input type="text" name="new_password" class="form-control">
+                        <label class="form-label">ยืนยันรหัสผ่านใหม่</label>
+                        <input type="text" name="confirm_password" class="form-control">
                       </div>
                       <!-- <button type="submit" id="forgotBtn" class="btn-login btn-sm w-100">
                         <i class="bi bi-envelope-at"></i> ส่งคำขอรีเซ็ตรหัสผ่าน
@@ -150,7 +157,65 @@
       });
     }
 
+     if (forgotForm) {
+    forgotForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
 
+      const empInput = forgotForm.querySelector('input[name="forgot_input"]');
+      const newPasswordInput = forgotForm.querySelector('input[name="new_password"]');
+      const confirmPasswordInput = forgotForm.querySelector('input[name="confirm_password"]');
+
+      // ตรวจสอบรหัสผ่านใหม่
+      if (newPasswordInput.value.trim() === "") {
+        toastr.error("กรุณากรอกรหัสผ่านใหม่", "แจ้งเตือน");
+        newPasswordInput.focus();
+        return;
+      }
+      if (confirmPasswordInput.value.trim() === "") {
+        toastr.error("กรุณากรอกยืนยันรหัสผ่านใหม่", "แจ้งเตือน");
+        confirmPasswordInput.focus();
+        return;
+      }
+      if (empInput.value.trim() === "") {
+        toastr.error("กรุณากรอกเลขพนักงาน", "แจ้งเตือน");
+        empInput.focus();
+        return;
+      }
+      
+      if (newPasswordInput.value !== confirmPasswordInput.value) {
+        toastr.error("รหัสผ่านใหม่และยืนยันรหัสผ่านไม่ตรงกัน", "แจ้งเตือน");
+        confirmPasswordInput.focus();
+        return;
+      }
+      const md5Password = md5(newPasswordInput.value);
+
+      try {
+        const formData = new FormData();
+        // formData.append("confirm_password", confirmPasswordInput.value);
+        formData.append("forgot_input", empInput.value);
+        formData.append("new_password", md5Password);
+           
+
+        const res = await fetch("<?= base_url('auth/forgot_password') ?>", {
+          method: "POST",
+          body: formData
+        });
+        const data = await res.json();
+
+        if (data.status === "success") {
+          toastr.success(data.message, "สำเร็จ");
+          // ปิด modal หลังส่งสำเร็จ
+          const modal = bootstrap.Modal.getInstance(document.getElementById("forgotPasswordModal"));
+          modal.hide();
+        } else {
+          toastr.error(data.message, "แจ้งเตือน");
+        }
+      } catch (err) {
+        toastr.error("เกิดข้อผิดพลาดในการเชื่อมต่อ", "แจ้งเตือน");
+        console.error(err);
+      }
+    });
+  }
   });
 
 </script>

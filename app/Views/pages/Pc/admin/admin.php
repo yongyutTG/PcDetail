@@ -189,7 +189,8 @@
 
     const userInput = registerForm.querySelector('input[name="USER_NAME"]');
     const pwdInput = registerForm.querySelector('input[name="U_PASSWORD"]');
-    const md5Password = md5(pwdInput.value);
+    const 
+    md5Password = md5(pwdInput.value);
 
     if (userInput.value.trim() === "") {
       toastr.error("กรุณากรอกชื่อผู้ใช้", "แจ้งเตือน");

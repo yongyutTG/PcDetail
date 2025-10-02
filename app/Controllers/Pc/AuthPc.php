@@ -64,6 +64,54 @@ class AuthPc extends BaseController
         ]);
     }
 
+
+
+    
+    //"ลืมรหัสผ่าน"
+    public function forgotPassword() {
+        $EMP_ID = $this->request->getPost('forgot_input');
+        if (empty($EMP_ID)) {
+            return $this->response->setJSON([
+                 'status' => 'error',
+                 'message' => 'กรุณากรอกเลขพนักงาน'
+             ]);
+        }
+
+         // สมมุติว่ามี Model สำหรับ Users
+        $userModel = new UserModel();
+        $user = $userModel->getActiveUserByUsername($EMP_ID);
+        // ตรวจสอบ
+        if (!$user) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'ไม่พบเลขพนักงานนี้ในระบบ'
+            ]);
+        }
+        $newPassword = $this->request->getPost('new_password');
+        // $confirmPassword = $this->request->getPost('confirm_password');
+
+
+        //รับค่ารหัสผ่านใหม่ generate รหัสผ่านใหม่
+        //$newPassword = substr(md5(uniqid(rand(), true)), 0, 8); // รหัสผ่านใหม่ 8 ตัวอักษร
+        $hashedPassword = password_hash(md5($newPassword), PASSWORD_DEFAULT); // Hash ซ้อนอีกชั้น
+
+        // อัพเดตรหัสผ่านใหม่ในฐานข้อมูลจาก EMP_ID
+        $userModel->update($user['USER_ID'], ['U_PASSWORD' => $hashedPassword]);
+        // ส่งอีเมลแจ้งรหัสผ่านใหม่ (สมมุติว่ามีฟังก์ชัน sendEmail)
+        $to = $user['EMP_ID'] . '@example.com'; // สมมุติ email
+        $subject = "รหัสผ่านใหม่สำหรับบัญชีของคุณ";
+        $message = "สวัสดี " . $user['user_name'] . ",\n\nรหัสผ่านใหม่ของคุณคือ: " . $newPassword . "\n\nกรุณาเปลี่ยนรหัสผ่านหลังจากเข้าสู่ระบบครั้งแรก.\n\nขอบคุณครับ.";
+        $headers = "From: no-reply@example.com";
+        // mail($to, $subject, $message, $headers); // ส่งอีเมล (เปิดใช้งานในสภาพแวดล้อมจริง)
+        // สำหรับการทดสอบ ให้ส่งกลับข้อความแทน
+        return $this->response->setJSON([
+            'status' => 'success',
+            'message' => 'ระบบได้ส่งรหัสผ่านใหม่ไปยังอีเมลของคุณแล้ว'
+        ]);
+        // return $this->response->setJSON(['status'=>'success','message'=>'รหัสผ่านใหม่ของคุณคือ: ' . $newPassword]);
+    }
+
+
     // ต่ออายุ session
     public function extendSession()
     {
@@ -145,31 +193,6 @@ class AuthPc extends BaseController
 
 
 
-    // แสดงหน้า "ลืมรหัสผ่าน"
-//     public function forgotPassword()
-//     {
-//         return view('pages/auth/forgot_password');
-//     }
-
-    // ลืมรหัสผ่าน
-//     public function processForgot()
-//     {
-//         $USER_NAME = $this->request->getPost('USER_NAME');
-//         $userModel = new UserModel();
-//         $user = $userModel->findByEmail($USER_NAME);
-
-    //         if (!$user) {
-//             return redirect()->back()->with('error', 'ไม่พบ USER_NAME นี้ในระบบ');
-//         }
-
-    //         // สร้างรหัสผ่านใหม่ (สุ่ม)
-//         $newPassword = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 8);
-
-    //         // อัปเดตรหัสผ่านใน DB
-//         $userModel->updatePassword($user['USER_ID'], $newPassword);
-
-    //         return redirect()->to('/login')->with('success', 'ส่งรหัสผ่านใหม่เรียบร้อยแล้ว');
-//     }
 
 
         // ดึงข้อมูลผู้ใช้งานตาม ID

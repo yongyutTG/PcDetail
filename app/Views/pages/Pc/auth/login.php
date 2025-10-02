@@ -48,40 +48,39 @@
   </div>
 
 
-  
-            <!-- Modal ลืมรหัสผ่าน -->
-            <div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordLabel"
-              aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                  <div class="modal-header custom-header">
-                  <!-- <div class="modal-header bg-primary text-white"> -->
-                    <h5 class="modal-title" id="forgotPasswordLabel"><i class="bi bi-key-fill"></i> ลืมรหัสผ่าน</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                      aria-label="ปิด"></button>
-                  </div>
-                  <div class="modal-body">
-                    <form id="forgotForm">
-                      <div class="mb-3">
-                        <label class="form-label">กรอกเลขพนักงาน</label>
-                        <input type="text" name="forgot_input" class="form-control">
-                        <label class="form-label">ตั้งรหัสผ่านใหม่</label>
-                        <input type="text" name="new_password" class="form-control">
-                        <label class="form-label">ยืนยันรหัสผ่านใหม่</label>
-                        <input type="text" name="confirm_password" class="form-control">
-                      </div>
-                      <!-- <button type="submit" id="forgotBtn" class="btn-login btn-sm w-100">
+
+  <!-- Modal ลืมรหัสผ่าน -->
+  <div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header custom-header">
+          <!-- <div class="modal-header bg-primary text-white"> -->
+          <h5 class="modal-title" id="forgotPasswordLabel"><i class="bi bi-key-fill"></i> ลืมรหัสผ่าน</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="ปิด"></button>
+        </div>
+        <div class="modal-body">
+          <form id="forgotForm">
+            <div class="mb-3">
+              <label class="form-label">กรอกเลขพนักงาน</label>
+              <input type="text" name="forgot_input" class="form-control">
+              <label class="form-label">ตั้งรหัสผ่านใหม่</label>
+              <input type="text" name="new_password" class="form-control">
+              <label class="form-label">ยืนยันรหัสผ่านใหม่</label>
+              <input type="text" name="confirm_password" class="form-control">
+            </div>
+            <!-- <button type="submit" id="forgotBtn" class="btn-login btn-sm w-100">
                         <i class="bi bi-envelope-at"></i> ส่งคำขอรีเซ็ตรหัสผ่าน
                       </button> -->
-                    </form>
-                     <div class="modal-footer">
-                    <button type="button" class="btn btn-reset_addPc" id="reset_addPc">ล้างข้อมูล</button>
-                    <button type="submit" id=forgotBtn class="btn-login btn-sm w-100"form="forgotForm">ส่งคำขอรีเซ็ตรหัสผ่าน</button>
-                  </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          </form>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-reset_addPc" id="reset_forgotForm">ล้างข้อมูล</button>
+            <button type="submit" id=forgotBtn class="btn-login btn-sm w-100" form="forgotForm">รีเซ็ตรหัสผ่าน</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 
@@ -181,7 +180,7 @@
         empInput.focus();
         return;
       }
-      
+
       if (newPasswordInput.value !== confirmPasswordInput.value) {
         toastr.error("รหัสผ่านใหม่และยืนยันรหัสผ่านไม่ตรงกัน", "แจ้งเตือน");
         confirmPasswordInput.focus();
@@ -189,12 +188,20 @@
       }
       const md5Password = md5(newPasswordInput.value);
 
+      // disable ปุ่มระหว่างรอส่ง
+      const submitBtn = forgotForm.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `
+          <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+          กำลังส่ง...
+      `;
+
       try {
         const formData = new FormData();
         // formData.append("confirm_password", confirmPasswordInput.value);
         formData.append("forgot_input", empInput.value);
         formData.append("new_password", md5Password);
-           
+
 
         const res = await fetch("<?= base_url('auth/forgot-password') ?>", {
           method: "POST",
@@ -207,15 +214,28 @@
           // ปิด modal หลังส่งสำเร็จ
           const modal = bootstrap.Modal.getInstance(document.getElementById("forgotPasswordModal"));
           modal.hide();
+          forgotForm.reset();
         } else {
           toastr.error(data.message, "แจ้งเตือน");
         }
       } catch (err) {
         toastr.error("เกิดข้อผิดพลาดในการเชื่อมต่อ", "แจ้งเตือน");
         console.error(err);
+      } finally {
+        // เปิดปุ่มกลับเหมือนเดิม
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<i class="bi bi-envelope-at"></i> รีเซ็ตรหัสผ่าน`;
       }
     });
-  //}
+    //}
   });
+
+
+  // ปุ่มล้างข้อมูลฟอร์ม forgot password
+  const reset_forgotForm = document.getElementById("reset_forgotForm");
+  reset_forgotForm.addEventListener("click", function () {
+    forgotForm.reset();
+  });
+
 
 </script>

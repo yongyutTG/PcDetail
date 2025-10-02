@@ -63,14 +63,14 @@
                         <label class="form-label">กรอกเลขพนักงาน</label>
                         <input type="text" name="forgot_input" class="form-control" placeholder="กรอกเลขพนักงาน">
                       </div>
-                      <button type="submit" id="forgotBtn" class="btn-login btn-sm w-100">
+                      <!-- <button type="submit" id="forgotBtn" class="btn-login btn-sm w-100">
                         <i class="bi bi-envelope-at"></i> ส่งคำขอรีเซ็ตรหัสผ่าน
-                      </button>
+                      </button> -->
                     </form>
                      <div class="modal-footer">
                     <button type="button" class="btn btn-reset_addPc" id="reset_addPc">ล้างข้อมูล</button>
                     <button type="button" id=reset_addPc class="btn btn-cancel" data-bs-dismiss="modal">ปิด</button>
-                    <button type="submit" id=forgotBtn class="btn btn-save"form="addPcForm">บันทึกเพิ่มข้อมูลใหม่</button>
+                    <button type="submit" id=forgotBtn class="btn btn-save"form="forgotForm">ส่งคำขอรีเซ็ตรหัสผ่าน</button>
                   </div>
                   </div>
                 </div>

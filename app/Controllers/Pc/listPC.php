@@ -4,7 +4,7 @@ namespace App\Controllers\Pc;
 use App\Models\Pc\PcModel;
 use CodeIgniter\Controller;
 
-class list extends BaseController
+class listPC extends BaseController
 {
     public function index()
     {

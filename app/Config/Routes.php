@@ -20,7 +20,7 @@ $routes->get('logout', 'Pc\AuthPc::logout');
 // Protect Routes ด้วย Filter "AuthPc"
 // $routes->group('', ['filter' => 'AuthPc'], function ($routes) {
     $routes->get('dashboard', 'Pc\Dashboard::index'); // หน้า Dashboard
-    $routes->get('listPC', 'Pc\list::index'); // หน้า
+    $routes->get('all-listPC', 'Pc\listPC::index'); // หน้า
     $routes->get('logPC', 'Pc\LogPC::index'); // หน้า logPC
 //  });
 $routes->get('ScanIP', 'Pc\ScanIP::index');   // เปิดหน้า Scan ทั้งหมด

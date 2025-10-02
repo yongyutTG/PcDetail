@@ -66,7 +66,7 @@
                 <p class="tool">Dashboard</p>
             </li>
             <li>
-                <a href="<?= base_url('listPC') ?>">
+                <a href="<?= base_url('all-listPC') ?>">
                     <i class="fa-solid fa-computer"></i>
                     <span class="link-name">listPC</span>
                 </a>

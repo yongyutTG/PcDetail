@@ -54,7 +54,7 @@ class AuthPc extends BaseController
         if (strtolower($user['USER_NAME']) === 'it0007') {
             $redirectUrl = base_url('admin');
         } else {
-            $redirectUrl = base_url('listPC');
+            $redirectUrl = base_url('all-listPC');
         }
 
         return $this->response->setJSON([

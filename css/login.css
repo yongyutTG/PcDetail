@@ -17,9 +17,8 @@
   background: linear-gradient(135deg, #3d216b, #3d216b) !important;
   color: #fff !important;
   border-radius: 50px !important;
-  font-weight: 600;
+  /* font-weight: 600; */
   transition: 0.3s;
-  padding: 22px 30px;   /* ปรับความสูง/ความกว้าง */
 }
 .btn-login .spinner-border {
   color: #fff !important; /* สปินเนอร์ก็ขาว */

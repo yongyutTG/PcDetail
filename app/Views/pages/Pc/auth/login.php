@@ -8,7 +8,7 @@
       <div class="col-md-5 col-lg-4">
         <div class="card shadow-lg">
           <div class="card-body p-4">
-            <h4 class="text-center mb-4"><i class="bi bi-person-circle"></i>PC Detail</h4>
+            <h4 class="text-center mb-4"><i class="bi bi-person-circle"></i>ระบบ PC Detail</h4>
             <form id="loginForm" method="post">
               <div class="mb-3">
                 <label class="form-label">ชื่อผู้ใช้งาน</label>
@@ -45,12 +45,12 @@
 <script>
 
   // ตั้งค่า toastr
-  toastr.options = {
-    "closeButton": true,
-    "progressBar": true,
-    "positionClass": "toast-top-center",
-    "timeOut": "3000"
-  };
+  // toastr.options = {
+  //   "closeButton": true,
+  //   "progressBar": true,
+  //   "positionClass": "toast-top-center",
+  //   "timeOut": "3000"
+  // };
   document.addEventListener("DOMContentLoaded", function () {
     // --- LOGIN ---
     const form = document.getElementById("loginForm");

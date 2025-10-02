@@ -31,12 +31,7 @@
               </button>
             </form>
 
-            
-            <button type="button" id="resetBtn" class="btn-reset btn-sm w-100">
-                <i class="bi bi-arrow-clockwise"></i> รีเซ็ตรหัสผ่าน
-              </button>
               <div class="text-center mt-3">
-                <a href="<?= base_url('admin') ?>">สำหรับผู้ดูแลระบบ</a>
                 <a href="<?= base_url('auth/forgot_password') ?>" class="d-block">ลืมรหัสผ่าน?</a>
                 
               </div>

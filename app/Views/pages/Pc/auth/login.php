@@ -35,8 +35,8 @@
             <div class="text-center mt-3">
               <a href="#" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">ลืมรหัสผ่าน?</a>
             </div>
-
-            <!-- Modal ลืมรหัสผ่าน -->
+          </div>
+          <!-- Modal ลืมรหัสผ่าน -->
             <div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordLabel"
               aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered">
@@ -61,8 +61,6 @@
                 </div>
               </div>
             </div>
-
-          </div>
         </div>
       </div>
     </div>

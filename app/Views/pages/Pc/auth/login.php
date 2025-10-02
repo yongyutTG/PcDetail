@@ -189,12 +189,12 @@
       const md5Password = md5(newPasswordInput.value);
 
       // disable ปุ่มระหว่างรอส่ง
-      const submitBtn = forgotForm.querySelector('button[type="submit"]');
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = `
-          <span class="spinner-border spinner-border-sm me-2" role="status"></span>
-          กำลังส่ง...
-      `;
+      // const submitBtn = forgotForm.querySelector('button[type="submit"]');
+      // submitBtn.disabled = true;
+      // submitBtn.innerHTML = `
+      //     <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+      //     กำลังส่ง...
+      // `;
 
       try {
         const formData = new FormData();
@@ -221,10 +221,10 @@
       } catch (err) {
         toastr.error("เกิดข้อผิดพลาดในการเชื่อมต่อ", "แจ้งเตือน");
         console.error(err);
-      } finally {
-        // เปิดปุ่มกลับเหมือนเดิม
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = `<i class="bi bi-envelope-at"></i> รีเซ็ตรหัสผ่าน`;
+      // } finally {
+      //   // เปิดปุ่มกลับเหมือนเดิม
+      //   submitBtn.disabled = false;
+      //   submitBtn.innerHTML = `<i class="bi bi-envelope-at"></i> รีเซ็ตรหัสผ่าน`;
       }
     });
     //}

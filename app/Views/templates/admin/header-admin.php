@@ -67,9 +67,9 @@
             <li>
                 <a href="<?= base_url('listPC') ?>">
                     <i class="fa-solid fa-computer"></i>
-                    <span class="link-name">ListPC</span>
+                    <span class="link-name">listPC</span>
                 </a>
-                <p class="tool">ListPC</p>
+                <p class="tool">listPC</p>
             </li>
             <li>
                 <a href="<?= base_url('logPC') ?>">

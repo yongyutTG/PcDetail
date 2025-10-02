@@ -63,7 +63,7 @@
                         <label class="form-label">กรอกเลขพนักงาน</label>
                         <input type="text" name="forgot_input" class="form-control" placeholder="กรอกเลขพนักงาน">
                       </div>
-                      <button type="submit" id="forgotBtn" class="btn btn-save">
+                      <button type="submit" id="forgotBtn" class="btn btn-login w-100">
                         <i class="bi bi-envelope-at"></i> ส่งคำขอรีเซ็ตรหัสผ่าน
                       </button>
                     </form>

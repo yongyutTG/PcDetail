@@ -196,7 +196,7 @@
         formData.append("new_password", md5Password);
            
 
-        const res = await fetch("<?= base_url('auth/forgot_password') ?>", {
+        const res = await fetch("<?= base_url('auth/forgot-password') ?>", {
           method: "POST",
           body: formData
         });

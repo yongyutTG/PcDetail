@@ -51,7 +51,8 @@
               aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                  <div class="modal-header bg-primary text-white">
+                  <div class="modal-header custom-header">
+                  <!-- <div class="modal-header bg-primary text-white"> -->
                     <h5 class="modal-title" id="forgotPasswordLabel"><i class="bi bi-key-fill"></i> ลืมรหัสผ่าน</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                       aria-label="ปิด"></button>
@@ -62,7 +63,7 @@
                         <label class="form-label">กรอกเลขพนักงาน</label>
                         <input type="text" name="forgot_input" class="form-control" placeholder="กรอกเลขพนักงาน">
                       </div>
-                      <button type="submit" class="btn btn-primary w-100">
+                      <button type="submit" id="forgotBtn" class="btn btn-primary w-100">
                         <i class="bi bi-envelope-at"></i> ส่งคำขอรีเซ็ตรหัสผ่าน
                       </button>
                     </form>
@@ -90,6 +91,8 @@
     // --- LOGIN ---
     const form = document.getElementById("loginForm");
     const loginBtn = document.getElementById("loginBtn");
+
+    const forgotForm = document.getElementById("forgotForm");
 
     if (form) {
       form.addEventListener("submit", async function (e) {

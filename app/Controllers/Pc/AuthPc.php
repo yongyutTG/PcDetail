@@ -13,9 +13,10 @@ class AuthPc extends BaseController
     //หน้า login
     public function login()
     {
-        return view('pages/Pc/auth/login')
-            . view('templates/Pc/header-login')
-            . view('templates/Pc/footer');
+        return 
+          view('templates/Pc/header-login')
+        .view('pages/Pc/auth/login')
+        .view('templates/Pc/footer');
     }
 
     public function chk_login()

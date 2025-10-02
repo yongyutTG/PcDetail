@@ -1,23 +1,16 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
 
 <section>
   <div class="container">
     <div class="row justify-content-center align-items-center vh-100">
       <div class="col-md-5 col-lg-4">
         <div class="card shadow-lg">
-
-          <div class="card-body p-4">       
-            <h4 class="text-center mb-4"><i class="bi bi-laptop"></i>ระบบ PC Detail</h4>
-
+          <div class="card-body p-4">
+            <h4 class="text-center mb-4"><i class="bi bi-person-circle"></i>PC Detail</h4>
             <form id="loginForm" method="post">
-
               <div class="mb-3">
-
                 <label class="form-label">ชื่อผู้ใช้งาน</label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
@@ -36,7 +29,7 @@
               <button type="submit" id="loginBtn" class="btn btn-login w-100">
                 <i class="bi bi-box-arrow-in-right"></i> เข้าสู่ระบบ
               </button>
-
+              
           </div>
         </div>
       </div>

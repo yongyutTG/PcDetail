@@ -45,12 +45,12 @@
 <script>
 
   // ตั้งค่า toastr
-  // toastr.options = {
-  //   "closeButton": true,
-  //   "progressBar": true,
-  //   "positionClass": "toast-top-center",
-  //   "timeOut": "3000"
-  // };
+  toastr.options = {
+    "closeButton": true,
+    "progressBar": true,
+    "positionClass": "toast-top-center",
+    "timeOut": "3000"
+  };
   document.addEventListener("DOMContentLoaded", function () {
     // --- LOGIN ---
     const form = document.getElementById("loginForm");

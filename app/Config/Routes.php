@@ -3,7 +3,7 @@
 $routes->get('/', 'Pc\AuthPc::login');
 $routes->get('login', 'Pc\AuthPc::login');    // หน้า login
 $routes->post('login', 'Pc\AuthPc::attemptRegister');    // หน้า login
-$routes->get('auth/forgot-password', 'Pc\AuthPc::forgotPassword');  // หน้า forgotPassword
+$routes->post('auth/forgot-password', 'Pc\AuthPc::forgotPassword');  // หน้า forgotPassword
 
 $routes->post('auth/chk_login', 'Pc\AuthPc::chk_login');
 

@@ -13,7 +13,7 @@
       /* backdrop-filter: blur(8px); */
   }
 
- .btn.btn-login {
+ .btn-login {
   background: linear-gradient(135deg, #3d216b, #3d216b) !important;
   color: #fff !important;
   border-radius: 50px !important;

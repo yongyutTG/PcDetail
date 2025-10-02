@@ -15,7 +15,7 @@
 
   .btn-login {
       background: linear-gradient(135deg, #3d216b, #3d216b);
-      color: white;
+      color: white !important;
       border-radius: 50px;
       font-weight: 600;
       transition: 0.3s;

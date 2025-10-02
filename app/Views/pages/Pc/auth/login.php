@@ -66,6 +66,9 @@
                       <button type="submit" id="forgotBtn" class="btn-login btn-sm w-100">
                         <i class="bi bi-envelope-at"></i> ส่งคำขอรีเซ็ตรหัสผ่าน
                       </button>
+                      <button type="button" class="btn-login btn-sm w-100" data-bs-dismiss="modal">
+                        <i class="bi bi-envelope-at"></i> ปิด
+                      </button>
                     </form>
                   </div>
                 </div>

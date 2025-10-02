@@ -13,21 +13,20 @@
       /* backdrop-filter: blur(8px); */
   }
 
-  .btn-login {
-      background: linear-gradient(135deg, #3d216b, #3d216b);
-      color: white !important;
-      border-radius: 50px;
-      font-weight: 600;
-      transition: 0.3s;
-  }
+ .btn.btn-login {
+  background: linear-gradient(135deg, #3d216b, #3d216b) !important;
+  color: #fff !important;
+  border-radius: 50px !important;
+  font-weight: 600;
+  transition: 0.3s;
+}
 .btn-login .spinner-border {
   color: #fff !important; /* สปินเนอร์ก็ขาว */
 }
-  .btn-login:hover {
-      background: linear-gradient(135deg, #3d216b, #3d216b);
-      transform: translateY(-2px);
-      color: white;
-  }
+.btn.btn-login:hover {
+  background: linear-gradient(135deg, #53308d, #3d216b) !important;
+  transform: translateY(-2px);
+}
 
   h4 {
       font-weight: 600;

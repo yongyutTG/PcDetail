@@ -199,7 +199,7 @@
       try {
         const formData = new FormData();
         // formData.append("confirm_password", confirmPasswordInput.value);
-        formData.append("forgot_input", empInput.value);
+        formData.append("forgot_input", UsernameInput.value);
         formData.append("new_password", md5Password);
 
 

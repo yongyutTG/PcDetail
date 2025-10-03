@@ -95,8 +95,8 @@ class AuthPc extends BaseController
         //$newPassword = substr(md5(uniqid(rand(), true)), 0, 8); // รหัสผ่านใหม่ 8 ตัวอักษร
         $hashedPassword = password_hash(md5($newPassword), PASSWORD_DEFAULT); // Hash ซ้อนอีกชั้น
 
-        // อัพเดตรหัสผ่านใหม่ในฐานข้อมูลจาก USER_NAME
-        $userModel->update($user['USER_NAME'], ['U_PASSWORD' => $hashedPassword]);
+        // อัพเดตรหัสผ่านใหม่ในฐานข้อมูลจาก USER_ID
+        $userModel->update($user['USER_ID'], ['U_PASSWORD' => $hashedPassword]);
         // ส่งอีเมลแจ้งรหัสผ่านใหม่ (สมมุติว่ามีฟังก์ชัน sendEmail)
         $to = $user['EMP_ID'] . '@example.com'; // สมมุติ email
         $subject = "รหัสผ่านใหม่สำหรับบัญชีของคุณ";

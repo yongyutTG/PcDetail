@@ -90,7 +90,7 @@ class AuthPc extends BaseController
         }
         $newPassword = $this->request->getPost('new_password');
         // $confirmPassword = $this->request->getPost('confirm_password');
-        echo "New Password: " . $newPassword; // Debug line
+       // echo "New Password: " . $newPassword; // Debug line
 
         //รับค่ารหัสผ่านใหม่ generate รหัสผ่านใหม่
         //$newPassword = substr(md5(uniqid(rand(), true)), 0, 8); // รหัสผ่านใหม่ 8 ตัวอักษร

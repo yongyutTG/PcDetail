@@ -6,19 +6,13 @@ use CodeIgniter\Config\BaseConfig;
 
 class Email extends BaseConfig
 {
-    public string $fromEmail  = 'yongyuttgsaving@gmail.com';
-    public string $fromName   = 'TG Saving System';
-    public string $recipients = '';
-
-    public string $protocol   = 'smtp';
-    public string $SMTPHost   = 'smtp.gmail.com';
-    public string $SMTPUser   = 'yongyuttgsaving@gmail.com';
-    public string $SMTPPass   = '0849270598';
-    public int    $SMTPPort   = 587; // หรือ 465 ถ้าใช้ SSL
-    public string $SMTPCrypto = 'tls'; // หรือ 'ssl'
-
-    public int    $SMTPTimeout = 30;
-    public string $mailType    = 'html';
+public $protocol = 'smtp';
+public $SMTPHost = 'smtp.gmail.com';
+public $SMTPUser = 'your-email@gmail.com';
+public $SMTPPass = 'your-app-password'; // ใช้ App Password ของ Gmail
+public $SMTPPort = 587;
+public $SMTPCrypto = 'tls';
+public $mailType = 'html';
     public string $charset     = 'utf-8';
     public string $newline     = "\r\n";
     public string $CRLF        = "\r\n";

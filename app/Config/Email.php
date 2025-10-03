@@ -8,7 +8,7 @@ class Email extends BaseConfig
 {
 public $protocol = 'smtp';
 public $SMTPHost = 'smtp.gmail.com';
-public $SMTPUser = 'your-email@gmail.com';
+public $SMTPUser = 'yongyuttgsaving@gmail.com';
 public $SMTPPass = 'your-app-password'; // ใช้ App Password ของ Gmail
 public $SMTPPort = 587;
 public $SMTPCrypto = 'tls';

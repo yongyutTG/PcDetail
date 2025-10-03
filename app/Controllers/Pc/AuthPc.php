@@ -118,7 +118,7 @@ class AuthPc extends BaseController
         $email->setSubject($subject);
         $email->setMessage($message);
 
-        $email->send();
+       
         if ($email->send()) {
             return $this->response->setJSON([
                 'status' => 'success',

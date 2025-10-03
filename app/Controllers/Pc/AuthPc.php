@@ -28,7 +28,6 @@ class AuthPc extends BaseController
         $clientHash = $this->request->getPost('U_PASSWORD');  //MD5
         $user = $userModel->getActiveUserByUsername($username);
 
-        //ตรวจสอบ
         if (!$user) {
             return $this->response->setJSON([
                 'status' => 'error',
@@ -51,7 +50,7 @@ class AuthPc extends BaseController
             'SUP_ADMIN' => $user['SUP_ADMIN'],
             'logged_in' => true
         ]);
-       // ✅ ถ้าเป็น admin → ไปหน้า admin
+       //ถ้าเป็น admin → ไปหน้า admin
         if (strtolower($user['USER_NAME']) === 'it0007') {
             $redirectUrl = base_url('admin');
         } else {
@@ -65,20 +64,24 @@ class AuthPc extends BaseController
         ]);
     }
 
-
-
     
     //"ลืมรหัสผ่าน"
     public function forgotPassword() {
         $Username = $this->request->getPost('forgot_input');
+        $Email    = $this->request->getPost('email');
+
         if (empty($Username)) {
             return $this->response->setJSON([
                  'status' => 'error',
                  'message' => 'กรุณากรอกชื่อผู้ใช้งาน'
              ]);
         }
-
-         // สมมุติว่ามี Model สำหรับ Users
+        if (empty($Email)) {
+            return $this->response->setJSON([
+                 'status' => 'error',
+                 'message' => 'กรุณากรอกอีเมลที่ต้องการจะให้ส่งรหัสผ่านใหม่'
+             ]);
+        }
         $userModel = new UserModel();
         $user = $userModel->getActiveUserByUsername($Username);
         // ตรวจสอบ
@@ -89,25 +92,44 @@ class AuthPc extends BaseController
             ]);
         }
         $newPassword = $this->request->getPost('new_password');
-        //รับค่ารหัสผ่านใหม่ generate รหัสผ่านใหม่
+        // $newPassword = substr(str_shuffle('abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 8);
         //$newPassword = substr(md5(uniqid(rand(), true)), 0, 8); // รหัสผ่านใหม่ 8 ตัวอักษร
-         // Hash ซ้อนอีกชั้น
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-       
-        // อัพเดตรหัสผ่านใหม่ในฐานข้อมูลจาก USER_ID
+    
         $userModel->update($user['USER_ID'], ['U_PASSWORD' => $hashedPassword]);
-        // ส่งอีเมลแจ้งรหัสผ่านใหม่ (สมมุติว่ามีฟังก์ชัน sendEmail)
-        $to = $user['EMP_ID'] . '@example.com'; // สมมุติ email
+        
+        // ตั้งค่าผู้รับจาก email ที่ user กรอก
+        $to = $Email;
         $subject = "รหัสผ่านใหม่สำหรับบัญชีของคุณ";
-        $message = "สวัสดี " . $user['user_name'] . ",\n\nรหัสผ่านใหม่ของคุณคือ: " . $newPassword . "\n\nกรุณาเปลี่ยนรหัสผ่านหลังจากเข้าสู่ระบบครั้งแรก.\n\nขอบคุณครับ.";
-        $headers = "From: no-reply@example.com";
-        // mail($to, $subject, $message, $headers); // ส่งอีเมล (เปิดใช้งานในสภาพแวดล้อมจริง)
-        // สำหรับการทดสอบ ให้ส่งกลับข้อความแทน
-        return $this->response->setJSON([
-            'status' => 'success',
-            'message' => 'ระบบได้ส่งรหัสผ่านใหม่ไปยังอีเมลของคุณแล้ว'
-        ]);
-        // return $this->response->setJSON(['status'=>'success','message'=>'รหัสผ่านใหม่ของคุณคือ: ' . $newPassword]);
+        $message = "สวัสดีคุณ " . $user['USER_NAME'] . ",\n\n"
+             . "รหัสผ่านใหม่ของคุณคือ: " . $newPassword . "\n\n"
+             . "กรุณาเปลี่ยนรหัสผ่านหลังจากเข้าสู่ระบบครั้งแรกครับ.";
+
+         // ส่งอีเมลด้วย Email Library ของ CI4
+        $email = \Config\Services::email();
+        $email->setFrom('noreply@yourapp.com', 'ระบบรีเซ็ตรหัสผ่าน');
+        $email->setTo($to);
+        $email->setSubject($subject);
+        $email->setMessage($message);
+
+        $email->send();
+        if ($email->send()) {
+            return $this->response->setJSON([
+                'status' => 'success',
+                'message' => 'รหัสผ่านใหม่ถูกส่งไปที่อีเมลของคุณแล้ว'
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'ไม่สามารถส่งอีเมลได้ กรุณาลองใหม่อีกครั้ง'
+            ]);
+        }
+
+        // return $this->response->setJSON([
+        //     'status' => 'success',
+        //     'message' => 'ระบบได้บันทึกรหัสผ่านใหม่ของคุณแล้ว'
+        // ]);
+        
     }
 
 

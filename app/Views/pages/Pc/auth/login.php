@@ -64,6 +64,8 @@
             <div class="mb-3">
               <label class="form-label">กรอกเลขพนักงาน</label>
               <input type="text" name="forgot_input" class="form-control">
+              <label for="email">อีเมลที่ลงทะเบียน</label>
+              <input type="email" class="form-control" name="email" required>
               <label class="form-label">ตั้งรหัสผ่านใหม่</label>
               <input type="password" name="new_password" class="form-control">
               <label class="form-label">ยืนยันรหัสผ่านใหม่</label>

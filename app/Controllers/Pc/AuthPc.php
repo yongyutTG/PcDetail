@@ -91,7 +91,8 @@ class AuthPc extends BaseController
         $newPassword = $this->request->getPost('new_password');
         //รับค่ารหัสผ่านใหม่ generate รหัสผ่านใหม่
         //$newPassword = substr(md5(uniqid(rand(), true)), 0, 8); // รหัสผ่านใหม่ 8 ตัวอักษร
-        $hashedPassword = password_hash(md5($newPassword), PASSWORD_DEFAULT); // Hash ซ้อนอีกชั้น
+         // Hash ซ้อนอีกชั้น
+        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
         echo "hashed New Password: " . $hashedPassword; // Debug line
        
         // อัพเดตรหัสผ่านใหม่ในฐานข้อมูลจาก USER_ID

@@ -1,6 +1,7 @@
 <?php
 namespace App\Controllers\Pc;
 use App\Models\Pc\UserModel;
+use CodeIgniter\CLI\Console;
 
 class AuthPc extends BaseController
 {
@@ -89,7 +90,7 @@ class AuthPc extends BaseController
         }
         $newPassword = $this->request->getPost('new_password');
         // $confirmPassword = $this->request->getPost('confirm_password');
-
+        Console::log("New Password: " + $newPassword);
 
         //รับค่ารหัสผ่านใหม่ generate รหัสผ่านใหม่
         //$newPassword = substr(md5(uniqid(rand(), true)), 0, 8); // รหัสผ่านใหม่ 8 ตัวอักษร

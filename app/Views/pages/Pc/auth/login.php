@@ -187,7 +187,7 @@
         return;
       }
       const md5Password = md5(newPasswordInput.value);
- console.log("New Password: " + md5Password);
+      console.log("New Password: " + md5Password);
       // disable ปุ่มระหว่างรอส่ง
       // const submitBtn = forgotForm.querySelector('button[type="submit"]');
       // submitBtn.disabled = true;

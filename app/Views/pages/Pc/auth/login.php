@@ -98,10 +98,8 @@
     "timeOut": "3000"
   };
   document.addEventListener("DOMContentLoaded", function () {
-    // --- LOGIN ---
     const form = document.getElementById("loginForm");
     const loginBtn = document.getElementById("loginBtn");
-
     const forgotForm = document.getElementById("forgotForm");
 
     if (form) {
@@ -155,8 +153,6 @@
         }
       });
     }
-
-    //  if (forgotForm) {
     forgotForm.addEventListener("submit", async function (e) {
       e.preventDefault();
 
@@ -164,10 +160,7 @@
       const newPasswordInput = forgotForm.querySelector('input[name="new_password"]');
       const confirmPasswordInput = forgotForm.querySelector('input[name="confirm_password"]');
       const md5Password = md5(newPasswordInput.value);
-
-       console.log("New Password: " + md5Password);
-
-      // ตรวจสอบรหัสผ่านใหม่
+      //  console.log("md5 Password: " + md5Password);
       if (newPasswordInput.value.trim() === "") {
         toastr.error("กรุณากรอกรหัสผ่านใหม่", "แจ้งเตือน");
         newPasswordInput.focus();
@@ -192,12 +185,12 @@
 
       
       // disable ปุ่มระหว่างรอส่ง
-      // const submitBtn = forgotForm.querySelector('button[type="submit"]');
-      // submitBtn.disabled = true;
-      // submitBtn.innerHTML = `
-      //     <span class="spinner-border spinner-border-sm me-2" role="status"></span>
-      //     กำลังส่ง...
-      // `;
+      const submitBtn = forgotForm.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `
+          <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+          กำลังส่ง...
+      `;
 
       try {
         const formData = new FormData();

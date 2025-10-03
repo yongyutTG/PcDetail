@@ -62,10 +62,10 @@
         <div class="modal-body">
           <form id="forgotForm">
             <div class="mb-3">
-              <label class="form-label">กรอกเลขพนักงาน</label>
+              <label class="form-label">กรุณากรอกชื่อผู้ใช้งาน</label>
               <input type="text" name="forgot_input" class="form-control">
               <label for="email">อีเมลที่ลงทะเบียน</label>
-              <input type="email" class="form-control" name="forgot_email" required>
+              <input type="email" class="form-control" name="forgot_email">
               <label class="form-label">ตั้งรหัสผ่านใหม่</label>
               <input type="password" name="new_password" class="form-control">
               <label class="form-label">ยืนยันรหัสผ่านใหม่</label>
@@ -206,7 +206,6 @@
 
         try {
           const formData = new FormData();
-          // formData.append("confirm_password", confirmPasswordInput.value);
           formData.append("forgot_input", UsernameInput.value);
           formData.append("new_password", md5Password);
           formData.append("forgot_email", emailInput.value);

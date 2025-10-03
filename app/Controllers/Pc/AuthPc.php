@@ -112,7 +112,7 @@ class AuthPc extends BaseController
 
          // ส่งอีเมลด้วย Email Library ของ CI4
         $email = \Config\Services::email();
-        $email->setFrom('noreply@yourapp.com', 'ระบบรีเซ็ตรหัสผ่าน');
+        $email->setFrom('info@tgsaving.com', 'ระบบรีเซ็ตรหัสผ่าน');
         $email->setTo($to);
         $email->setSubject($subject);
         $email->setMessage($message);

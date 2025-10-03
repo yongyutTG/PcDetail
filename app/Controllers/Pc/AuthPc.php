@@ -68,7 +68,7 @@ class AuthPc extends BaseController
     //"ลืมรหัสผ่าน"
     public function forgotPassword() {
         $Username = $this->request->getPost('forgot_input');
-        $Email    = $this->request->getPost('email');
+        $Email    = $this->request->getPost('forgot_email');
 
         if (empty($Username)) {
             return $this->response->setJSON([
@@ -91,9 +91,14 @@ class AuthPc extends BaseController
                 'message' => 'ไม่พบชื่อผู้ใช้งานนี้ในระบบ'
             ]);
         }
-        $newPassword = $this->request->getPost('new_password');
-        // $newPassword = substr(str_shuffle('abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 8);
+
+        //กรณีไรับค่ารหัสผ่านใหม่จาก user
+       // $newPassword = $this->request->getPost('new_password');
+
+        $newPassword = substr(str_shuffle('abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 8);
         //$newPassword = substr(md5(uniqid(rand(), true)), 0, 8); // รหัสผ่านใหม่ 8 ตัวอักษร
+       
+        // Hash ซ้อนอีกชั้น
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
     
         $userModel->update($user['USER_ID'], ['U_PASSWORD' => $hashedPassword]);

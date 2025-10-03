@@ -65,13 +65,13 @@
               <label class="form-label">กรอกเลขพนักงาน</label>
               <input type="text" name="forgot_input" class="form-control">
               <label for="email">อีเมลที่ลงทะเบียน</label>
-              <input type="email" class="form-control" name="email" required>
+              <input type="email" class="form-control" name="forgot_email" required>
               <label class="form-label">ตั้งรหัสผ่านใหม่</label>
               <input type="password" name="new_password" class="form-control">
               <label class="form-label">ยืนยันรหัสผ่านใหม่</label>
               <input type="password" name="confirm_password" class="form-control">
             </div>
-            <!-- <button type="submit" id="forgotBtn" class="btn-login btn-sm w-100">
+            <!-- <button type="submit" id="forgotBtn" class="btn-login btn-s  m w-100">
                         <i class="bi bi-envelope-at"></i> ส่งคำขอรีเซ็ตรหัสผ่าน
                       </button> -->
           </form>
@@ -158,6 +158,7 @@
         }
       });
     }
+
       forgotForm.addEventListener("submit", async function (e) {
         e.preventDefault();
 
@@ -165,7 +166,9 @@
         const newPasswordInput = forgotForm.querySelector('input[name="new_password"]');
         const confirmPasswordInput = forgotForm.querySelector('input[name="confirm_password"]');
         const md5Password = md5(newPasswordInput.value);
+        const emailInput = forgotForm.querySelector('input[name="forgot_email"]');
         //  console.log("md5 Password: " + md5Password);
+
         if (newPasswordInput.value.trim() === "") {
           toastr.error("กรุณากรอกรหัสผ่านใหม่", "แจ้งเตือน");
           newPasswordInput.focus();
@@ -182,6 +185,11 @@
           return;
         }
 
+        if (emailInput.value.trim() === "") {
+          toastr.error("กรุณากรอกอีเมลที่ต้องการจะให้ส่งรหัสผ่านใหม่", "แจ้งเตือน");
+          emailInput.focus();
+          return;
+        }
         if (newPasswordInput.value !== confirmPasswordInput.value) {
           toastr.error("รหัสผ่านใหม่และยืนยันรหัสผ่านไม่ตรงกัน", "แจ้งเตือน");
           confirmPasswordInput.focus();
@@ -201,6 +209,7 @@
           // formData.append("confirm_password", confirmPasswordInput.value);
           formData.append("forgot_input", UsernameInput.value);
           formData.append("new_password", md5Password);
+          formData.append("forgot_email", emailInput.value);
 
 
           const res = await fetch("<?= base_url('auth/forgot-password') ?>", {

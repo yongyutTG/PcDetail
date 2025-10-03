@@ -160,7 +160,7 @@
     forgotForm.addEventListener("submit", async function (e) {
       e.preventDefault();
 
-      const empInput = forgotForm.querySelector('input[name="forgot_input"]');
+      const UsernameInput = forgotForm.querySelector('input[name="forgot_input"]');
       const newPasswordInput = forgotForm.querySelector('input[name="new_password"]');
       const confirmPasswordInput = forgotForm.querySelector('input[name="confirm_password"]');
 
@@ -175,9 +175,9 @@
         confirmPasswordInput.focus();
         return;
       }
-      if (empInput.value.trim() === "") {
-        toastr.error("กรุณากรอกเลขพนักงาน", "แจ้งเตือน");
-        empInput.focus();
+      if (UsernameInput.value.trim() === "") {
+        toastr.error("กรุณากรอกชื่อผู้ใช้งาน", "แจ้งเตือน");
+        UsernameInput.focus();
         return;
       }
 

@@ -69,22 +69,22 @@ class AuthPc extends BaseController
     
     //"ลืมรหัสผ่าน"
     public function forgotPassword() {
-        $EMP_ID = $this->request->getPost('forgot_input');
-        if (empty($EMP_ID)) {
+        $Username = $this->request->getPost('forgot_input');
+        if (empty($Username)) {
             return $this->response->setJSON([
                  'status' => 'error',
-                 'message' => 'กรุณากรอกเลขพนักงาน'
+                 'message' => 'กรุณากรอกชื่อผู้ใช้งาน'
              ]);
         }
 
          // สมมุติว่ามี Model สำหรับ Users
         $userModel = new UserModel();
-        $user = $userModel->getActiveUserByUsername($EMP_ID);
+        $user = $userModel->getActiveUserByUsername($Username);
         // ตรวจสอบ
         if (!$user) {
             return $this->response->setJSON([
                 'status' => 'error',
-                'message' => 'ไม่พบเลขพนักงานนี้ในระบบ'
+                'message' => 'ไม่พบชื่อผู้ใช้งานนี้ในระบบ'
             ]);
         }
         $newPassword = $this->request->getPost('new_password');
@@ -95,8 +95,8 @@ class AuthPc extends BaseController
         //$newPassword = substr(md5(uniqid(rand(), true)), 0, 8); // รหัสผ่านใหม่ 8 ตัวอักษร
         $hashedPassword = password_hash(md5($newPassword), PASSWORD_DEFAULT); // Hash ซ้อนอีกชั้น
 
-        // อัพเดตรหัสผ่านใหม่ในฐานข้อมูลจาก EMP_ID
-        $userModel->update($user['USER_ID'], ['U_PASSWORD' => $hashedPassword]);
+        // อัพเดตรหัสผ่านใหม่ในฐานข้อมูลจาก USER_NAME
+        $userModel->update($user['USER_NAME'], ['U_PASSWORD' => $hashedPassword]);
         // ส่งอีเมลแจ้งรหัสผ่านใหม่ (สมมุติว่ามีฟังก์ชัน sendEmail)
         $to = $user['EMP_ID'] . '@example.com'; // สมมุติ email
         $subject = "รหัสผ่านใหม่สำหรับบัญชีของคุณ";

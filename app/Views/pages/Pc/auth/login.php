@@ -224,6 +224,8 @@
             const modal = bootstrap.Modal.getInstance(document.getElementById("forgotPasswordModal"));
             modal.hide();
             forgotForm.reset();
+            forgotBtn.disabled = false;
+            forgotBtn.innerHTML = `<i class="bi bi-envelope-at"></i> รีเซ็ตรหัสผ่าน`;
           } else {
             toastr.error(data.message, "แจ้งเตือน");
             // เปิดปุ่มกลับเหมือนเดิม

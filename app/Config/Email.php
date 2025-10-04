@@ -7,9 +7,9 @@ use CodeIgniter\Config\BaseConfig;
 class Email extends BaseConfig
 {
 public $protocol = 'smtp';
-public $SMTPHost = 'smtp.tgsaving.com';
-public $SMTPUser = 'yongyut@tgsaving.com';
-public $SMTPPass = '';
+public $SMTPHost = 'smtp.gmail.com';
+public $SMTPUser = 'yongyuttgsaving@gmail.com';
+public $SMTPPass = 'blcg pknr mbbk xpig';
 public $SMTPPort = 587;
 public $SMTPCrypto = 'tls';
 public $mailType = 'html';

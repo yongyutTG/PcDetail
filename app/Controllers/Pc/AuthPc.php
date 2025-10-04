@@ -113,7 +113,7 @@ class AuthPc extends BaseController
 
          // ส่งอีเมลด้วย Email Library ของ CI4
         $email = \Config\Services::email();
-       $email->setFrom('yongyuttgsaving@gmail.com', 'ระบบรีเซ็ตรหัสผ่าน');
+       $email->setFrom('yongyut@tgsaving.com', 'ระบบรีเซ็ตรหัสผ่าน');
         $email->setTo($to);
         $email->setSubject($subject);
         $email->setMessage($message);
@@ -125,10 +125,12 @@ class AuthPc extends BaseController
                 'message' => 'รหัสผ่านใหม่ถูกส่งไปที่อีเมลของคุณแล้ว'
             ]);
         } else {
+            $data = $email->printDebugger(['headers', 'subject', 'body']);
             return $this->response->setJSON([
-                'status' => 'error',
-                'message' => 'ไม่สามารถส่งอีเมลได้ กรุณาลองใหม่อีกครั้ง'
-            ]);
+            'status' => 'error',
+            'message' => 'ไม่สามารถส่งอีเมลได้ กรุณาลองใหม่อีกครั้ง',
+            'debug' => $data
+        ]);
         }
 
         // return $this->response->setJSON([

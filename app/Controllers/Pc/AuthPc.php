@@ -94,7 +94,7 @@ class AuthPc extends BaseController
 
 
          //กรณีไรับค่ารหัสผ่านใหม่จาก user
-       $newPassword_gen = $this->request->getPost('new_password'); รับค่ามาจากหน้าบ้าน เข้า md5 มาแล้ว
+       $newPassword_gen = $this->request->getPost('new_password');
         //$newPassword_gen = substr(str_shuffle('abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 8);
         //$newPassword = substr(md5(uniqid(rand(), true)), 0, 8); // รหัสผ่านใหม่ 8 ตัวอักษร
        

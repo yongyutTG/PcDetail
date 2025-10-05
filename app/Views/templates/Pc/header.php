@@ -136,7 +136,7 @@
                             </li>
                             <li>
                                 <a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                    data-bs-target="#changPasswordModal"><i class=" "></i> เปลี่ยนรหัสผ่าน</a>
+                                    data-bs-target="#changPasswordModal"><i class="bi bi-key-fill"></i> เปลี่ยนรหัสผ่าน</a>
                             </li>
                             <li>
                                 <a class="dropdown-item text-danger" href="javascript:void(0)"

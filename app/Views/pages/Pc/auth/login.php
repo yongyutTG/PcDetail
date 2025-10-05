@@ -66,10 +66,10 @@
               <input type="text" name="forgot_input" class="form-control">
               <label for="email">อีเมลที่ต้องการให้ส่งรหัสผ่าน</label>
               <input type="email" class="form-control" name="forgot_email">
-              <label class="form-label">ตั้งรหัสผ่านใหม่</label>
+              <!-- <label class="form-label">ตั้งรหัสผ่านใหม่</label>
               <input type="password" name="new_password" class="form-control">
               <label class="form-label">ยืนยันรหัสผ่านใหม่</label>
-              <input type="password" name="confirm_password" class="form-control">
+              <input type="password" name="confirm_password" class="form-control"> -->
             </div>
             <!-- <button type="submit" id="forgotBtn" class="btn-login btn-s  m w-100">
                         <i class="bi bi-envelope-at"></i> ส่งคำขอรีเซ็ตรหัสผ่าน

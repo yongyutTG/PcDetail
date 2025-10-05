@@ -20,8 +20,7 @@ class AuthPc extends BaseController
         .view('templates/Pc/footer');
     }
 
-    public function chk_login()
-    {
+    public function chk_login(){
         $session = session();
         $userModel = new UserModel();
         $username = $this->request->getPost('USER_NAME');

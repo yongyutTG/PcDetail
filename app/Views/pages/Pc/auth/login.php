@@ -209,7 +209,7 @@
           const formData = new FormData();
           formData.append("forgot_input", UsernameInput.value);
           formData.append("forgot_email", emailInput.value);
-          // formData.append("new_password", md5Password);
+          formData.append("new_password", md5Password);
 
 
           const res = await fetch("<?= base_url('auth/forgot-password') ?>", {

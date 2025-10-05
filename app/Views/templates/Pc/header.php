@@ -191,11 +191,11 @@
                         <input type="password" name="confirm_password" class="form-control" required>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">บันทึกรหัสผ่านใหม่</button>
-                    </form>
-
+                    <!-- <button type="submit" class="btn btn-save">บันทึกรหัสผ่านใหม่</button> -->
+                </form>
             </div>
             <div class="modal-footer">
+                <button type="submit" class="btn btn-save">บันทึกรหัสผ่านใหม่</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
             </div>
         </div>

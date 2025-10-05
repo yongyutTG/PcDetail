@@ -104,12 +104,10 @@ class AuthPc extends BaseController
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
     
         $userModel->update($user['USER_ID'], ['U_PASSWORD' => $hashedPassword]);
-        
-        // ตั้งค่าผู้รับจาก email ที่ user กรอก
-         // ตั้งค่าผู้รับจาก email ที่ user กรอก
+     
         $to = $Email;
         $subject = "รหัสผ่านใหม่สำหรับบัญชีของคุณ";
-        $message = "สวัสดีคุณ " . $Username . ",\n\n"
+        $message = "สวัสดีผู้ใช้งาน " . $Username . ",\n\n"
              . "รหัสผ่านใหม่ของคุณคือ: " . $newPassword_gen . "\n\n"
              . "กรุณาเปลี่ยนรหัสผ่านหลังจากเข้าสู่ระบบครั้งแรกครับ.";
 
@@ -118,7 +116,7 @@ class AuthPc extends BaseController
 
          // ส่งอีเมลด้วย Email Library ของ CI4
         $email = \Config\Services::email();
-        $email->setFrom('yongyuttgsaving@gmail.com', 'ระบบรีเซ็ตรหัสผ่าน');
+        $email->setFrom('yongyuttgsaving@gmail.com', 'PC Detail ระบบรีเซ็ตรหัสผ่าน');
         $email->setTo($to);
         $email->setSubject($subject);
         $email->setMessage($message);

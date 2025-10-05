@@ -213,6 +213,21 @@ document.addEventListener("DOMContentLoaded", function () {
         const newPass = form.new_password.value.trim();
         const confirmPass = form.confirm_password.value.trim();
 
+
+        if (oldPass.value.trim() === "") {
+          toastr.error("กรุณากรอกรหัสผ่านเดิม", "แจ้งเตือน");
+          oldPass.focus();
+          return;
+        } else if (newPass.value.trim() === "") {
+          toastr.error("กรุณากรอกรหัสผ่านใหม่", "แจ้งเตือน");
+          newPass.focus();
+          return;
+        } else if (confirmPass.value.trim() === "") {
+            toastr.error("กรุณากรอกยืนยันรหัสผ่านใหม")
+            confirmPass.focus();
+            return;
+        }
+
         if (newPass !== confirmPass) {
             toastr.error("รหัสผ่านใหม่ไม่ตรงกัน");
             return;

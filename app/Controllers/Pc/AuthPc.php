@@ -65,42 +65,52 @@ class AuthPc extends BaseController
 
     
     //เปลี่ยนรหัสผ่าน
-     public function changPassword() {
-         $session = session();
-        $data = $this->request->getJSON(true) ?? $this->request->getPost();
-         $UsernameChang = $session->get('USER_NAME');
+    public function changePassword()
+{
+    $session = session();
+    $data = $this->request->getJSON(true) ?? $this->request->getPost();
+    $UsernameChang = $session->get('USER_NAME');
 
-        if (!$UsernameChang) {
-            return $this->response->setJSON([
-                'status' => 'error',
-                'message' => 'Session หมดอายุ กรุณาเข้าสู่ระบบใหม่'
-            ]);
-        }
-       
-        $userModel = new UserModel();
-        $UsernameChang = $userModel->getActiveUserByUsername($UsernameChang);
-
-         //oldPasswordHashjs และ newPasswordjs ที่ส่งมาจากหน้าบ้านถูก md5() แล้ว
-        $oldPasswordHashjs = $data['old_password']; // md5 ที่มาจาก JS
-        $newPasswordjs = $data['new_password']; // md5 ที่มาจาก JS
-
-        // ตรวจสอบ
-         if (!password_verify($oldPasswordHashjs, $UsernameChang['U_PASSWORD'])) {
-            return $this->response->setJSON([
-                'status' => 'error',
-                'message' => 'รหัสผ่านเดิมไม่ถูกต้อง'
-            ]);
-        }
-        $newPassword = md5($newPasswordjs);
-        // Hash ซ้อนอีกชั้น
-        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-        $userModel->update($UsernameChang['USER_ID'], ['U_PASSWORD' => $hashedPassword]);
+    if (!$UsernameChang) {
         return $this->response->setJSON([
-            'status' => 'success',
-            'message' => 'เปลี่ยนรหัสผ่านเรียบร้อยแล้ว'
+            'status' => 'error',
+            'message' => 'Session หมดอายุ กรุณาเข้าสู่ระบบใหม่'
         ]);
-        
     }
+
+    $userModel = new UserModel();
+    $user = $userModel->getActiveUserByUsername($UsernameChang);
+
+    if (!$user) {
+        return $this->response->setJSON([
+            'status' => 'error',
+            'message' => 'ไม่พบข้อมูลผู้ใช้'
+        ]);
+    }
+
+    $oldPasswordHashjs = $data['old_password']; // md5 จาก JS
+    $newPasswordHashjs = $data['new_password']; // md5 จาก JS
+
+    // ตรวจสอบรหัสผ่านเดิม
+    // ตอนสมัครหรือสร้าง user คุณต้องเก็บรหัสแบบนี้: password_hash(md5(plain_password))
+    if (!password_verify($oldPasswordHashjs, $user['U_PASSWORD'])) {
+        return $this->response->setJSON([
+            'status' => 'error',
+            'message' => 'รหัสผ่านเดิมไม่ถูกต้อง'
+        ]);
+    }
+
+    // สร้าง hash ใหม่
+    $hashedPassword = password_hash($newPasswordHashjs, PASSWORD_DEFAULT);
+
+    $userModel->update($user['USER_ID'], ['U_PASSWORD' => $hashedPassword]);
+
+    return $this->response->setJSON([
+        'status' => 'success',
+        'message' => 'เปลี่ยนรหัสผ่านเรียบร้อยแล้ว'
+    ]);
+}
+
 
     //"ลืมรหัสผ่าน"
     public function forgotPassword() {

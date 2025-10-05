@@ -200,8 +200,10 @@
     </div>
   </div>
 </div>
+
+
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("changePasswordForm");
 
     form.addEventListener("submit", async function (e) {
@@ -211,40 +213,42 @@
         const newPass = form.new_password.value.trim();
         const confirmPass = form.confirm_password.value.trim();
 
-       
         if (newPass !== confirmPass) {
-        toastr.error("รหัสผ่านใหม่ไม่ตรงกัน");
-        return;
+            toastr.error("รหัสผ่านใหม่ไม่ตรงกัน");
+            return;
         }
 
+        // เข้ารหัสก่อนส่ง
         const md5oldPass = md5(oldPass);
-        const md5oldnewPass = md5(newPass);
-      
-        try {
-        const response = await fetch("<?= site_url('user/changePassword') ?>", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-            old_password: md5oldPass,
-            new_password: mdnewPass,
-            }),
-        });
+        const md5newPass = md5(newPass);
 
-        const result = await response.json();
-        if (result.status === "success") {
-            toastr.success(result.message);
-            form.reset();
-            const modal = bootstrap.Modal.getInstance(document.getElementById("changPasswordModal"));
-            modal.hide();
-        } else {
-            toastr.error(result.message);
-        }
+        try {
+            const response = await fetch("<?= site_url('user/changePassword') ?>", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    old_password: md5oldPass,
+                    new_password: md5newPass,
+                }),
+            });
+
+            const result = await response.json();
+
+            if (result.status === "success") {
+                toastr.success(result.message);
+                form.reset();
+                const modal = bootstrap.Modal.getInstance(document.getElementById("changPasswordModal"));
+                modal.hide();
+            } else {
+                toastr.error(result.message);
+            }
         } catch (error) {
-        toastr.error("เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์");
+            toastr.error("เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์");
         }
     });
-    });
+});
 </script>
+
 
 
 <script>

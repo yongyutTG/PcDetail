@@ -94,7 +94,7 @@ class AuthPc extends BaseController
 
 
          //กรณีไรับค่ารหัสผ่านใหม่จาก user
-        $newPassword = $this->request->getPost('new_password');
+       $newPassword = $this->request->getPost('new_password');
 
 
         //$newPassword = substr(str_shuffle('abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 8);
@@ -106,38 +106,38 @@ class AuthPc extends BaseController
         $userModel->update($user['USER_ID'], ['U_PASSWORD' => $hashedPassword]);
         
         // ตั้งค่าผู้รับจาก email ที่ user กรอก
-        // $to = $Email;
-        // $subject = "รหัสผ่านใหม่สำหรับบัญชีของคุณ";
-        // $message = "สวัสดีคุณ " . $user['USER_NAME'] . ",\n\n"
-        //      . "รหัสผ่านใหม่ของคุณคือ: " . $newPassword . "\n\n"
-        //      . "กรุณาเปลี่ยนรหัสผ่านหลังจากเข้าสู่ระบบครั้งแรกครับ.";
+        $to = $Email;
+        $subject = "รหัสผ่านใหม่สำหรับบัญชีของคุณ";
+        $message = "สวัสดีคุณ " . $user['USER_NAME'] . ",\n\n"
+             . "รหัสผ่านใหม่ของคุณคือ: " . $newPassword . "\n\n"
+             . "กรุณาเปลี่ยนรหัสผ่านหลังจากเข้าสู่ระบบครั้งแรกครับ.";
 
          // ส่งอีเมลด้วย Email Library ของ CI4
-    //     $email = \Config\Services::email();
-    //    $email->setFrom('yongyuttgsaving@gmail.com', 'ระบบรีเซ็ตรหัสผ่าน');
-    //     $email->setTo($to);
-    //     $email->setSubject($subject);
-    //     $email->setMessage($message);
+        $email = \Config\Services::email();
+        $email->setFrom('yongyuttgsaving@gmail.com', 'ระบบรีเซ็ตรหัสผ่าน');
+        $email->setTo($to);
+        $email->setSubject($subject);
+        $email->setMessage($message);
 
        
-    //     if ($email->send()) {
-    //         return $this->response->setJSON([
-    //             'status' => 'success',
-    //             'message' => 'รหัสผ่านใหม่ถูกส่งไปที่อีเมลของคุณแล้ว'
-    //         ]);
-    //     } else {
-    //         $data = $email->printDebugger(['headers', 'subject', 'body']);
-    //         return $this->response->setJSON([
-    //         'status' => 'error',
-    //         'message' => 'ไม่สามารถส่งอีเมลได้ กรุณาลองใหม่อีกครั้ง',
-    //         'debug' => $data
-    //     ]);
-    //     }
-
-        return $this->response->setJSON([
-            'status' => 'success',
-            'message' => 'ระบบได้บันทึกรหัสผ่านใหม่ของคุณแล้ว'
+        if ($email->send()) {
+            return $this->response->setJSON([
+                'status' => 'success',
+                'message' => 'รหัสผ่านใหม่ถูกส่งไปที่อีเมลของคุณแล้ว'
+            ]);
+        } else {
+            $data = $email->printDebugger(['headers', 'subject', 'body']);
+            return $this->response->setJSON([
+            'status' => 'error',
+            'message' => 'ไม่สามารถส่งอีเมลได้ กรุณาลองใหม่อีกครั้ง',
+            'debug' => $data
         ]);
+        }
+
+        // return $this->response->setJSON([
+        //     'status' => 'success',
+        //     'message' => 'ระบบได้บันทึกรหัสผ่านใหม่ของคุณแล้ว'
+        // ]);
         
     }
 

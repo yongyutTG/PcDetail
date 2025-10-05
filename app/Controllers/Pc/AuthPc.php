@@ -94,10 +94,11 @@ class AuthPc extends BaseController
 
 
          //กรณีไรับค่ารหัสผ่านใหม่จาก user
-       //$newPassword = $this->request->getPost('new_password');
-        $newPassword = substr(str_shuffle('abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 8);
+       //$newPassword = $this->request->getPost('new_password'); รับค่ามาจากหน้าบ้าน เข้า md5 มาแล้ว
+        $newPassword_gen = substr(str_shuffle('abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 8);
         //$newPassword = substr(md5(uniqid(rand(), true)), 0, 8); // รหัสผ่านใหม่ 8 ตัวอักษร
-        $newPassword = md5($newPassword);
+        $newPassword = md5($newPassword_gen);
+       
         // Hash ซ้อนอีกชั้น
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
     
@@ -107,7 +108,7 @@ class AuthPc extends BaseController
         $to = $Email;
         $subject = "รหัสผ่านใหม่สำหรับบัญชีของคุณ";
         $message = "สวัสดีคุณ " . $Username. ",\n\n"
-             . "รหัสผ่านใหม่ของคุณคือ: " . $newPassword . "\n\n"
+             . "รหัสผ่านใหม่ของคุณคือ: " . $newPassword_gen . "\n\n"
              . "กรุณาเปลี่ยนรหัสผ่านหลังจากเข้าสู่ระบบครั้งแรกครับ.";
 
          // ส่งอีเมลด้วย Email Library ของ CI4

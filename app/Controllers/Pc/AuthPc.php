@@ -94,8 +94,8 @@ class AuthPc extends BaseController
 
 
          //กรณีไรับค่ารหัสผ่านใหม่จาก user
-       //$newPassword_gen = $this->request->getPost('new_password');
-       $newPassword_gen = substr(str_shuffle('abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 8);
+       $newPassword_gen = $this->request->getPost('new_password');
+       //$newPassword_gen = substr(str_shuffle('abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 8);
         //$newPassword = substr(md5(uniqid(rand(), true)), 0, 8); // รหัสผ่านใหม่ 8 ตัวอักษร
        
        
@@ -110,7 +110,7 @@ class AuthPc extends BaseController
         $to = $Email;
         $subject = "รหัสผ่านใหม่สำหรับบัญชีของคุณ";
         $message = "สวัสดีคุณ " . $Username . ",\n\n"
-             . "รหัสผ่านใหม่ของคุณคือ: " . $newPassword . "\n\n"
+             . "รหัสผ่านใหม่ของคุณคือ: " . $newPassword_gen . "\n\n"
              . "กรุณาเปลี่ยนรหัสผ่านหลังจากเข้าสู่ระบบครั้งแรกครับ.";
 
         

@@ -70,9 +70,7 @@ class AuthPc extends BaseController
         $Username = $this->request->getPost('forgot_input');
         $Email    = $this->request->getPost('forgot_email');
 
-        //กรณีไรับค่ารหัสผ่านใหม่จาก user
-       // $newPassword = $this->request->getPost('new_password');
-
+       
         if (empty($Username)) {
             return $this->response->setJSON([
                  'status' => 'error',
@@ -96,7 +94,11 @@ class AuthPc extends BaseController
         }
 
 
-        $newPassword = substr(str_shuffle('abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 8);
+         //กรณีไรับค่ารหัสผ่านใหม่จาก user
+        $newPassword = $this->request->getPost('new_password');
+
+
+        //$newPassword = substr(str_shuffle('abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 8);
         //$newPassword = substr(md5(uniqid(rand(), true)), 0, 8); // รหัสผ่านใหม่ 8 ตัวอักษร
        
         // Hash ซ้อนอีกชั้น

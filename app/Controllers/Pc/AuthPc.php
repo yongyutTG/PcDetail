@@ -67,7 +67,7 @@ class AuthPc extends BaseController
     //เปลี่ยนรหัสผ่าน
      public function changPassword() {
          $session = session();
-        $data = $this->request->getJSON(true);
+        $data = $this->request->getJSON(true) ?? $this->request->getPost();
          $UsernameChang = $session->get('USER_NAME');
 
         if (!$UsernameChang) {

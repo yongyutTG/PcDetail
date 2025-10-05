@@ -208,14 +208,18 @@
         const newPass = form.new_password.value.trim();
         const confirmPass = form.confirm_password.value.trim();
 
+       
         if (newPass !== confirmPass) {
         toastr.error("รหัสผ่านใหม่ไม่ตรงกัน");
         return;
         }
 
          //เข้ารหัส md5 ก่อนส่งไปหลังบ้าน
-        const oldHash = CryptoJS.MD5(oldPass).toString();
-        const newHash = CryptoJS.MD5(newPass).toString();
+        // const oldHash = CryptoJS.MD5(oldPass).toString();
+        // const newHash = CryptoJS.MD5(newPass).toString();
+
+        const md5oldPass = md5(oldPass);
+        const md5oldnewPass = md5(newPass);
 
         
         try {
@@ -223,8 +227,8 @@
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-            old_password: oldPass,
-            new_password: newPass,
+            old_password: md5oldPass,
+            new_password: mdnewPass,
             }),
         });
 

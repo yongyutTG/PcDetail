@@ -224,6 +224,9 @@
         const md5oldPass = md5(oldPass);
         const md5oldnewPass = md5(newPass);
 
+        console.log("md5oldPass",md5oldPass)
+
+
         
         try {
         const response = await fetch("<?= site_url('user/changePassword') ?>", {

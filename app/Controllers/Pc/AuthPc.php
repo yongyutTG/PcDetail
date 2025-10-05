@@ -106,7 +106,7 @@ class AuthPc extends BaseController
         // ตั้งค่าผู้รับจาก email ที่ user กรอก
         $to = $Email;
         $subject = "รหัสผ่านใหม่สำหรับบัญชีของคุณ";
-        $message = "สวัสดีคุณ " . $user['USER_NAME'] . ",\n\n"
+        $message = "สวัสดีคุณ " . $Username. ",\n\n"
              . "รหัสผ่านใหม่ของคุณคือ: " . $newPassword . "\n\n"
              . "กรุณาเปลี่ยนรหัสผ่านหลังจากเข้าสู่ระบบครั้งแรกครับ.";
 

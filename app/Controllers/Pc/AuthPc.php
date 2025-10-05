@@ -92,7 +92,6 @@ class AuthPc extends BaseController
     $newPasswordHashjs = $data['new_password']; // md5 จาก JS
 
     // ตรวจสอบรหัสผ่านเดิม
-    // ตอนสมัครหรือสร้าง user คุณต้องเก็บรหัสแบบนี้: password_hash(md5(plain_password))
     if (!password_verify($oldPasswordHashjs, $user['U_PASSWORD'])) {
         return $this->response->setJSON([
             'status' => 'error',

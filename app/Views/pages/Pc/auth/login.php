@@ -66,14 +66,9 @@
               <input type="text" name="forgot_input" class="form-control">
               <label for="email">อีเมลที่ต้องการให้ส่งรหัสผ่าน</label>
               <input type="email" class="form-control" name="forgot_email">
-              <!-- <label class="form-label">ตั้งรหัสผ่านใหม่</label>
-              <input type="password" name="new_password" class="form-control">
-              <label class="form-label">ยืนยันรหัสผ่านใหม่</label>
-              <input type="password" name="confirm_password" class="form-control"> -->
             </div>
           </form>
           <div class="modal-footer">
-            <button type="button" class="btn btn-reset_addPc" id="reset_forgotForm">ล้างข้อมูล</button>
             <button type="submit" id=forgotBtn class="btn-login btn-sm w-100" form="forgotForm">รีเซ็ตรหัสผ่าน</button>
           </div>
         </div>
@@ -188,13 +183,7 @@
           emailInput.focus();
           return;
         }
-        // if (newPasswordInput.value !== confirmPasswordInput.value) {
-        //   toastr.error("รหัสผ่านใหม่และยืนยันรหัสผ่านไม่ตรงกัน", "แจ้งเตือน");
-        //   confirmPasswordInput.focus();
-        //   return;
-        // }
-
-        
+  
         // disable ปุ่มระหว่างรอส่ง
         forgotBtn.disabled = true;
         forgotBtn.innerHTML = `
@@ -235,15 +224,6 @@
           forgotBtn.innerHTML = `<i class="bi bi-envelope-at"></i> รีเซ็ตรหัสผ่าน`;
         }
       });
-      });
-  
-  
-
-
-      // ปุ่มล้างข้อมูลฟอร์ม forgot password
-      const reset_forgotForm = document.getElementById("reset_forgotForm");
-      reset_forgotForm.addEventListener("click", function () {
-        forgotForm.reset();
 });
 
 

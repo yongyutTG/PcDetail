@@ -181,15 +181,15 @@
         <form id="changePasswordForm">
           <div class="mb-3">
             <label>รหัสผ่านเดิม</label>
-            <input type="password" name="old_password" class="form-control" required>
+            <input type="password" name="old_password" class="form-control">
           </div>
           <div class="mb-3">
             <label>รหัสผ่านใหม่</label>
-            <input type="password" name="new_password" class="form-control" required>
+            <input type="password" name="new_password" class="form-control" >
           </div>
           <div class="mb-3">
             <label>ยืนยันรหัสผ่านใหม่</label>
-            <input type="password" name="confirm_password" class="form-control" required>
+            <input type="password" name="confirm_password" class="form-control" >
           </div>
           <div class="modal-footer">
             <button type="submit" class="btn btn-save">บันทึกรหัสผ่านใหม่</button>
@@ -243,7 +243,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     old_password: md5oldPass,
-                    new_password: md5newPass,
+                    new_password: md5newPass
                 }),
             });
 

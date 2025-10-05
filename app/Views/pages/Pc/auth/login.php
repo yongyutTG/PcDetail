@@ -164,22 +164,22 @@
 
         const UsernameInput = forgotForm.querySelector('input[name="forgot_input"]');
         const emailInput = forgotForm.querySelector('input[name="forgot_email"]');
-        // const newPasswordInput = forgotForm.querySelector('input[name="new_password"]');
-        // const confirmPasswordInput = forgotForm.querySelector('input[name="confirm_password"]');
-        // const md5Password = md5(newPasswordInput.value);
+        const newPasswordInput = forgotForm.querySelector('input[name="new_password"]');
+        const confirmPasswordInput = forgotForm.querySelector('input[name="confirm_password"]');
+        const md5Password = md5(newPasswordInput.value);
        
-        //  console.log("md5 Password: " + md5Password);
+         console.log("md5 Password: " + md5Password);
 
-        // if (newPasswordInput.value.trim() === "") {
-        //   toastr.error("กรุณากรอกรหัสผ่านใหม่", "แจ้งเตือน");
-        //   newPasswordInput.focus();
-        //   return;
-        // }
-        // if (confirmPasswordInput.value.trim() === "") {
-        //   toastr.error("กรุณากรอกยืนยันรหัสผ่านใหม่", "แจ้งเตือน");
-        //   confirmPasswordInput.focus();
-        //   return;
-        // }
+        if (newPasswordInput.value.trim() === "") {
+          toastr.error("กรุณากรอกรหัสผ่านใหม่", "แจ้งเตือน");
+          newPasswordInput.focus();
+          return;
+        }
+        if (confirmPasswordInput.value.trim() === "") {
+          toastr.error("กรุณากรอกยืนยันรหัสผ่านใหม่", "แจ้งเตือน");
+          confirmPasswordInput.focus();
+          return;
+        }
         if (UsernameInput.value.trim() === "") {
           toastr.error("กรุณากรอกชื่อผู้ใช้งาน", "แจ้งเตือน");
           UsernameInput.focus();
@@ -191,11 +191,11 @@
           emailInput.focus();
           return;
         }
-        // if (newPasswordInput.value !== confirmPasswordInput.value) {
-        //   toastr.error("รหัสผ่านใหม่และยืนยันรหัสผ่านไม่ตรงกัน", "แจ้งเตือน");
-        //   confirmPasswordInput.focus();
-        //   return;
-        // }
+        if (newPasswordInput.value !== confirmPasswordInput.value) {
+          toastr.error("รหัสผ่านใหม่และยืนยันรหัสผ่านไม่ตรงกัน", "แจ้งเตือน");
+          confirmPasswordInput.focus();
+          return;
+        }
 
         
         // disable ปุ่มระหว่างรอส่ง

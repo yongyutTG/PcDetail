@@ -181,15 +181,15 @@
         <form id="changePasswordForm">
           <div class="mb-3">
             <label>รหัสผ่านเดิม</label>
-            <input type="password" name="old_password" class="form-control">
+            <input type="password" name="old_password" class="form-control" required>
           </div>
           <div class="mb-3">
             <label>รหัสผ่านใหม่</label>
-            <input type="password" name="new_password" class="form-control" >
+            <input type="password" name="new_password" class="form-control" required>
           </div>
           <div class="mb-3">
             <label>ยืนยันรหัสผ่านใหม่</label>
-            <input type="password" name="confirm_password" class="form-control" >
+            <input type="password" name="confirm_password" class="form-control"required >
           </div>
           <div class="modal-footer">
             <button type="submit" class="btn btn-save">บันทึกรหัสผ่านใหม่</button>
@@ -214,19 +214,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const confirmPass = form.confirm_password.value.trim();
 
 
-        if (oldPass.value.trim() === "") {
-          toastr.error("กรุณากรอกรหัสผ่านเดิม", "แจ้งเตือน");
-          oldPass.focus();
-          return;
-        } else if (newPass.value.trim() === "") {
-          toastr.error("กรุณากรอกรหัสผ่านใหม่", "แจ้งเตือน");
-          newPass.focus();
-          return;
-        } else if (confirmPass.value.trim() === "") {
-            toastr.error("กรุณากรอกยืนยันรหัสผ่านใหม")
-            confirmPass.focus();
-            return;
-        }
 
         if (newPass !== confirmPass) {
             toastr.error("รหัสผ่านใหม่ไม่ตรงกัน");

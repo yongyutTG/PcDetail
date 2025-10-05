@@ -132,6 +132,10 @@
                                     data-bs-target="#profileModal"><i class="bi bi-person"></i> โปรไฟล์</a>
                             </li>
                             <li>
+                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#changPasswordModal"><i class=" "></i> เปลี่ยนรหัสผ่าน</a>
+                            </li>
+                            <li>
                                 <a class="dropdown-item text-danger" href="javascript:void(0)"
                                     onclick="confirmLogout()">
                                     <i class="bi bi-box-arrow-right"></i> ออกจากระบบ
@@ -162,6 +166,41 @@
     </div>
 </div>
 
+
+<div class="modal fade" id="changPasswordModal" tabindex="-1" aria-labelledby="changPasswordModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header custom-header">
+                <h5 class="modal-title" id="changPasswordModalLabel">เปลี่ยนรหัสผ่าน</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <div class="mb-3">
+                        <label>รหัสผ่านเดิม</label>
+                        <input type="password" name="old_password" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>รหัสผ่านใหม่</label>
+                        <input type="password" name="new_password" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>ยืนยันรหัสผ่านใหม่</label>
+                        <input type="password" name="confirm_password" class="form-control" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">บันทึกรหัสผ่านใหม่</button>
+                    </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     function confirmLogout() {
         toastr.info(

@@ -174,8 +174,8 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header custom-header">
-        <h5 class="modal-title" id="changPasswordModalLabel">เปลี่ยนรหัสผ่าน</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <h5 class="modal-title" id="changPasswordModalLabel"><i class="bi bi-key-fill"></i> เปลี่ยนรหัสผ่าน</h5>
+         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="ปิด"></button>
       </div>
       <div class="modal-body">
         <form id="changePasswordForm">

@@ -217,17 +217,9 @@
         return;
         }
 
-         //เข้ารหัส md5 ก่อนส่งไปหลังบ้าน
-        // const oldHash = CryptoJS.MD5(oldPass).toString();
-        // const newHash = CryptoJS.MD5(newPass).toString();
-
         const md5oldPass = md5(oldPass);
         const md5oldnewPass = md5(newPass);
-
-        console.log("md5oldPass",md5oldPass)
-
-
-        
+      
         try {
         const response = await fetch("<?= site_url('user/changePassword') ?>", {
             method: "POST",
@@ -252,9 +244,10 @@
         }
     });
     });
+</script>
 
 
-
+<script>
     function confirmLogout() {
         toastr.info(
             '<div style="text-align:center;">คุณต้องการออกจากระบบหรือไม่ ?<br><br>' +
@@ -275,4 +268,4 @@
             toastr.close();
         });
     }
-</script>
+    </script>

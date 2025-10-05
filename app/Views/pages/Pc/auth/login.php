@@ -57,6 +57,8 @@
         <div class="modal-header custom-header">
           <!-- <div class="modal-header bg-primary text-white"> -->
           <h5 class="modal-title" id="forgotPasswordLabel"><i class="bi bi-key-fill"></i> ลืมรหัสผ่าน</h5>
+          <h5>Reset your password</h5>
+          <h5>Enter your User No. and we will send you a new password through email</h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="ปิด"></button>
         </div>
         <div class="modal-body">
@@ -64,7 +66,7 @@
             <div class="mb-3">
               <label class="form-label">กรุณากรอกชื่อผู้ใช้งาน</label>
               <input type="text" name="forgot_input" class="form-control">
-              <label for="email">อีเมลที่ลงทะเบียน</label>
+              <label for="email">อีเมลที่ต้องการให้ส่งรหัสผ่าน</label>
               <input type="email" class="form-control" name="forgot_email">
               <label class="form-label">ตั้งรหัสผ่านใหม่</label>
               <input type="password" name="new_password" class="form-control">

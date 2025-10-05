@@ -108,8 +108,8 @@ class AuthPc extends BaseController
         $to = $Email;
         $subject = "รหัสผ่านใหม่สำหรับบัญชีของคุณ";
         $message = "สวัสดีคุณ " . $Username. ",\n\n"
-             . "รหัสผ่านใหม่ของคุณคือ: " . $newPassword_gen . "\n\n"
-             . "กรุณาเปลี่ยนรหัสผ่านหลังจากเข้าสู่ระบบครั้งแรกครับ.";
+             . "รหัสผ่านใหม่ของคุณคือ: " . $newPassword_gen .
+   
 
          // ส่งอีเมลด้วย Email Library ของ CI4
         $email = \Config\Services::email();

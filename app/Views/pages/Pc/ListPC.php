@@ -1041,23 +1041,42 @@
 
 
 
-  // Event delegation สำหรับปุ่ม Copy IP
-document.addEventListener("click", function (e) {
-  if (e.target.closest(".copy-ip-btn")) {
-    const btn = e.target.closest(".copy-ip-btn");
-    const ip = btn.getAttribute("data-ip");
-    if (ip) {
-      navigator.clipboard.writeText(ip)
-        .then(() => {
-          btn.innerHTML = '<i class="fa-solid fa-check text-success"></i>';
-          setTimeout(() => {
-            btn.innerHTML = '<i class="fa-solid fa-copy"></i>';
-          }, 1500);
-        })
-        .catch(() => alert("คัดลอกไม่สำเร็จ"));
+ document.addEventListener("click", function (e) {
+  const btn = e.target.closest(".copy-ip-btn");
+  if (!btn) return;
+
+  const ip = btn.getAttribute("data-ip");
+  if (!ip) return;
+
+  // ✅ ตรวจสอบว่ามี clipboard API ไหม
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(ip)
+      .then(() => {
+        btn.innerHTML = '<i class="fa-solid fa-check text-success"></i>';
+        setTimeout(() => {
+          btn.innerHTML = '<i class="fa-solid fa-copy"></i>';
+        }, 1500);
+      })
+      .catch(() => alert("คัดลอกไม่สำเร็จ"));
+  } else {
+    // ✅ fallback แบบเก่า ใช้ textarea ชั่วคราว
+    const tempInput = document.createElement("textarea");
+    tempInput.value = ip;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    try {
+      document.execCommand("copy");
+      btn.innerHTML = '<i class="fa-solid fa-check text-success"></i>';
+      setTimeout(() => {
+        btn.innerHTML = '<i class="fa-solid fa-copy"></i>';
+      }, 1500);
+    } catch (err) {
+      alert("คัดลอกไม่สำเร็จ");
     }
+    document.body.removeChild(tempInput);
   }
 });
+
   
 
 </script>

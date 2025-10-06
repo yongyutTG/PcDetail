@@ -101,15 +101,9 @@
                 <div class="modal-content">
                   <div class="modal-header custom-header">
                     <h5 class="modal-title" id="pcDetailLabel">View PC Detail</h5>
-                    
-                    <!-- <button id="remoteDesktopBtn" class="btn btn-outline-light btn-sm ms-3"><i class="fa-solid fa-desktop"></i>
-                      (RemoteDesktop)
-                    </button> -->
-
-                     <!-- ตัวอย่างปุ่มใน View -->
-                    <!-- <button id="rdpDownloadBtn" class="btn btn-outline-light btn-sm ms-3" target="_blank"><i class="fa-solid fa-download"></i>
+                    <button id="rdpDownloadBtn" class="btn btn-outline-light btn-sm ms-3" target="_blank"><i class="fa-solid fa-download"></i>
                       ดาวน์โหลด .rdp
-                    </button> -->
+                    </button>
 
                     <button id="pingBtn" class="btn btn-outline-light btn-sm ms-3"><i class="fa-solid fa-signal"></i>
                       (Ping)
@@ -507,6 +501,58 @@
     // "timeOut": "3000"
   };
 
+
+document.addEventListener("click", function (e) {
+  const btn = e.target.closest(".copy-ip-btn");
+  if (!btn) return;
+
+  const ip = btn.getAttribute("data-ip");
+  if (!ip) return;
+
+  async function copyToClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      try {
+        await navigator.clipboard.writeText(text);
+        return true;
+      } catch (err) {
+        console.warn("Clipboard API failed:", err);
+      }
+    }
+
+    // fallback
+    const tempInput = document.createElement("textarea");
+    tempInput.value = text;
+    tempInput.style.position = "fixed";
+    tempInput.style.opacity = "0";
+    document.body.appendChild(tempInput);
+    tempInput.focus();
+    tempInput.select();
+
+    try {
+      const success = document.execCommand("copy");
+      document.body.removeChild(tempInput);
+      return success;
+    } catch (err) {
+      console.error("Fallback copy failed:", err);
+      document.body.removeChild(tempInput);
+      return false;
+    }
+  }
+
+  copyToClipboard(ip).then((ok) => {
+    if (ok) {
+      btn.innerHTML = '<i class="fa-solid fa-check text-success"></i>';
+      setTimeout(() => {
+        btn.innerHTML = '<i class="fa-regular fa-copy"></i>';
+      }, 1500);
+    } else {
+      alert("❌ คัดลอกไม่สำเร็จ");
+    }
+  });
+});
+
+
+  
   document.addEventListener("DOMContentLoaded", function () {
     const spinner = document.getElementById("loading-spinner");
     const tbody = document.getElementById('tableBody');
@@ -794,40 +840,7 @@
         });
         if (!res.ok) throw new Error(`ไม่สามารถโหลดรายละเอียด PC ${pcId}`);
         const result = await res.json();
-        // if (result.status === 'success') {
-
-        //   const pc = result.data;
-        //   window.currentPcIp = pc.ip_address || pc.ip;
-
-        //   document.getElementById("pcDetailBody").innerHTML = renderDetailHTML(result.data);
-
-
-        //   document.getElementById("pingStatus").innerHTML = "-";
-        //   document.getElementById("pingStatus").className = "ms-2 text-muted";
-
-
-        //   const pingBtn = document.getElementById("pingBtn");
-        //   if (pingBtn) {
-        //     pingBtn.onclick = function () { pingPc(window.currentPcIp); };
-        //   }
-
-        //   if (currentPcIp) {
-        //     pingPc(currentPcIp);
-        //   }
-
-        //   // ดึงประวัติย้อนหลัง LogPC หลัง render รายละเอียดเสร็จ
-        //   fetch(`${historyUrl}/${pcId}`)
-        //     .then(res => res.json())
-        //     .then(historyResult => {
-        //       if (historyResult.status === 'success') {
-        //         renderPCHistory(historyResult.data);
-        //       } else {
-        //         renderPCHistory([]);
-        //       }
-        //     })
-        //     .catch(() => renderPCHistory([]));
-        //   new bootstrap.Modal(document.getElementById("pcDetailModal")).show();
-          
+       
         if (result.status === 'success') {
 
             const pc = result.data;
@@ -839,29 +852,29 @@
             document.getElementById("pingStatus").className = "ms-2 text-muted";
 
              // ตั้งค่า ping button (ถ้ามี)
-    const pingBtn = document.getElementById("pingBtn");
-    if (pingBtn) {
-        pingBtn.onclick = function () { pingPc(window.currentPcIp); };
-    }
+          const pingBtn = document.getElementById("pingBtn");
+          if (pingBtn) {
+              pingBtn.onclick = function () { pingPc(window.currentPcIp); };
+          }
 
-    // ping อัตโนมัติ
-    if (window.currentPcIp) {
-        pingPc(window.currentPcIp);
-    }
+          // ping อัตโนมัติ
+          if (window.currentPcIp) {
+              pingPc(window.currentPcIp);
+          }
 
 
           // ✅ ตั้งค่า RDP Download button แบบไม่โดน Browser block
-    const rdpBtn = document.getElementById("rdpDownloadBtn");
-    if (rdpBtn && window.currentPcIp) {
-        rdpBtn.onclick = function () {
-            const link = document.createElement("a");
-            link.href = `<?= base_url('remote/rdp') ?>/${window.currentPcIp}`;
-            link.download = `${window.currentPcIp}.rdp`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        };
-    }
+            const rdpBtn = document.getElementById("rdpDownloadBtn");
+            if (rdpBtn && window.currentPcIp) {
+                rdpBtn.onclick = function () {
+                    const link = document.createElement("a");
+                    link.href = `<?= base_url('remote/rdp') ?>/${window.currentPcIp}`;
+                    link.download = `${window.currentPcIp}.rdp`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                };
+            }
 
          
             // ดึงประวัติย้อนหลัง LogPC หลัง render รายละเอียดเสร็จ
@@ -945,7 +958,7 @@
             <span class="ip-text">${pc.ip_address || '-'}</span>
             ${pc.ip_address ? `<button class="btn btn-sm btn-light border copy-ip-btn" 
                           data-ip="${pc.ip_address}" 
-                          title="คัดลอก IP">
+                          title="คัดลอก">
                       <i class="fa-regular fa-copy"></i>
                   </button>`
                 : ''

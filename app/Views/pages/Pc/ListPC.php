@@ -708,9 +708,9 @@ let selectedRowIndex = -1;
 // }
 function highlightRow(index) {
   const rows = tbody.querySelectorAll("tr");
-  rows.forEach((tr, i) => tr.classList.toggle("table-primary", i === index));
+  rows.forEach((tr, i) => tr.classList.toggle("highlight", i === index));
   selectedRowIndex = index;
-  if (index >= 0) rows[index].focus(); // focus แถว
+  if (index >= 0) rows[index].focus();
   if (index >= 0) rows[index].scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 

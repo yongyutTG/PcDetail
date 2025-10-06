@@ -502,56 +502,6 @@
   };
 
 
-document.addEventListener("click", function (e) {
-  const btn = e.target.closest(".copy-ip-btn");
-  if (!btn) return;
-
-  const ip = btn.getAttribute("data-ip");
-  if (!ip) return;
-
-  async function copyToClipboard(text) {
-    if (navigator.clipboard && window.isSecureContext) {
-      try {
-        await navigator.clipboard.writeText(text);
-        return true;
-      } catch (err) {
-        console.warn("Clipboard API failed:", err);
-      }
-    }
-
-    // fallback
-    const tempInput = document.createElement("textarea");
-    tempInput.value = text;
-    tempInput.style.position = "fixed";
-    tempInput.style.opacity = "0";
-    document.body.appendChild(tempInput);
-    tempInput.focus();
-    tempInput.select();
-
-    try {
-      const success = document.execCommand("copy");
-      document.body.removeChild(tempInput);
-      return success;
-    } catch (err) {
-      console.error("Fallback copy failed:", err);
-      document.body.removeChild(tempInput);
-      return false;
-    }
-  }
-
-  copyToClipboard(ip).then((ok) => {
-    if (ok) {
-      btn.innerHTML = '<i class="fa-solid fa-check text-success"></i>';
-      setTimeout(() => {
-        btn.innerHTML = '<i class="fa-regular fa-copy"></i>';
-      }, 1500);
-    } else {
-      alert("❌ คัดลอกไม่สำเร็จ");
-    }
-  });
-});
-
-
   
   document.addEventListener("DOMContentLoaded", function () {
     const spinner = document.getElementById("loading-spinner");
@@ -899,6 +849,44 @@ document.addEventListener("click", function (e) {
         toastr.error(err.message || 'เกิดข้อผิดพลาดในการโหลดข้อมูล', 'Error');
       }
     }
+
+
+
+    // ⬇️ เรียกฟังก์ชันนี้หลังจาก modal ถูกสร้าง
+    attachCopyIPHandler();
+function attachCopyIPHandler() {
+  document.querySelectorAll(".copy-ip-btn").forEach(btn => {
+    btn.addEventListener("click", async function () {
+      const ip = this.getAttribute("data-ip");
+      if (!ip) return;
+
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(ip);
+        } else {
+          // fallback
+          const temp = document.createElement("textarea");
+          temp.value = ip;
+          document.body.appendChild(temp);
+          temp.select();
+          document.execCommand("copy");
+          document.body.removeChild(temp);
+        }
+
+        // แสดงว่า "คัดลอกสำเร็จ"
+        this.innerHTML = '<i class="fa-solid fa-check text-success"></i>';
+        setTimeout(() => {
+          this.innerHTML = '<i class="fa-regular fa-copy"></i>';
+        }, 1500);
+      } catch (err) {
+        alert("❌ คัดลอกไม่สำเร็จ");
+      }
+    });
+  });
+}
+
+
+
 
     //ข้อมูลLogPC modal
     function renderPCHistory(history) {

@@ -942,14 +942,16 @@
         <li class="list-group-item"><strong>Model:</strong> ${pc.model || '-'}</li>
         <li class="list-group-item"><strong>IP:</strong> ${pc.ip_address || '-'}</li>
          <li class="list-group-item d-flex align-items-center justify-content-between">
-        <div><strong>IP:</strong> ${pc.ip_address || '-'}</div>
+        <div class="d-flex align-items-center gap-1">
+        <span>${pc.ip_address || '-'}</span>
         ${
           pc.ip_address
-            ? `<button class="btn btn-sm btn-light border copy-ip-btn" data-ip="${pc.ip_address}" title="คัดลอก IP">
-                  <i class="fa-regular fa-copy"></i>
+            ? `<button class="btn btn-sm btn-light border copy-ip-btn" data-ip="${pc.ip_address}" title="คัดลอก">
+                <i class="fa-regular fa-copy"></i>
                </button>`
             : ''
         }
+      </div>
       </li>
         <li class="list-group-item"><strong>RAM:</strong> ${pc.ram || '-'}</li>
         <li class="list-group-item"><strong>Harddisk:</strong> ${pc.harddisk || '-'}</li>

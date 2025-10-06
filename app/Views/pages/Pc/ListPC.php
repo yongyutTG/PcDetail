@@ -698,11 +698,12 @@ let selectedRowIndex = -1;
     });
 
 
-    // Highlight แถว
+    // Highlight แถว focus + scroll
 function highlightRow(index) {
   const rows = tbody.querySelectorAll("tr");
   rows.forEach((tr, i) => tr.classList.toggle("table-primary", i === index));
   selectedRowIndex = index;
+  if (index >= 0) rows[index].focus();
   if (index >= 0) rows[index].scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
@@ -749,7 +750,7 @@ function makeRowsFocusable() {
 
 
     // Arrow Up / Down + Enter บน tbody
-   document.addEventListener("keydown", function(e) {
+    document.addEventListener("keydown", function(e) {
   const rows = Array.from(tbody.querySelectorAll("tr"));
   if (!rows.length) return;
 
@@ -758,7 +759,7 @@ function makeRowsFocusable() {
     let nextIndex = selectedRowIndex + 1;
     if (nextIndex >= rows.length) nextIndex = 0;
     highlightRow(nextIndex);
-    rows[nextIndex].focus(); // ให้โฟกัสแถวจริง
+    rows[nextIndex].focus();
   } else if (e.key === "ArrowUp") {
     e.preventDefault();
     let prevIndex = selectedRowIndex - 1;
@@ -773,6 +774,7 @@ function makeRowsFocusable() {
     }
   }
 });
+
 
     // ----------------------
     // ฟังก์ชันหลัง render ตาราง

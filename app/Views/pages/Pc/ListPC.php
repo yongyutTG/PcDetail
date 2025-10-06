@@ -840,7 +840,8 @@
               .catch(() => renderPCHistory([]));
 
             new bootstrap.Modal(document.getElementById("pcDetailModal")).show();
-        
+          // ⬇️ เรียกฟังก์ชันนี้หลังจาก modal ถูกสร้าง
+    attachCopyIPHandler();
 
         } else {
           tbody.innerHTML = `<tr><td colspan="4" class="text-center text-danger">ไม่พบข้อมูล</td></tr>`;
@@ -852,8 +853,7 @@
 
 
 
-    // ⬇️ เรียกฟังก์ชันนี้หลังจาก modal ถูกสร้าง
-    attachCopyIPHandler();
+  
 function attachCopyIPHandler() {
   document.querySelectorAll(".copy-ip-btn").forEach(btn => {
     btn.addEventListener("click", async function () {

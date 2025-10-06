@@ -941,15 +941,16 @@
         <li class="list-group-item"><strong>Brand:</strong> ${pc.band || '-'}</li>
         <li class="list-group-item"><strong>Model:</strong> ${pc.model || '-'}</li>
         <li class="list-group-item"><strong>IP:</strong> ${pc.ip_address || '-'}</li>
-        <li class="list-group-item"><strong>IP:</strong>${pc.ip_address || '-'}
-          ${
-            pc.ip_address
-              ? `<button class="btn btn-sm btn-outline-primary copy-ip-btn" data-ip="${pc.ip_address}" title="คัดลอก IP">
-                  <i class="fa-solid fa-network-wired"></i>
-                </button>`
-              : ''
-          }
-        </li>
+        <li class="list-group-item"><strong>IP:</strong>
+        <span>${pc.ip_address || '-'}</span>
+        ${
+          pc.ip_address
+            ? `<button class="btn btn-sm btn-outline-primary copy-ip-btn" data-ip="${pc.ip_address}" title="คัดลอก IP">
+                 <i class="fa-solid fa-network-wired"></i>
+               </button>`
+            : ''
+        }
+     </li>
         <li class="list-group-item"><strong>RAM:</strong> ${pc.ram || '-'}</li>
         <li class="list-group-item"><strong>Harddisk:</strong> ${pc.harddisk || '-'}</li>
         <li class="list-group-item"><strong>CPU:</strong> ${pc.cpu || '-'}</li>

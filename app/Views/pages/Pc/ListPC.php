@@ -795,12 +795,7 @@
 
             const pc = result.data;
             window.currentPcIp = pc.ip_address || pc.ip;
-
             document.getElementById("pcDetailBody").innerHTML = renderDetailHTML(result.data);
-
-            attachCopyIPHandler();
-
-
             document.getElementById("pingStatus").innerHTML = "-";
             document.getElementById("pingStatus").className = "ms-2 text-muted";
 
@@ -843,7 +838,7 @@
               .catch(() => renderPCHistory([]));
 
             new bootstrap.Modal(document.getElementById("pcDetailModal")).show();
-     
+      attachCopyIPHandler();
         } else {
           tbody.innerHTML = `<tr><td colspan="4" class="text-center text-danger">ไม่พบข้อมูล</td></tr>`;
         }
@@ -979,7 +974,7 @@
       });
     }
 
-    
+
     //เพิ่มข้อมูล pc
     document.getElementById('addPcForm').addEventListener('submit', async function (e) {
       e.preventDefault();

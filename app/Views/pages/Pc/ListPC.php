@@ -596,7 +596,7 @@
         <span>${pc.ip_address || '-'}</span>
         ${
           pc.ip_address
-            ? `<button class="btn btn-sm btn-light border copy-ip-btn" data-ip="${pc.ip_address}" title="คัดลอก">
+            ? `<button class="fa-thin fa-copy" data-ip="${pc.ip_address}" title="คัดลอก">
                  <i class="fa-thin fa-copy"></i>
                </button>`
             : ''

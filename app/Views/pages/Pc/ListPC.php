@@ -941,8 +941,8 @@
         <li class="list-group-item"><strong>Brand:</strong> ${pc.band || '-'}</li>
         <li class="list-group-item"><strong>Model:</strong> ${pc.model || '-'}</li>
         <li class="list-group-item"><strong>IP:</strong> ${pc.ip_address || '-'}</li>
-        <li class="list-group-item"><strong>IP:</strong>
-        <span>${pc.ip_address || '-'}</span>
+         <li class="list-group-item d-flex align-items-center justify-content-between">
+        <div><strong>IP:</strong> ${pc.ip_address || '-'}</div>
         ${
           pc.ip_address
             ? `<button class="btn btn-sm btn-outline-primary copy-ip-btn" data-ip="${pc.ip_address}" title="คัดลอก IP">
@@ -950,7 +950,7 @@
                </button>`
             : ''
         }
-     </li>
+      </li>
         <li class="list-group-item"><strong>RAM:</strong> ${pc.ram || '-'}</li>
         <li class="list-group-item"><strong>Harddisk:</strong> ${pc.harddisk || '-'}</li>
         <li class="list-group-item"><strong>CPU:</strong> ${pc.cpu || '-'}</li>
@@ -1088,5 +1088,41 @@
 });
 
   
+
+// ========== ฟังก์ชัน Copy IP ==========
+document.addEventListener("click", function (e) {
+  const btn = e.target.closest(".copy-ip-btn");
+  if (!btn) return;
+
+  const ip = btn.getAttribute("data-ip");
+  if (!ip) return;
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(ip)
+      .then(() => {
+        btn.innerHTML = '<i class="fa-solid fa-check text-success"></i>';
+        setTimeout(() => {
+          btn.innerHTML = '<i class="fa-solid fa-network-wired"></i>';
+        }, 1500);
+      })
+      .catch(() => alert("คัดลอกไม่สำเร็จ"));
+  } else {
+    const tempInput = document.createElement("textarea");
+    tempInput.value = ip;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    try {
+      document.execCommand("copy");
+      btn.innerHTML = '<i class="fa-solid fa-check text-success"></i>';
+      setTimeout(() => {
+        btn.innerHTML = '<i class="fa-solid fa-network-wired"></i>';
+      }, 1500);
+    } catch {
+      alert("คัดลอกไม่สำเร็จ");
+    }
+    document.body.removeChild(tempInput);
+  }
+});
+
 
 </script>

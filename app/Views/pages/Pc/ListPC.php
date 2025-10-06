@@ -696,6 +696,30 @@
       fetchPCs({ page: 1 });
     });
 
+    // listener สำหรับกด Enter เพื่อเปิด modal
+    searchInput.addEventListener('keydown', function(e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+
+        // ให้ fetchPCs เสร็จก่อน (อาจต้อง delay หรือรอ Promise)
+        fetchPCs({
+          page: 1,
+          keyword: searchInput.value,
+          status: statusFilter.value,
+          br_no: brnoFilter.value,
+          property_type: typeFilter.value
+        }).then(() => {
+          // หลัง render ตารางเสร็จ
+          const firstRow = tbody.querySelector("tr");
+          if (firstRow) {
+            const viewBtn = firstRow.querySelector(".view-btn");
+            if (viewBtn) viewBtn.click(); // เปิด modal ของแถวแรก
+          }
+        });
+      }
+    });
+
+
     // Map ข้อมูลเข้า form edit
     function fillEditForm(pc) {
       const map = [
@@ -838,7 +862,7 @@
               .catch(() => renderPCHistory([]));
 
             new bootstrap.Modal(document.getElementById("pcDetailModal")).show();
-      attachCopyIPHandler();
+     
         } else {
           tbody.innerHTML = `<tr><td colspan="4" class="text-center text-danger">ไม่พบข้อมูล</td></tr>`;
         }
@@ -941,39 +965,6 @@
       </ul>
     `;
     }
-
-
-  function attachCopyIPHandler() {
-      document.querySelectorAll("#pcDetailBody .copy-ip-btn").forEach(btn => {
-        btn.addEventListener("click", async function () {
-          const ip = this.getAttribute("data-ip");
-          if (!ip) return;
-
-          try {
-            if (navigator.clipboard && window.isSecureContext) {
-              await navigator.clipboard.writeText(ip);
-            } else {
-              // fallback
-              const temp = document.createElement("textarea");
-              temp.value = ip;
-              document.body.appendChild(temp);
-              temp.select();
-              document.execCommand("copy");
-              document.body.removeChild(temp);
-            }
-
-            // แสดง icon ✅
-            this.innerHTML = '<i class="fa-solid fa-check text-success"></i>';
-            setTimeout(() => {
-              this.innerHTML = '<i class="fa-regular fa-copy"></i>';
-            }, 1500);
-          } catch (err) {
-            alert("❌ คัดลอกไม่สำเร็จ");
-          }
-        });
-      });
-    }
-
 
     //เพิ่มข้อมูล pc
     document.getElementById('addPcForm').addEventListener('submit', async function (e) {

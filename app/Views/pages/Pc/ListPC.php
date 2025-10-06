@@ -1065,7 +1065,7 @@
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(ip)
       .then(() => {
-        btn.innerHTML = '<i class="fa-solid fa-check text-success"></i>';
+        btn.innerHTML = '<i class="fa-regular fa-check text-success"></i>';
         setTimeout(() => {
           btn.innerHTML = '<i class="fa-regular fa-copy"></i>';
         }, 1500);

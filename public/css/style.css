@@ -158,6 +158,11 @@ h2 {
 }
 
 
+.highlight {
+  background-color: #ffeb3b; /* สีเหลืองอ่อน */
+  color: #000;
+}
+
   /* เฉพาะตาราง */
   table.table {
     font-size: 14px;

@@ -706,6 +706,7 @@ function highlightRow(index) {
   if (index >= 0) rows[index].scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
+
 // ให้แต่ละ row focus ได้
 function makeRowsFocusable() {
   tbody.querySelectorAll("tr").forEach(tr => tr.setAttribute("tabindex", "0"));
@@ -748,28 +749,30 @@ function makeRowsFocusable() {
 
 
     // Arrow Up / Down + Enter บน tbody
-    tbody.addEventListener("keydown", function(e) {
-      const rows = Array.from(tbody.querySelectorAll("tr"));
-      if (!rows.length) return;
+   document.addEventListener("keydown", function(e) {
+  const rows = Array.from(tbody.querySelectorAll("tr"));
+  if (!rows.length) return;
 
-      if (e.key === "ArrowDown") {
-        e.preventDefault();
-        let nextIndex = selectedRowIndex + 1;
-        if (nextIndex >= rows.length) nextIndex = 0;
-        highlightRow(nextIndex);
-      } else if (e.key === "ArrowUp") {
-        e.preventDefault();
-        let prevIndex = selectedRowIndex - 1;
-        if (prevIndex < 0) prevIndex = rows.length - 1;
-        highlightRow(prevIndex);
-      } else if (e.key === "Enter") {
-        e.preventDefault();
-        if (selectedRowIndex >= 0) {
-          const viewBtn = rows[selectedRowIndex].querySelector(".view-btn");
-          if (viewBtn) viewBtn.click();
-        }
-      }
-    });
+  if (e.key === "ArrowDown") {
+    e.preventDefault();
+    let nextIndex = selectedRowIndex + 1;
+    if (nextIndex >= rows.length) nextIndex = 0;
+    highlightRow(nextIndex);
+    rows[nextIndex].focus(); // ให้โฟกัสแถวจริง
+  } else if (e.key === "ArrowUp") {
+    e.preventDefault();
+    let prevIndex = selectedRowIndex - 1;
+    if (prevIndex < 0) prevIndex = rows.length - 1;
+    highlightRow(prevIndex);
+    rows[prevIndex].focus();
+  } else if (e.key === "Enter") {
+    e.preventDefault();
+    if (selectedRowIndex >= 0) {
+      const viewBtn = rows[selectedRowIndex].querySelector(".view-btn");
+      if (viewBtn) viewBtn.click();
+    }
+  }
+});
 
     // ----------------------
     // ฟังก์ชันหลัง render ตาราง

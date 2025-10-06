@@ -852,38 +852,6 @@
       }
     }
 
-    function attachCopyIPHandler() {
-  document.querySelectorAll("#pcDetailBody .copy-ip-btn").forEach(btn => {
-    btn.addEventListener("click", async function () {
-      const ip = this.getAttribute("data-ip");
-      if (!ip) return;
-
-      try {
-        if (navigator.clipboard && window.isSecureContext) {
-          await navigator.clipboard.writeText(ip);
-        } else {
-          // fallback
-          const temp = document.createElement("textarea");
-          temp.value = ip;
-          document.body.appendChild(temp);
-          temp.select();
-          document.execCommand("copy");
-          document.body.removeChild(temp);
-        }
-
-        // แสดง icon ✅
-        this.innerHTML = '<i class="fa-solid fa-check text-success"></i>';
-        setTimeout(() => {
-          this.innerHTML = '<i class="fa-regular fa-copy"></i>';
-        }, 1500);
-      } catch (err) {
-        alert("❌ คัดลอกไม่สำเร็จ");
-      }
-    });
-  });
-}
-
-
 
     //Render LogPC modal
     function renderPCHistory(history) {
@@ -980,7 +948,38 @@
     }
 
 
+  function attachCopyIPHandler() {
+      document.querySelectorAll("#pcDetailBody .copy-ip-btn").forEach(btn => {
+        btn.addEventListener("click", async function () {
+          const ip = this.getAttribute("data-ip");
+          if (!ip) return;
 
+          try {
+            if (navigator.clipboard && window.isSecureContext) {
+              await navigator.clipboard.writeText(ip);
+            } else {
+              // fallback
+              const temp = document.createElement("textarea");
+              temp.value = ip;
+              document.body.appendChild(temp);
+              temp.select();
+              document.execCommand("copy");
+              document.body.removeChild(temp);
+            }
+
+            // แสดง icon ✅
+            this.innerHTML = '<i class="fa-solid fa-check text-success"></i>';
+            setTimeout(() => {
+              this.innerHTML = '<i class="fa-regular fa-copy"></i>';
+            }, 1500);
+          } catch (err) {
+            alert("❌ คัดลอกไม่สำเร็จ");
+          }
+        });
+      });
+    }
+
+    
     //เพิ่มข้อมูล pc
     document.getElementById('addPcForm').addEventListener('submit', async function (e) {
       e.preventDefault();

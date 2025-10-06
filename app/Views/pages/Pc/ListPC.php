@@ -565,7 +565,7 @@
       }
     }
 
-    // สร้างแถวในตาราง PC 
+    // Render สร้างแถวในตาราง PC 
     function addTableRow(pc) {
       const row = document.createElement("tr");
       const branchNames = {
@@ -781,7 +781,7 @@
     });
 
     window.currentPcIp = null;
-    //ดึงรายละเอียด PC และ log การใช้งานในModal
+    //ดึงรายละเอียด PC และ log ไปใช้งานในModal
     async function fetchPCDetail(pcId) {
       try {
         const res = await fetch(`${apiBaseUrl}/${pcId}`, {
@@ -797,6 +797,9 @@
             window.currentPcIp = pc.ip_address || pc.ip;
 
             document.getElementById("pcDetailBody").innerHTML = renderDetailHTML(result.data);
+
+            attachCopyIPHandler();
+
 
             document.getElementById("pingStatus").innerHTML = "-";
             document.getElementById("pingStatus").className = "ms-2 text-muted";
@@ -840,9 +843,7 @@
               .catch(() => renderPCHistory([]));
 
             new bootstrap.Modal(document.getElementById("pcDetailModal")).show();
-          // ⬇️ เรียกฟังก์ชันนี้หลังจาก modal ถูกสร้าง
-    attachCopyIPHandler();
-
+     
         } else {
           tbody.innerHTML = `<tr><td colspan="4" class="text-center text-danger">ไม่พบข้อมูล</td></tr>`;
         }
@@ -851,11 +852,8 @@
       }
     }
 
-
-
-  
-function attachCopyIPHandler() {
-  document.querySelectorAll(".copy-ip-btn").forEach(btn => {
+    function attachCopyIPHandler() {
+  document.querySelectorAll("#pcDetailBody .copy-ip-btn").forEach(btn => {
     btn.addEventListener("click", async function () {
       const ip = this.getAttribute("data-ip");
       if (!ip) return;
@@ -873,7 +871,7 @@ function attachCopyIPHandler() {
           document.body.removeChild(temp);
         }
 
-        // แสดงว่า "คัดลอกสำเร็จ"
+        // แสดง icon ✅
         this.innerHTML = '<i class="fa-solid fa-check text-success"></i>';
         setTimeout(() => {
           this.innerHTML = '<i class="fa-regular fa-copy"></i>';
@@ -887,8 +885,7 @@ function attachCopyIPHandler() {
 
 
 
-
-    //ข้อมูลLogPC modal
+    //Render LogPC modal
     function renderPCHistory(history) {
       const historyTableBody = document.getElementById('pcHistoryTableBody');
       if (!historyTableBody) {
@@ -922,9 +919,7 @@ function attachCopyIPHandler() {
     }
 
 
-
-
-    //Renderหน้ารายละเอียดใน modal
+    //Render Pc modal
     function renderDetailHTML(pc) {
       const branchNames = {
         "001": "ลาดพร้าว",

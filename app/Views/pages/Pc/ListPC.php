@@ -699,13 +699,33 @@ let selectedRowIndex = -1;
 
 
     // Highlight แถว focus + scroll
+// function highlightRow(index) {
+//   const rows = tbody.querySelectorAll("tr");
+//   rows.forEach((tr, i) => tr.classList.toggle("table-primary", i === index));
+//   selectedRowIndex = index;
+//   if (index >= 0) rows[index].focus();
+//   if (index >= 0) rows[index].scrollIntoView({ behavior: "smooth", block: "nearest" });
+// }
 function highlightRow(index) {
   const rows = tbody.querySelectorAll("tr");
   rows.forEach((tr, i) => tr.classList.toggle("table-primary", i === index));
   selectedRowIndex = index;
-  if (index >= 0) rows[index].focus();
+  if (index >= 0) rows[index].focus(); // focus แถว
   if (index >= 0) rows[index].scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
+
+
+
+// สำหรับ mouseover
+tbody.addEventListener("mouseover", function(e) {
+  const tr = e.target.closest("tr");
+  if (!tr) return;
+
+  const rows = Array.from(tbody.querySelectorAll("tr"));
+  const index = rows.indexOf(tr);
+  if (index >= 0) highlightRow(index);
+});
+
 
 
 // ให้แต่ละ row focus ได้

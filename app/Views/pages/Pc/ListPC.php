@@ -945,8 +945,8 @@
         <div><strong>IP:</strong> ${pc.ip_address || '-'}</div>
         ${
           pc.ip_address
-            ? `<button class="btn btn-sm btn-outline-primary copy-ip-btn" data-ip="${pc.ip_address}" title="คัดลอก IP">
-                 <i class="fa-solid fa-network-wired"></i>
+            ? `<button class="btn btn-sm btn-light border copy-ip-btn" data-ip="${pc.ip_address}" title="คัดลอก IP">
+                  <i class="fa-regular fa-copy"></i>
                </button>`
             : ''
         }

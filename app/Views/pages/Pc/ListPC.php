@@ -1067,7 +1067,7 @@
       .then(() => {
         btn.innerHTML = '<i class="fa-solid fa-check text-success"></i>';
         setTimeout(() => {
-          btn.innerHTML = '<i class="fa-solid fa-copy"></i>';
+          btn.innerHTML = '<i class="fa-regular fa-copy"></i>';
         }, 1500);
       })
       .catch(() => alert("คัดลอกไม่สำเร็จ"));

@@ -107,9 +107,9 @@
                     </button> -->
 
                      <!-- ตัวอย่างปุ่มใน View -->
-                    <button id="rdpDownloadBtn" class="btn btn-outline-light btn-sm ms-3" target="_blank"><i class="fa-solid fa-download"></i>
+                    <!-- <button id="rdpDownloadBtn" class="btn btn-outline-light btn-sm ms-3" target="_blank"><i class="fa-solid fa-download"></i>
                       ดาวน์โหลด .rdp
-                    </button>
+                    </button> -->
 
                     <button id="pingBtn" class="btn btn-outline-light btn-sm ms-3"><i class="fa-solid fa-signal"></i>
                       (Ping)
@@ -941,7 +941,7 @@
         <li class="list-group-item"><strong>Brand:</strong> ${pc.band || '-'}</li>
         <li class="list-group-item"><strong>Model:</strong> ${pc.model || '-'}</li>
         <li class="list-group-item"><strong>IP:</strong> ${pc.ip_address || '-'}</li>
-        
+
         <li class="list-group-item d-flex align-items-center justify-content-between">
   <div class="d-flex align-items-center gap-1">
     <span class="ip-text">${pc.ip_address || '-'}</span>

@@ -1089,40 +1089,7 @@
 
   
 
-// ========== ฟังก์ชัน Copy IP ==========
-document.addEventListener("click", function (e) {
-  const btn = e.target.closest(".copy-ip-btn");
-  if (!btn) return;
 
-  const ip = btn.getAttribute("data-ip");
-  if (!ip) return;
-
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(ip)
-      .then(() => {
-        btn.innerHTML = '<i class="fa-solid fa-check text-success"></i>';
-        setTimeout(() => {
-          btn.innerHTML = '<i class="fa-solid fa-network-wired"></i>';
-        }, 1500);
-      })
-      .catch(() => alert("คัดลอกไม่สำเร็จ"));
-  } else {
-    const tempInput = document.createElement("textarea");
-    tempInput.value = ip;
-    document.body.appendChild(tempInput);
-    tempInput.select();
-    try {
-      document.execCommand("copy");
-      btn.innerHTML = '<i class="fa-solid fa-check text-success"></i>';
-      setTimeout(() => {
-        btn.innerHTML = '<i class="fa-solid fa-network-wired"></i>';
-      }, 1500);
-    } catch {
-      alert("คัดลอกไม่สำเร็จ");
-    }
-    document.body.removeChild(tempInput);
-  }
-});
 
 
 </script>

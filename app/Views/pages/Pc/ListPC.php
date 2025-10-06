@@ -591,7 +591,18 @@
     <td>${pc.terminal_server || '-'}</td>
     <td>${pc.terminal_login || '-'}</td>
     <td>${pc.location || '-'}</td>
-    <td>${pc.ip_address || '-'}</td>
+    <td>
+      <div class="d-flex align-items-center gap-1">
+        <span>${pc.ip_address || '-'}</span>
+        ${
+          pc.ip_address
+            ? `<button class="btn btn-sm btn-light border copy-ip-btn" data-ip="${pc.ip_address}" title="คัดลอก IP">
+                 <i class="fa-solid fa-copy"></i>
+               </button>`
+            : ''
+        }
+      </div>
+    </td>  
     <td>${statusBadge}</td>
     <td>${branchNames[pc.br_no] || pc.br_no || '-'}</td>
     <td>
@@ -607,8 +618,7 @@
         </button>
       </div>
     </td>
-  `;
-
+   `;
       tbody.appendChild(row);
     }
 
@@ -1031,6 +1041,23 @@
 
 
 
+  // Event delegation สำหรับปุ่ม Copy IP
+document.addEventListener("click", function (e) {
+  if (e.target.closest(".copy-ip-btn")) {
+    const btn = e.target.closest(".copy-ip-btn");
+    const ip = btn.getAttribute("data-ip");
+    if (ip) {
+      navigator.clipboard.writeText(ip)
+        .then(() => {
+          btn.innerHTML = '<i class="fa-solid fa-check text-success"></i>';
+          setTimeout(() => {
+            btn.innerHTML = '<i class="fa-solid fa-copy"></i>';
+          }, 1500);
+        })
+        .catch(() => alert("คัดลอกไม่สำเร็จ"));
+    }
+  }
+});
   
 
 </script>

@@ -521,6 +521,7 @@
     const limit = 17;
     let totalPages = 0;
     let totalRecords = 0;
+let selectedRowIndex = -1;
 
     // ฟังก์ชันโหลดข้อมูลทั้งหมด PCหน้าแรก (รองรับค้นหา/กรอง/เปลี่ยนหน้า)
     async function fetchPCs({ page = 1, keyword = '', property_type = '', status = '', br_no } = {}) {
@@ -696,6 +697,21 @@
       fetchPCs({ page: 1 });
     });
 
+
+    // Highlight แถว
+function highlightRow(index) {
+  const rows = tbody.querySelectorAll("tr");
+  rows.forEach((tr, i) => tr.classList.toggle("table-primary", i === index));
+  selectedRowIndex = index;
+  if (index >= 0) rows[index].scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+// ให้แต่ละ row focus ได้
+function makeRowsFocusable() {
+  tbody.querySelectorAll("tr").forEach(tr => tr.setAttribute("tabindex", "0"));
+  selectedRowIndex = -1;
+}
+
     // listener สำหรับกด Enter เพื่อเปิด modal
     searchInput.addEventListener('keydown', function(e) {
       if (e.key === "Enter") {
@@ -708,18 +724,63 @@
           status: statusFilter.value,
           br_no: brnoFilter.value,
           property_type: typeFilter.value
-        }).then(() => {
-          // หลัง render ตารางเสร็จ
+        // }).then(() => {
+        //   // หลัง render ตารางเสร็จ
+        //   const firstRow = tbody.querySelector("tr");
+        //   if (firstRow) {
+        //     const viewBtn = firstRow.querySelector(".view-btn");
+        //     if (viewBtn) viewBtn.click(); // เปิด modal ของแถวแรก
+        //   }
+        // });
+
+          // รอให้ fetch + render ตาราง
+        });
+        setTimeout(() => {
           const firstRow = tbody.querySelector("tr");
           if (firstRow) {
+            highlightRow(0);
             const viewBtn = firstRow.querySelector(".view-btn");
-            if (viewBtn) viewBtn.click(); // เปิด modal ของแถวแรก
+            if (viewBtn) viewBtn.click();
           }
-        });
+        }, 200);
       }
     });
 
 
+    // Arrow Up / Down + Enter บน tbody
+    tbody.addEventListener("keydown", function(e) {
+      const rows = Array.from(tbody.querySelectorAll("tr"));
+      if (!rows.length) return;
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        let nextIndex = selectedRowIndex + 1;
+        if (nextIndex >= rows.length) nextIndex = 0;
+        highlightRow(nextIndex);
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        let prevIndex = selectedRowIndex - 1;
+        if (prevIndex < 0) prevIndex = rows.length - 1;
+        highlightRow(prevIndex);
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        if (selectedRowIndex >= 0) {
+          const viewBtn = rows[selectedRowIndex].querySelector(".view-btn");
+          if (viewBtn) viewBtn.click();
+        }
+      }
+    });
+
+    // ----------------------
+    // ฟังก์ชันหลัง render ตาราง
+    function afterRenderTable() {
+      makeRowsFocusable();
+      selectedRowIndex = -1;
+    }
+
+
+
+    
     // Map ข้อมูลเข้า form edit
     function fillEditForm(pc) {
       const map = [

@@ -51,7 +51,7 @@ class UserModel extends Model
                 g.GROUP_NAME
             FROM usr_user u
             LEFT JOIN mem_h_member t 
-                ON t.empid = u.USER_NAME
+                ON t.empid = u.EMP_ID
             Left join mem_m_ptitle p 
                 ON t.ptitle_id = p.ptitle_id    
             LEFT JOIN usr_group g

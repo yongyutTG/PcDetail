@@ -46,12 +46,14 @@ class UserModel extends Model
                 u.GROUP_ID,
                 u.SUP_ADMIN,
                 u.U_PASSWORD,
-                t.ptitle_name + ' ' + t.fname + ' ' + t.lname AS user_name,
+                p.ptitle_name + ' ' + t.fname + ' ' + t.lname AS user_name,
                 t.email,
                 g.GROUP_NAME
             FROM usr_user u
             LEFT JOIN mem_h_member t 
                 ON t.empid = u.USER_NAME
+            Left join mem_m_ptitle p 
+                ON t.ptitle_id = p.ptitle_id    
             LEFT JOIN usr_group g
                 ON g.GROUP_ID = u.GROUP_ID
             WHERE u.USER_NAME = ?

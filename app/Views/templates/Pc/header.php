@@ -128,6 +128,7 @@
                                 <i class="bi bi-person-circle fs-4 ms-2"></i> <!-- ไอคอนชิดขวา -->
                             </div>
                         </a>
+                        <pre><?php print_r(session()->get()); ?></pre>
 
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li>
@@ -160,7 +161,7 @@
             <div class="modal-body">
                 <p><strong>ชื่อผู้ใช้:</strong> <?= esc(session()->get('USER_NAME')) ?></p>
                 <p><strong>ฝ่าย:</strong> <?= esc(session()->get('GROUP_NAME')) ?></p>
-                <p><strong>ชื่อ-นามสกุล:</strong> <?= esc(session()->get('full_name')) ?></p>
+                <p><strong>ชื่อ-นามสกุล:</strong> <?= esc(session()->get('FULL_NAME')) ?></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>

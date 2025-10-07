@@ -133,6 +133,7 @@ class AuthPc extends BaseController
         }
         $userModel = new UserModel();
         $user = $userModel->getActiveUserByUsername($Username);
+
         // ตรวจสอบ
         if (!$user) {
             return $this->response->setJSON([
@@ -140,7 +141,19 @@ class AuthPc extends BaseController
                 'message' => 'ไม่พบชื่อผู้ใช้งานนี้ในระบบ'
             ]);
         }
+         if (empty($user['email'])) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'บัญชีนี้ยังไม่ได้ลงทะเบียนอีเมลในระบบ'
+            ]);
+        }
 
+        if (strtolower(trim($user['email'])) !== strtolower(trim($Email))) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'อีเมลที่กรอกไม่ตรงกับข้อมูลในระบบ'
+            ]);
+        }    
 
          //กรณีไรับค่ารหัสผ่านใหม่จาก user
        //$newPassword_gen = $this->request->getPost('new_password');

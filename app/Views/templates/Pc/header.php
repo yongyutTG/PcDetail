@@ -124,7 +124,7 @@
                                 ฝ่าย: <?= esc(session()->get('GROUP_NAME')) ?>
                             </div>
                             <div class="fw-bold">
-                                <?= esc(session()->get('FULL_NAME')) ?>
+                                <?= esc(session()->get('full_name')) ?>
                                 <i class="bi bi-person-circle fs-4 ms-2"></i> <!-- ไอคอนชิดขวา -->
                             </div>
                         </a>

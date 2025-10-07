@@ -162,6 +162,7 @@
                 <p><strong>ชื่อผู้ใช้:</strong> <?= esc(session()->get('USER_NAME')) ?></p>
                 <p><strong>ฝ่าย:</strong> <?= esc(session()->get('GROUP_NAME')) ?></p>
                 <p><strong>ชื่อ-นามสกุล:</strong> <?= esc(session()->get('FULL_NAME')) ?></p>
+                 <p><strong>Email:</strong> <?= esc(session()->get('EMAIL')) ?></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>

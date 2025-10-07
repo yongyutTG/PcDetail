@@ -16,6 +16,28 @@ class UserModel extends Model
 
 
 // ตรวจสอบ user สำหรับ login
+//     public function getActiveUserByUsername($username){
+//     $sql = "SELECT 
+//                 u.USER_NAME,
+//                 u.USER_ID,
+//                 u.EMP_ID,
+//                 u.GROUP_ID,
+//                 u.SUP_ADMIN,
+//                 u.U_PASSWORD,
+//                 t.user_name,
+//                 g.GROUP_NAME
+//             FROM usr_user u
+//             LEFT JOIN bk_h_teller_control t 
+//                 ON t.user_id = u.USER_NAME
+//             LEFT JOIN usr_group g
+//                 ON g.GROUP_ID = u.GROUP_ID
+//             WHERE u.USER_NAME = ?
+//               AND u.IS_ACTIVE = '1'";
+
+//     $query = $this->db->query($sql, [$username]);
+//     return $query->getRowArray(); // คืนค่าเป็น array
+// }
+
     public function getActiveUserByUsername($username){
     $sql = "SELECT 
                 u.USER_NAME,
@@ -24,11 +46,12 @@ class UserModel extends Model
                 u.GROUP_ID,
                 u.SUP_ADMIN,
                 u.U_PASSWORD,
-                t.user_name,
+                t.ptitle_name + ' ' + t.fname + ' ' + t.lname AS user_name,
+                t.email,
                 g.GROUP_NAME
             FROM usr_user u
-            LEFT JOIN bk_h_teller_control t 
-                ON t.user_id = u.USER_NAME
+            LEFT JOIN mem_h_member t 
+                ON t.empid = u.USER_NAME
             LEFT JOIN usr_group g
                 ON g.GROUP_ID = u.GROUP_ID
             WHERE u.USER_NAME = ?
@@ -37,7 +60,6 @@ class UserModel extends Model
     $query = $this->db->query($sql, [$username]);
     return $query->getRowArray(); // คืนค่าเป็น array
 }
-
 
     // 🔹 หาค่า USER_ID ล่าสุด +1
     public function getNextUserId()

@@ -124,11 +124,11 @@
                                 ฝ่าย: <?= esc(session()->get('GROUP_NAME')) ?>
                             </div>
                             <div class="fw-bold">
-                                <?= esc(session()->get('full_name')) ?>
+                                <?= esc(session()->get('FULL_NAME')) ?>
                                 <i class="bi bi-person-circle fs-4 ms-2"></i> <!-- ไอคอนชิดขวา -->
                             </div>
                         </a>
-                        <pre><?php print_r(session()->get()); ?></pre>
+                       
 
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li>

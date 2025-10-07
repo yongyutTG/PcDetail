@@ -128,7 +128,6 @@
                                 <i class="bi bi-person-circle fs-4 ms-2"></i> <!-- ไอคอนชิดขวา -->
                             </div>
                         </a>
-<pre><?php print_r(session()->get()); ?></pre>
 
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li>

@@ -49,6 +49,9 @@ class AuthPc extends BaseController
             'SUP_ADMIN' => $user['SUP_ADMIN'],
             'logged_in' => true
         ]);
+        echo '<pre>';
+print_r($user);
+exit;
        //ถ้าเป็น admin → ไปหน้า admin
         if (strtolower($user['USER_NAME']) === 'it0007') {
             $redirectUrl = base_url('admin');

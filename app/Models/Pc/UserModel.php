@@ -46,7 +46,7 @@ class UserModel extends Model
                 u.GROUP_ID,
                 u.SUP_ADMIN,
                 u.U_PASSWORD,
-                p.ptitle_name +''+ t.fname +''+ t.lname AS full_name,
+                p.ptitle_name + t.fname +''+ t.lname AS full_name,
                 t.email,
                 g.GROUP_NAME
             FROM usr_user u

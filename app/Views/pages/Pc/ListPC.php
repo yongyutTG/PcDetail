@@ -707,13 +707,13 @@ let selectedRowIndex = -1;
 //   if (index >= 0) rows[index].scrollIntoView({ behavior: "smooth", block: "nearest" });
 // }
 
-//function highlightRow(index) {
- // const rows = tbody.querySelectorAll("tr");
- // rows.forEach((tr, i) => tr.classList.toggle("table-primary", i === index));
- // selectedRowIndex = index;
- // if (index >= 0) rows[index].focus();
- // if (index >= 0) rows[index].scrollIntoView({ behavior: "smooth", block: "nearest" });
-//}
+function highlightRow(index) {
+ const rows = tbody.querySelectorAll("tr");
+ rows.forEach((tr, i) => tr.classList.toggle("table-primary", i === index));
+ selectedRowIndex = index;
+ if (index >= 0) rows[index].focus();
+ if (index >= 0) rows[index].scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
 
 
 

@@ -700,7 +700,7 @@ let selectedRowIndex = -1;
 
  // --- assume these are already defined in your code ---
 //const tbody = document.querySelector("tbody"); // ปรับ selector ตามจริง
-const searchInput = document.getElementById("searchInput"); // ตัวอย่าง
+//const searchInput = document.getElementById("searchInput"); // ตัวอย่าง
 // statusFilter, brnoFilter, typeFilter ตามที่คุณใช้
 // ---------------------------------------------------
 

@@ -704,7 +704,7 @@ let selectedRowIndex = -1;
 // statusFilter, brnoFilter, typeFilter ตามที่คุณใช้
 // ---------------------------------------------------
 
-let selectedRowIndex = -1;
+
 
 function highlightRow(index) {
   const rows = tbody.querySelectorAll("tr");

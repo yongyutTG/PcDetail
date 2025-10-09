@@ -698,80 +698,101 @@ let selectedRowIndex = -1;
     });
 
 
-    // Highlight แถว focus + scroll
-// function highlightRow(index) {
-//   const rows = tbody.querySelectorAll("tr");
-//   rows.forEach((tr, i) => tr.classList.toggle("table-primary", i === index));
-//   selectedRowIndex = index;
-//   if (index >= 0) rows[index].focus();
-//   if (index >= 0) rows[index].scrollIntoView({ behavior: "smooth", block: "nearest" });
-// }
+ // --- assume these are already defined in your code ---
+const tbody = document.querySelector("tbody"); // ปรับ selector ตามจริง
+const searchInput = document.getElementById("searchInput"); // ตัวอย่าง
+// statusFilter, brnoFilter, typeFilter ตามที่คุณใช้
+// ---------------------------------------------------
+
+let selectedRowIndex = -1;
 
 function highlightRow(index) {
- const rows = tbody.querySelectorAll("tr");
- rows.forEach((tr, i) => tr.classList.toggle("table-primary", i === index));
- selectedRowIndex = index;
- if (index >= 0) rows[index].focus();
- if (index >= 0) rows[index].scrollIntoView({ behavior: "smooth", block: "nearest" });
+  const rows = tbody.querySelectorAll("tr");
+  rows.forEach((tr, i) => tr.classList.toggle("table-primary", i === index));
+  selectedRowIndex = index;
+  if (index >= 0) {
+    rows[index].focus();
+    rows[index].scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
 }
 
-
-
-// สำหรับ mouseover
-tbody.addEventListener("mouseover", function(e) {
-  const tr = e.target.closest("tr");
-  if (!tr) return;
-
-  const rows = Array.from(tbody.querySelectorAll("tr"));
-  const index = rows.indexOf(tr);
-  if (index >= 0) highlightRow(index);
-});
-
-
-
-// ให้แต่ละ row focus ได้
 function makeRowsFocusable() {
   tbody.querySelectorAll("tr").forEach(tr => tr.setAttribute("tabindex", "0"));
   selectedRowIndex = -1;
 }
 
-    // listener สำหรับกด Enter เพื่อเปิด modal
-    searchInput.addEventListener('keydown', function(e) {
-      if (e.key === "Enter") {
-        e.preventDefault();
+// ตรวจสอบว่า modal กำลังเปิดอยู่หรือไม่ (รองรับ Bootstrap class .modal.show / body.modal-open)
+const isModalOpen = () => !!document.querySelector(".modal.show") || document.body.classList.contains("modal-open");
 
-        // ให้ fetchPCs เสร็จก่อน (อาจต้อง delay หรือรอ Promise)
-        fetchPCs({
-          page: 1,
-          keyword: searchInput.value,
-          status: statusFilter.value,
-          br_no: brnoFilter.value,
-          property_type: typeFilter.value
-        // }).then(() => {
-        //   // หลัง render ตารางเสร็จ
-        //   const firstRow = tbody.querySelector("tr");
-        //   if (firstRow) {
-        //     const viewBtn = firstRow.querySelector(".view-btn");
-        //     if (viewBtn) viewBtn.click(); // เปิด modal ของแถวแรก
-        //   }
-        // });
-
-          // รอให้ fetch + render ตาราง
-        });
-        setTimeout(() => {
-          const firstRow = tbody.querySelector("tr");
-          if (firstRow) {
-            highlightRow(0);
-            const viewBtn = firstRow.querySelector(".view-btn");
-            if (viewBtn) viewBtn.click();
-          }
-        }, 200);
+// ---------- MutationObserver: รอ tbody เปลี่ยน (ดีกว่า setTimeout) ----------
+let pendingOpenFirstRow = false;
+const tbodyObserver = new MutationObserver((mutations) => {
+  if (!pendingOpenFirstRow) return;
+  for (const m of mutations) {
+    if (m.addedNodes && m.addedNodes.length) {
+      pendingOpenFirstRow = false;
+      const firstRow = tbody.querySelector("tr");
+      if (firstRow && !isModalOpen()) {
+        highlightRow(0);
+        const viewBtn = firstRow.querySelector(".view-btn");
+        if (viewBtn && !viewBtn.disabled) viewBtn.click();
       }
+      break;
+    }
+  }
+});
+tbodyObserver.observe(tbody, { childList: true });
+
+// ---------- Enter ใน searchInput: เรียก fetch แล้วเปิดแถวแรก (รองรับทั้ง Promise และ non-Promise) ----------
+searchInput.addEventListener("keydown", async function(e) {
+  if (e.key !== "Enter") return;
+  e.preventDefault();
+
+  // เตรียมให้ observer รอแถวใหม่
+  pendingOpenFirstRow = true;
+
+  // เรียก fetchPCs (ถ้าเป็น Promise เรารอ ถ้าไม่ก็ปล่อยให้ observer ทำงาน)
+  try {
+    const res = fetchPCs({
+      page: 1,
+      keyword: searchInput.value,
+      status: statusFilter.value,
+      br_no: brnoFilter.value,
+      property_type: typeFilter.value
     });
+    if (res && typeof res.then === "function") {
+      // ถ้า fetchPCs คืน Promise ให้รอจนเสร็จ (หรือจับ error แล้ว fallback)
+      await res.catch(() => {/* ignore */});
+    }
+  } catch (err) {
+    // ignore
+  }
 
+  // ถ้า table ถูกเติม synchronous แล้ว ให้เปิดทันที (fallback)
+  const firstRow = tbody.querySelector("tr");
+  if (firstRow && !isModalOpen()) {
+    pendingOpenFirstRow = false;
+    highlightRow(0);
+    const viewBtn = firstRow.querySelector(".view-btn");
+    if (viewBtn && !viewBtn.disabled) viewBtn.click();
+  }
+});
 
-    // Arrow Up / Down + Enter บน tbody
-    document.addEventListener("keydown", function(e) {
+// ---------- Keyboard navigation (Arrow Up/Down + Enter) ----------
+document.addEventListener("keydown", function(e) {
+  // ถ้ามี modal เปิดอยู่และ focus อยู่ใน modal -> ปล่อยให้ modal จัดการเอง
+  if (isModalOpen()) {
+    const modalEl = document.querySelector(".modal.show");
+    if (modalEl && modalEl.contains(document.activeElement)) return;
+    // ถ้า modal เปิดอยู่แต่ focus ไม่อยู่ใน modal เราจะไม่ทำอะไร (ป้องกันการเปิด modal ซ้อน)
+    return;
+  }
+
+  // ถ้า user กำลังพิมพ์ใน input/textarea ที่อยู่นอกตาราง ให้ข้ามการจับปุ่ม
+  const active = document.activeElement;
+  const isTyping = active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA" || active.isContentEditable);
+  if (isTyping && !tbody.contains(active)) return;
+
   const rows = Array.from(tbody.querySelectorAll("tr"));
   if (!rows.length) return;
 
@@ -780,30 +801,50 @@ function makeRowsFocusable() {
     let nextIndex = selectedRowIndex + 1;
     if (nextIndex >= rows.length) nextIndex = 0;
     highlightRow(nextIndex);
-    rows[nextIndex].focus();
   } else if (e.key === "ArrowUp") {
     e.preventDefault();
     let prevIndex = selectedRowIndex - 1;
     if (prevIndex < 0) prevIndex = rows.length - 1;
     highlightRow(prevIndex);
-    rows[prevIndex].focus();
   } else if (e.key === "Enter") {
     e.preventDefault();
     if (selectedRowIndex >= 0) {
       const viewBtn = rows[selectedRowIndex].querySelector(".view-btn");
-      if (viewBtn) viewBtn.click();
+      if (viewBtn && !viewBtn.disabled && !isModalOpen()) {
+        viewBtn.click();
+      }
     }
   }
 });
 
+// ---------- ป้องกันการ click ซ้ำ: disable ปุ่ม view ชั่วคราว แล้ว enable เมื่อ modal ปิด ----------
+document.addEventListener("click", function(e) {
+  const btn = e.target.closest(".view-btn");
+  if (!btn) return;
+  // disable ทันทีก่อนเรียก modal
+  btn.disabled = true;
 
-    // ----------------------
-    // ฟังก์ชันหลัง render ตาราง
-    function afterRenderTable() {
-      makeRowsFocusable();
-      selectedRowIndex = -1;
-    }
+  // พยายามหา modal target จาก data-bs-target (Bootstrap) ถ้ามี
+  const targetSelector = btn.getAttribute("data-bs-target") || btn.dataset.bsTarget;
+  const modalEl = targetSelector ? document.querySelector(targetSelector) : document.querySelector(".modal");
 
+  if (modalEl) {
+    const handler = () => {
+      btn.disabled = false;
+      modalEl.removeEventListener("hidden.bs.modal", handler);
+    };
+    modalEl.addEventListener("hidden.bs.modal", handler);
+  } else {
+    // fallback: re-enable หลัง 1s (ถ้า modal library ไม่ใช่ bootstrap)
+    setTimeout(() => { btn.disabled = false; }, 1000);
+  }
+});
+
+// ---------- เรียกใช้หลัง render ตารางเสร็จ ----------
+function afterRenderTable() {
+  makeRowsFocusable();
+  selectedRowIndex = -1;
+}
 
 
     

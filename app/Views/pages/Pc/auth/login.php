@@ -56,7 +56,7 @@
       <div class="modal-content">
         <div class="modal-header custom-header">
           <!-- <div class="modal-header bg-primary text-white"> -->
-          <h5 class="modal-title" id="forgotPasswordLabel"><i class="bi bi-key-fill"></i> ลืมรหัสผ่าน</h5>
+          <h5 class="modal-title" id="forgotPasswordLabel"><i class="bi bi-key-fill"></i> รีเซ็ตรหัสผ่าน</h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="ปิด"></button>
         </div>
         <div class="modal-body">

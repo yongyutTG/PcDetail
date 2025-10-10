@@ -524,7 +524,7 @@
 let selectedRowIndex = -1;
 
     // ฟังก์ชันโหลดข้อมูลทั้งหมด PCหน้าแรก (รองรับค้นหา/กรอง/เปลี่ยนหน้า)
-    async function fetchPCs({ page = 1, keyword = '', property_type = '', status = '', br_no } = {}) {
+    async function fetchPCs({ page = 1, keyword = '', property_type = '', status = 'A', br_no } = {}) {
       spinner.style.display = "block";
       tbody.innerHTML = "";
       let url = (keyword || status || br_no || property_type)

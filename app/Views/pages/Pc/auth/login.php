@@ -59,13 +59,10 @@
               <label for="forgot_input" class="form-label">ชื่อผู้ใช้งาน</label>
               <input type="text" id="forgot_input" name="forgot_input" class="form-control">
 
-              <label for="forgot_empid" class="form-label mt-2">เลขพนักงาน</label>
+              <label for="forgot_empid" class="form-label">เลขพนักงาน</label>
               <input type="text" id="forgot_empid" name="forgot_empid" class="form-control">
 
-              <label for="forgot_brithdate" class="form-label mt-2">วันเดือนปีเกิด</label>
-              <input type="text" id="forgot_brithdate" name="forgot_brithdate" class="form-control" placeholder="เช่น 1990-05-20">
-
-              <label for="forgot_email" class="form-label mt-2">อีเมลรับรหัสผ่าน</label>
+              <label for="forgot_email" class="form-label">อีเมลรับรหัสผ่าน</label>
               <input type="email" id="forgot_email" name="forgot_email" class="form-control">
             </div>
           </form>
@@ -183,7 +180,6 @@
       e.preventDefault();
       const UsernameInput = forgotForm.querySelector('input[name="forgot_input"]');
       const empidInput = forgotForm.querySelector('input[name="forgot_empid"]');
-      const brithdateInput = forgotForm.querySelector('input[name="forgot_brithdate"]');
       const emailInput = forgotForm.querySelector('input[name="forgot_email"]');
 
       if (UsernameInput.value.trim() === "") {
@@ -196,11 +192,7 @@
         empidInput.focus();
         return;
       }
-       if (brithdateInput.value.trim() === "") {
-        toastr.error("กรุณากรอกวันเดือนปีเกิด", "แจ้งเตือน");
-        brithdateInput.focus();
-        return;
-      }
+     
       if (emailInput.value.trim() === "") {
         toastr.error("กรุณากรอกอีเมลที่ต้องการจะให้ส่งรหัสผ่านใหม่", "แจ้งเตือน");
         emailInput.focus();
@@ -217,7 +209,6 @@
         const formData = new FormData();
         formData.append("forgot_input", UsernameInput.value);
         formData.append("forgot_empid", empidInput.value);
-        formData.append("forgot_brithdate", brithdateInput.value);
         formData.append("forgot_email", emailInput.value);
 
         const res = await fetch("<?= base_url('auth/forgot-password') ?>", {

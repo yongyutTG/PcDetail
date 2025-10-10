@@ -56,13 +56,13 @@
         <div class="modal-body">
           <form id="forgotForm">
             <div class="mb-3">
-              <label class="form-label">ชื่อผู้ใช้งาน</label>
+              <label for ="forgot_input" class="form-label">ชื่อผู้ใช้งาน</label>
               <input type="text" name="forgot_input" class="form-control">
 
-              <label class="form-label">เลขพนักงาน</label>
+              <label for ="forgot_empid"class="form-label">เลขพนักงาน</label>
               <input type="text" name="forgot_empid" class="form-control">
 
-              <label class="form-label">วันเดือนปีเกิด</label>
+              <label for="forgot_brithdate"class="form-label">วันเดือนปีเกิด</label>
               <input type="text" name="forgot_brithdate" class="form-control">
 
               <label for="email">อีเมลรับรหัสผ่าน</label>

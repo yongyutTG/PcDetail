@@ -230,6 +230,7 @@
           toastr.success(data.message, "สำเร็จ");
           // ปิด modal หลังส่งสำเร็จ
           const modal = bootstrap.Modal.getInstance(document.getElementById("forgotPasswordModal"));
+          forgotForm.reset()
           modal.hide();
           forgotBtn.disabled = false;
           forgotBtn.innerHTML = `<i class="bi bi-envelope-at"></i> รีเซ็ตรหัสผ่าน`;

@@ -1,9 +1,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
 
 <section>
@@ -21,7 +19,6 @@
                   <input type="text" name="USER_NAME" class="form-control">
                 </div>
               </div>
-
               <div class="mb-3">
                 <label class="form-label">รหัสผ่าน</label>
                 <div class="input-group">
@@ -29,18 +26,15 @@
                   <input type="password" name="U_PASSWORD" class="form-control">
                 </div>
               </div>
-
               <button type="submit" id="loginBtn" class="btn-login btn-sm w-100">
                 <i class="bi bi-box-arrow-in-right"></i> เข้าสู่ระบบ
               </button>
             </form>
 
-            <!-- ลิงก์ลืมรหัสผ่าน -->
+            <!-- ลิงก์รีเซ็ตรหัสผ่าน -->
             <div class="text-center mt-3">
               <a href="#" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">ลืมรหัสผ่าน?</a>
             </div>
-
-
           </div>
         </div>
       </div>
@@ -50,13 +44,12 @@
 
 
 
-  <!-- Modal ลืมรหัสผ่าน -->
+  <!-- Modal รีเซ็ตรหัสผ่าน -->
   <div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header custom-header">
-          <!-- <div class="modal-header bg-primary text-white"> -->
           <h5 class="modal-title" id="forgotPasswordLabel"><i class="bi bi-key-fill"></i> รีเซ็ตรหัสผ่าน</h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="ปิด"></button>
         </div>
@@ -65,6 +58,13 @@
             <div class="mb-3">
               <label class="form-label">กรุณากรอกชื่อผู้ใช้งาน</label>
               <input type="text" name="forgot_input" class="form-control">
+
+              <label class="form-label">กรูณากรอกเลขพนักงาน</label>
+              <input type="text" name="empid_input" class="form-control">
+
+              <label class="form-label">กรูณากรอกเลขวันเดือนปีเกิด</label>
+              <input type="text" name="brithdate_input" class="form-control">
+
               <label for="email">อีเมลที่ต้องการให้ส่งรหัสผ่าน</label>
               <input type="email" class="form-control" name="forgot_email">
             </div>
@@ -102,141 +102,138 @@
 
    
     if (form) {
-  form.addEventListener("submit", async function (e) {
-    e.preventDefault();
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
 
-    const userInput = form.querySelector('input[name="USER_NAME"]');
-    const pwdInput = form.querySelector('input[name="U_PASSWORD"]');
-    const md5Password = md5(pwdInput.value);
+      const userInput = form.querySelector('input[name="USER_NAME"]');
+      const pwdInput = form.querySelector('input[name="U_PASSWORD"]');
+      const md5Password = md5(pwdInput.value);
 
-    if (userInput.value.trim() === "") {
-      toastr.error("กรุณากรอกชื่อผู้ใช้", "แจ้งเตือน");
-      userInput.focus();
-      return;
-    } else if (pwdInput.value.trim() === "") {
-      toastr.error("กรุณากรอกรหัสผ่าน", "แจ้งเตือน");
-      pwdInput.focus();
-      return;
-    }
+      if (userInput.value.trim() === "") {
+        toastr.error("กรุณากรอกชื่อผู้ใช้", "แจ้งเตือน");
+        userInput.focus();
+        return;
+      } else if (pwdInput.value.trim() === "") {
+        toastr.error("กรุณากรอกรหัสผ่าน", "แจ้งเตือน");
+        pwdInput.focus();
+        return;
+      }
 
-    loginBtn.disabled = true;
-    loginBtn.innerHTML = `
-      <span class="spinner-border spinner-border-sm me-2 text-white" role="status"></span>
-      <span style="color: #fff;">กำลังเข้าสู่ระบบ...</span>
-    `;
+      loginBtn.disabled = true;
+      loginBtn.innerHTML = `
+        <span class="spinner-border spinner-border-sm me-2 text-white" role="status"></span>
+        <span style="color: #fff;">กำลังเข้าสู่ระบบ...</span>
+      `;
 
-    try {
-      const formData = new FormData();
-      formData.append("USER_NAME", userInput.value);
-      formData.append("U_PASSWORD", md5Password);
+      try {
+        const formData = new FormData();
+        formData.append("USER_NAME", userInput.value);
+        formData.append("U_PASSWORD", md5Password);
 
-      const res = await fetch("<?= base_url('auth/chk_login') ?>", {
-        method: "POST",
-        body: formData
-      });
-      const data = await res.json();
+        const res = await fetch("<?= base_url('auth/chk_login') ?>", {
+          method: "POST",
+          body: formData
+        });
+        const data = await res.json();
 
-      if (data.status === "success") {
-        toastr.success(data.message, "สำเร็จ");
+        if (data.status === "success") {
+          toastr.success(data.message, "สำเร็จ");
 
-        // ✅ ตรวจสอบว่าเป็น admin ไหม
-        if (userInput.value.toLowerCase() === "it0007") {
-          // แสดง popup ให้เลือกหน้า
-          Swal.fire({
-            title: "เลือกหน้าที่ต้องการเข้าถึง",
-            text: "คุณต้องการเข้าหน้าไหน?",
-            icon: "question",
-            showCancelButton: true,
-            confirmButtonText: "หน้า Admin",
-            cancelButtonText: "หน้า All PC",
-            allowOutsideClick: false,
-            allowEscapeKey: false
-          }).then((result) => {
-            if (result.isConfirmed) {
-              window.location.href = "<?= base_url('admin') ?>";
-            } else {
-              window.location.href = "<?= base_url('all-listPC') ?>";
-            }
-          });
+          // ✅ ตรวจสอบว่าเป็น admin ไหม
+          if (userInput.value.toLowerCase() === "it0007") {
+            // แสดง popup ให้เลือกหน้า
+            Swal.fire({
+              title: "เลือกหน้าที่ต้องการเข้าถึง",
+              text: "คุณต้องการเข้าหน้าไหน?",
+              icon: "question",
+              showCancelButton: true,
+              confirmButtonText: "หน้า Admin",
+              cancelButtonText: "หน้า All PC",
+              allowOutsideClick: false,
+              allowEscapeKey: false
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.href = "<?= base_url('admin') ?>";
+              } else {
+                window.location.href = "<?= base_url('all-listPC') ?>";
+              }
+            });
+          } else {
+            // ถ้าไม่ใช่ admin → เข้า all-listPC ทันที
+            setTimeout(() => window.location.href = "<?= base_url('all-listPC') ?>", 800);
+          }
+
         } else {
-          // ถ้าไม่ใช่ admin → เข้า all-listPC ทันที
-          setTimeout(() => window.location.href = "<?= base_url('all-listPC') ?>", 800);
+          toastr.error(data.message, "แจ้งเตือน");
+          loginBtn.disabled = false;
+          loginBtn.innerHTML = `<i class="bi bi-box-arrow-in-right"></i> เข้าสู่ระบบ`;
         }
 
-      } else {
-        toastr.error(data.message, "แจ้งเตือน");
+      } catch (err) {
+        toastr.error("เกิดข้อผิดพลาดในการเชื่อมต่อ", "แจ้งเตือน");
+        console.error(err);
         loginBtn.disabled = false;
         loginBtn.innerHTML = `<i class="bi bi-box-arrow-in-right"></i> เข้าสู่ระบบ`;
       }
-
-    } catch (err) {
-      toastr.error("เกิดข้อผิดพลาดในการเชื่อมต่อ", "แจ้งเตือน");
-      console.error(err);
-      loginBtn.disabled = false;
-      loginBtn.innerHTML = `<i class="bi bi-box-arrow-in-right"></i> เข้าสู่ระบบ`;
-    }
-  });
-}
+    });
+  }
 
 
+    forgotForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const UsernameInput = forgotForm.querySelector('input[name="forgot_input"]');
+      const emailInput = forgotForm.querySelector('input[name="forgot_email"]');
+      if (UsernameInput.value.trim() === "") {
+        toastr.error("กรุณากรอกชื่อผู้ใช้งาน", "แจ้งเตือน");
+        UsernameInput.focus();
+        return;
+      }
+      if (emailInput.value.trim() === "") {
+        toastr.error("กรุณากรอกอีเมลที่ต้องการจะให้ส่งรหัสผ่านใหม่", "แจ้งเตือน");
+        emailInput.focus();
+        return;
+      }
+      // disable ปุ่มระหว่างรอส่ง
+      forgotBtn.disabled = true;
+      forgotBtn.innerHTML = `
+          <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+          กำลังส่ง...
+      `;
+      try {
+        const formData = new FormData();
+        formData.append("forgot_input", UsernameInput.value);
+        formData.append("forgot_email", emailInput.value);
 
-      forgotForm.addEventListener("submit", async function (e) {
-        e.preventDefault();
-        const UsernameInput = forgotForm.querySelector('input[name="forgot_input"]');
-        const emailInput = forgotForm.querySelector('input[name="forgot_email"]');
-        if (UsernameInput.value.trim() === "") {
-          toastr.error("กรุณากรอกชื่อผู้ใช้งาน", "แจ้งเตือน");
-          UsernameInput.focus();
-          return;
-        }
-
-        if (emailInput.value.trim() === "") {
-          toastr.error("กรุณากรอกอีเมลที่ต้องการจะให้ส่งรหัสผ่านใหม่", "แจ้งเตือน");
-          emailInput.focus();
-          return;
-        }
-  
-        // disable ปุ่มระหว่างรอส่ง
-        forgotBtn.disabled = true;
-        forgotBtn.innerHTML = `
-            <span class="spinner-border spinner-border-sm me-2" role="status"></span>
-            กำลังส่ง...
-        `;
-
-        try {
-          const formData = new FormData();
-          formData.append("forgot_input", UsernameInput.value);
-          formData.append("forgot_email", emailInput.value);
-         // formData.append("new_password", md5Password);
+        // formData.append("new_password", md5Password);
 
 
-          const res = await fetch("<?= base_url('auth/forgot-password') ?>", {
-            method: "POST",
-            body: formData
-          });
-          const data = await res.json();
+        const res = await fetch("<?= base_url('auth/forgot-password') ?>", {
+          method: "POST",
+          body: formData
+        });
+        const data = await res.json();
 
-          if (data.status === "success") {
-            toastr.success(data.message, "สำเร็จ");
-            // ปิด modal หลังส่งสำเร็จ
-            const modal = bootstrap.Modal.getInstance(document.getElementById("forgotPasswordModal"));
-            modal.hide();
-        forgotBtn.disabled = false;
-            forgotBtn.innerHTML = `<i class="bi bi-envelope-at"></i> รีเซ็ตรหัสผ่าน`;
-          } else {
-            toastr.error(data.message, "แจ้งเตือน");
-            // เปิดปุ่มกลับเหมือนเดิม
-            forgotBtn.disabled = false;
-            forgotBtn.innerHTML = `<i class="bi bi-envelope-at"></i> รีเซ็ตรหัสผ่าน`;
-          }
-        } catch (err) {
-          toastr.error("เกิดข้อผิดพลาดในการเชื่อมต่อ", "แจ้งเตือน");
-          console.error(err);
+        if (data.status === "success") {
+          toastr.success(data.message, "สำเร็จ");
+          // ปิด modal หลังส่งสำเร็จ
+          const modal = bootstrap.Modal.getInstance(document.getElementById("forgotPasswordModal"));
+          modal.hide();
+      forgotBtn.disabled = false;
+          forgotBtn.innerHTML = `<i class="bi bi-envelope-at"></i> รีเซ็ตรหัสผ่าน`;
+        } else {
+          toastr.error(data.message, "แจ้งเตือน");
+          // เปิดปุ่มกลับเหมือนเดิม
           forgotBtn.disabled = false;
           forgotBtn.innerHTML = `<i class="bi bi-envelope-at"></i> รีเซ็ตรหัสผ่าน`;
         }
-      });
-});
+      } catch (err) {
+        toastr.error("เกิดข้อผิดพลาดในการเชื่อมต่อ", "แจ้งเตือน");
+        console.error(err);
+        forgotBtn.disabled = false;
+        forgotBtn.innerHTML = `<i class="bi bi-envelope-at"></i> รีเซ็ตรหัสผ่าน`;
+      }
+    });
+  });
 
 
 </script>

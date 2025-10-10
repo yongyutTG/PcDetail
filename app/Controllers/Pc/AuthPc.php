@@ -117,21 +117,10 @@ class AuthPc extends BaseController
     //รีเซ็ตรหัสผ่าน"
     public function forgotPassword() {
         $Username = $this->request->getPost('forgot_input');
-        $Email    = $this->request->getPost('forgot_email');
+        $empid    = $this->request->getPost('forgot_empid');
+        $brithdate    = $this->request->getPost('forgot_brithdate');
+        $email    = $this->request->getPost('forgot_email');
 
-       
-        if (empty($Username)) {
-            return $this->response->setJSON([
-                 'status' => 'error',
-                 'message' => 'กรุณากรอกชื่อผู้ใช้งาน'
-             ]);
-        }
-        if (empty($Email)) {
-            return $this->response->setJSON([
-                 'status' => 'error',
-                 'message' => 'กรุณากรอกอีเมลที่ต้องการจะให้ส่งรหัสผ่านใหม่'
-             ]);
-        }
         $userModel = new UserModel();
         $user = $userModel->getActiveUserByUsername($Username);
 
@@ -142,14 +131,20 @@ class AuthPc extends BaseController
                 'message' => 'ไม่พบชื่อผู้ใช้งานนี้ในระบบ'
             ]);
         }
-         if (empty($user['email'])) {
+       
+         if (strtolower(trim($user['EMP_ID'])) !== strtolower(trim($empid))) {
             return $this->response->setJSON([
                 'status' => 'error',
-                'message' => 'บัญชีนี้ยังไม่ได้ลงทะเบียนอีเมลในระบบ'
+                'message' => 'ไม่พบเลขพนักงานนี้ในระบบ'
             ]);
-        }
-
-        if (strtolower(trim($user['email'])) !== strtolower(trim($Email))) {
+        }    
+        if (strtolower(trim($user['dmy_birth'])) !== strtolower(trim($brithdate))) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'ไม่พบเลขวันเดือนปีเกิดนี้ในระบบ'
+            ]);
+        }    
+        if (strtolower(trim($user['email'])) !== strtolower(trim($email))) {
             return $this->response->setJSON([
                 'status' => 'error',
                 'message' => 'อีเมลที่กรอกไม่ตรงกับข้อมูลในระบบ'
@@ -168,7 +163,7 @@ class AuthPc extends BaseController
     
         $userModel->update($user['USER_ID'], ['U_PASSWORD' => $hashedPassword]);
      
-        $to = $Email;
+        $to = $email;
         $subject = "รหัสผ่านใหม่สำหรับบัญชีของคุณ";
         $message = "สวัสดีผู้ใช้งาน " . $Username . ",\n\n"
              . "รหัสผ่านใหม่ของคุณคือ: " . $newPassword_gen . "\n\n"
@@ -253,7 +248,7 @@ class AuthPc extends BaseController
                 'status' => 'success',
                 'message' => 'สมัครผู้ใช้งานเรียบร้อย'
             ]);
-            
+
         } catch (\Exception $e) {
             return $this->response->setJSON([
                 'status' => 'error',

@@ -56,17 +56,17 @@
         <div class="modal-body">
           <form id="forgotForm">
             <div class="mb-3">
-              <label for ="forgot_input" class="form-label">ชื่อผู้ใช้งาน</label>
-              <input type="text" name="forgot_input" class="form-control">
+              <label for="forgot_input" class="form-label">ชื่อผู้ใช้งาน</label>
+              <input type="text" id="forgot_input" name="forgot_input" class="form-control">
 
-              <label for ="forgot_empid"class="form-label">เลขพนักงาน</label>
-              <input type="text" name="forgot_empid" class="form-control">
+              <label for="forgot_empid" class="form-label mt-2">เลขพนักงาน</label>
+              <input type="text" id="forgot_empid" name="forgot_empid" class="form-control">
 
-              <label for="forgot_brithdate"class="form-label">วันเดือนปีเกิด</label>
-              <input type="text" name="forgot_brithdate" class="form-control">
+              <label for="forgot_brithdate" class="form-label mt-2">วันเดือนปีเกิด</label>
+              <input type="text" id="forgot_brithdate" name="forgot_brithdate" class="form-control" placeholder="เช่น 1990-05-20">
 
-              <label for="email">อีเมลรับรหัสผ่าน</label>
-              <input type="email" class="form-control" name="forgot_email">
+              <label for="forgot_email" class="form-label mt-2">อีเมลรับรหัสผ่าน</label>
+              <input type="email" id="forgot_email" name="forgot_email" class="form-control">
             </div>
           </form>
           <div class="modal-footer">

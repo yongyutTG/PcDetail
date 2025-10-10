@@ -99,79 +99,90 @@
     const forgotForm = document.getElementById("forgotForm");
     const forgotBtn = document.getElementById("forgotBtn");
 
+   
     if (form) {
-      form.addEventListener("submit", async function (e) {
-        e.preventDefault();
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-        const userInput = form.querySelector('input[name="USER_NAME"]');
-        const pwdInput = form.querySelector('input[name="U_PASSWORD"]');
-        const md5Password = md5(pwdInput.value);
+    const userInput = form.querySelector('input[name="USER_NAME"]');
+    const pwdInput = form.querySelector('input[name="U_PASSWORD"]');
+    const md5Password = md5(pwdInput.value);
 
-        if (userInput.value.trim() === "") {
-          toastr.error("กรุณากรอกชื่อผู้ใช้", "แจ้งเตือน");
-          userInput.focus();
-          return;
-        } else if (pwdInput.value.trim() === "") {
-          toastr.error("กรุณากรอกรหัสผ่าน", "แจ้งเตือน");
-          pwdInput.focus();
-          return;
-        }
-
-        loginBtn.disabled = true;
-        loginBtn.innerHTML = `
-        <span class="spinner-border spinner-border-sm me-2 text-white" role="status"></span>
-        <span style="color: #fff;">กำลังเข้าสู่ระบบ...</span>
-        `;
-
-        try {
-          const formData = new FormData();
-          formData.append("USER_NAME", userInput.value);
-          formData.append("U_PASSWORD", md5Password);
-
-          const res = await fetch("<?= base_url('auth/chk_login') ?>", {
-            method: "POST",
-            body: formData
-          });
-          const data = await res.json();
-
-          if (data.status === "success") {
-            toastr.success(data.message, "สำเร็จ");
-            setTimeout(() => window.location.href = data.redirect, 1000);
-          } else {
-            toastr.error(data.message, "แจ้งเตือน");
-            loginBtn.disabled = false;
-            loginBtn.innerHTML = `<i class="bi bi-box-arrow-in-right"></i> เข้าสู่ระบบ`;
-          }
-        } catch (err) {
-          toastr.error("เกิดข้อผิดพลาดในการเชื่อมต่อ", "แจ้งเตือน");
-          console.error(err);
-          loginBtn.disabled = false;
-          loginBtn.innerHTML = `<i class="bi bi-box-arrow-in-right"></i> เข้าสู่ระบบ`;
-        }
-      });
+    if (userInput.value.trim() === "") {
+      toastr.error("กรุณากรอกชื่อผู้ใช้", "แจ้งเตือน");
+      userInput.focus();
+      return;
+    } else if (pwdInput.value.trim() === "") {
+      toastr.error("กรุณากรอกรหัสผ่าน", "แจ้งเตือน");
+      pwdInput.focus();
+      return;
     }
+
+    loginBtn.disabled = true;
+    loginBtn.innerHTML = `
+      <span class="spinner-border spinner-border-sm me-2 text-white" role="status"></span>
+      <span style="color: #fff;">กำลังเข้าสู่ระบบ...</span>
+    `;
+
+    try {
+      const formData = new FormData();
+      formData.append("USER_NAME", userInput.value);
+      formData.append("U_PASSWORD", md5Password);
+
+      const res = await fetch("<?= base_url('auth/chk_login') ?>", {
+        method: "POST",
+        body: formData
+      });
+      const data = await res.json();
+
+      if (data.status === "success") {
+        toastr.success(data.message, "สำเร็จ");
+
+        // ✅ ตรวจสอบว่าเป็น admin ไหม
+        if (userInput.value.toLowerCase() === "it0007") {
+          // แสดง popup ให้เลือกหน้า
+          Swal.fire({
+            title: "เลือกหน้าที่ต้องการเข้าถึง",
+            text: "คุณต้องการเข้าหน้าไหน?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "หน้า Admin",
+            cancelButtonText: "หน้า All PC",
+            allowOutsideClick: false,
+            allowEscapeKey: false
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.href = "<?= base_url('admin') ?>";
+            } else {
+              window.location.href = "<?= base_url('all-listPC') ?>";
+            }
+          });
+        } else {
+          // ถ้าไม่ใช่ admin → เข้า all-listPC ทันที
+          setTimeout(() => window.location.href = "<?= base_url('all-listPC') ?>", 800);
+        }
+
+      } else {
+        toastr.error(data.message, "แจ้งเตือน");
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = `<i class="bi bi-box-arrow-in-right"></i> เข้าสู่ระบบ`;
+      }
+
+    } catch (err) {
+      toastr.error("เกิดข้อผิดพลาดในการเชื่อมต่อ", "แจ้งเตือน");
+      console.error(err);
+      loginBtn.disabled = false;
+      loginBtn.innerHTML = `<i class="bi bi-box-arrow-in-right"></i> เข้าสู่ระบบ`;
+    }
+  });
+}
+
+
 
       forgotForm.addEventListener("submit", async function (e) {
         e.preventDefault();
-
         const UsernameInput = forgotForm.querySelector('input[name="forgot_input"]');
         const emailInput = forgotForm.querySelector('input[name="forgot_email"]');
-        // const newPasswordInput = forgotForm.querySelector('input[name="new_password"]');
-        // const confirmPasswordInput = forgotForm.querySelector('input[name="confirm_password"]');
-        // const md5Password = md5(newPasswordInput.value);
-       
-         //console.log("md5 Password: " + md5Password);
-
-        // if (newPasswordInput.value.trim() === "") {
-        //   toastr.error("กรุณากรอกรหัสผ่านใหม่", "แจ้งเตือน");
-        //   newPasswordInput.focus();
-        //   return;
-        // }
-        // if (confirmPasswordInput.value.trim() === "") {
-        //   toastr.error("กรุณากรอกยืนยันรหัสผ่านใหม่", "แจ้งเตือน");
-        //   confirmPasswordInput.focus();
-        //   return;
-        // }
         if (UsernameInput.value.trim() === "") {
           toastr.error("กรุณากรอกชื่อผู้ใช้งาน", "แจ้งเตือน");
           UsernameInput.focus();

@@ -114,7 +114,7 @@ class AuthPc extends BaseController
 }
 
 
-    //"ลืมรหัสผ่าน"
+    //รีเซ็ตรหัสผ่าน"
     public function forgotPassword() {
         $Username = $this->request->getPost('forgot_input');
         $Email    = $this->request->getPost('forgot_email');
@@ -247,14 +247,13 @@ class AuthPc extends BaseController
             'CREATED_DATE' => $this->request->getPost('CREATED_DATE'),
             'UPDATED_DATE' => $this->request->getPost('UPDATED_DATE'),
         ];
-        // return redirect()->to('login')->with('success', 'สมัครสมาชิกเรียบร้อย สามารถเข้าสู่ระบบได้แล้ว');
         try {
             $userModel->insert($userData);
             return $this->response->setJSON([
                 'status' => 'success',
                 'message' => 'สมัครผู้ใช้งานเรียบร้อย'
-                //  'redirect' => base_url('/login')
             ]);
+            
         } catch (\Exception $e) {
             return $this->response->setJSON([
                 'status' => 'error',

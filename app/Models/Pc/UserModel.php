@@ -48,8 +48,6 @@ class UserModel extends Model
                 u.U_PASSWORD,
                 p.ptitle_name +''+ t.fname + ' ' + t.lname AS full_name,
                 t.email,
-                t.dmy_birth,
-                t.id_card,
                 g.GROUP_NAME
             FROM usr_user u
             LEFT JOIN mem_h_member t 

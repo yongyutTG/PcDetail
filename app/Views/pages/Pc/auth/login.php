@@ -56,16 +56,16 @@
         <div class="modal-body">
           <form id="forgotForm">
             <div class="mb-3">
-              <label class="form-label">กรุณากรอกชื่อผู้ใช้งาน</label>
+              <label class="form-label">ชื่อผู้ใช้งาน</label>
               <input type="text" name="forgot_input" class="form-control">
 
-              <label class="form-label">กรูณากรอกเลขพนักงาน</label>
-              <input type="text" name="empid_input" class="form-control">
+              <label class="form-label">เลขพนักงาน</label>
+              <input type="text" name="forgot_empid" class="form-control">
 
-              <label class="form-label">กรูณากรอกเลขวันเดือนปีเกิด</label>
-              <input type="text" name="brithdate_input" class="form-control">
+              <label class="form-label">วันเดือนปีเกิด</label>
+              <input type="text" name="forgot_brithdate" class="form-control">
 
-              <label for="email">อีเมลที่ต้องการให้ส่งรหัสผ่าน</label>
+              <label for="email">อีเมลรับรหัสผ่าน</label>
               <input type="email" class="form-control" name="forgot_email">
             </div>
           </form>
@@ -182,10 +182,23 @@
     forgotForm.addEventListener("submit", async function (e) {
       e.preventDefault();
       const UsernameInput = forgotForm.querySelector('input[name="forgot_input"]');
+      const empidInput = forgotForm.querySelector('input[name="forgot_empid"]');
+      const brithdateInput = forgotForm.querySelector('input[name="forgot_brithdate"]');
       const emailInput = forgotForm.querySelector('input[name="forgot_email"]');
+
       if (UsernameInput.value.trim() === "") {
         toastr.error("กรุณากรอกชื่อผู้ใช้งาน", "แจ้งเตือน");
         UsernameInput.focus();
+        return;
+      }
+       if (empidInput.value.trim() === "") {
+        toastr.error("กรุณากรอกเลขพนักงาน", "แจ้งเตือน");
+        empidInput.focus();
+        return;
+      }
+       if (brithdateInput.value.trim() === "") {
+        toastr.error("กรุณากรอกวันเดือนปีเกิด", "แจ้งเตือน");
+        brithdateInput.focus();
         return;
       }
       if (emailInput.value.trim() === "") {
@@ -193,6 +206,7 @@
         emailInput.focus();
         return;
       }
+    
       // disable ปุ่มระหว่างรอส่ง
       forgotBtn.disabled = true;
       forgotBtn.innerHTML = `
@@ -202,10 +216,9 @@
       try {
         const formData = new FormData();
         formData.append("forgot_input", UsernameInput.value);
+        formData.append("forgot_empid", empidInput.value);
+        formData.append("forgot_brithdate", brithdateInput.value);
         formData.append("forgot_email", emailInput.value);
-
-        // formData.append("new_password", md5Password);
-
 
         const res = await fetch("<?= base_url('auth/forgot-password') ?>", {
           method: "POST",
@@ -218,7 +231,7 @@
           // ปิด modal หลังส่งสำเร็จ
           const modal = bootstrap.Modal.getInstance(document.getElementById("forgotPasswordModal"));
           modal.hide();
-      forgotBtn.disabled = false;
+          forgotBtn.disabled = false;
           forgotBtn.innerHTML = `<i class="bi bi-envelope-at"></i> รีเซ็ตรหัสผ่าน`;
         } else {
           toastr.error(data.message, "แจ้งเตือน");

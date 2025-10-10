@@ -34,9 +34,9 @@
                 <label for="statusFilter" class="mb-0 fw-bold">สถานะ: </label>
                 <select id="statusFilter"
                   style="padding:6px; font-size: 14px; font-weight: bold; border-radius:6px; border:1px solid #ccc;">
+                  <option value="">ทั้งหมด</option>
                   <option value="A">ใช้งาน</option>
                   <option value="N">ไม่ใช้งาน</option>
-                  <option value="N">ทั้งหมด</option>
                 </select>
                 <br>
                 <button type="button" id="resetBtn" class="btn btn-reset">
@@ -529,7 +529,7 @@ let selectedRowIndex = -1;
       tbody.innerHTML = "";
       let url = (keyword || status || br_no || property_type)
         ? `${searchUrlstatus}?page=${page}&limit=${limit}&property_type=${encodeURIComponent(property_type)}&br_no=${encodeURIComponent(br_no)}&status=${encodeURIComponent(status)}&keyword=${encodeURIComponent(keyword)}`
-        : `${apiBaseUrl}?page=${page}&limit=${limit}&property_type=${encodeURIComponent(property_type)}&br_no=${encodeURIComponent(br_no)}&status=${encodeURIComponent(status)}&keyword=${encodeURIComponent(keyword)}`;
+        : `${apiBaseUrl}?page=${page}&limit=${limit}`;
       try {
         const res = await fetch(url, {
           method: 'GET',

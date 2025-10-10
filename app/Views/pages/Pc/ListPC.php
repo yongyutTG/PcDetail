@@ -529,7 +529,7 @@ let selectedRowIndex = -1;
       tbody.innerHTML = "";
       let url = (keyword || status || br_no || property_type)
         ? `${searchUrlstatus}?page=${page}&limit=${limit}&property_type=${encodeURIComponent(property_type)}&br_no=${encodeURIComponent(br_no)}&status=${encodeURIComponent(status)}&keyword=${encodeURIComponent(keyword)}`
-        : `${apiBaseUrl}?page=${page}&limit=${limit}`;
+        : `${apiBaseUrl}?page=${page}&limit=${limit}&property_type=${encodeURIComponent(property_type)}&br_no=${encodeURIComponent(br_no)}&status=${encodeURIComponent(status)}&keyword=${encodeURIComponent(keyword)}`;
       try {
         const res = await fetch(url, {
           method: 'GET',

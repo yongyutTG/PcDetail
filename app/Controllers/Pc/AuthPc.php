@@ -138,12 +138,6 @@ class AuthPc extends BaseController
                 'message' => 'ไม่พบเลขพนักงานนี้ในระบบ'
             ]);
         }    
-        if (strtolower(trim($user['dmy_birth'])) !== strtolower(trim($brithdate))) {
-            return $this->response->setJSON([
-                'status' => 'error',
-                'message' => 'ไม่พบเลขวันเดือนปีเกิดนี้ในระบบ'
-            ]);
-        }    
         if (strtolower(trim($user['email'])) !== strtolower(trim($email))) {
             return $this->response->setJSON([
                 'status' => 'error',

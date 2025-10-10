@@ -58,34 +58,6 @@
         </div>
         <ul class="nav-list">
             <li>
-                <a href="<?= base_url('dashboard') ?>">
-                    <i class="fa-solid fa-house-chimney"></i>
-                    <span class="link-name">Dashboard</span>
-                </a>
-                <p class="tool">Dashboard</p>
-            </li>
-            <li>
-                <a href="<?= base_url('all-listPC') ?>">
-                    <i class="fa-solid fa-computer"></i>
-                    <span class="link-name">listPC</span>
-                </a>
-                <p class="tool">listPC</p>
-            </li>
-            <li>
-                <a href="<?= base_url('logPC') ?>">
-                    <i class="fa-solid fa-file-lines"></i>
-                    <span class="link-name">LogPC</span>
-                </a>
-                <p class="tool">LogPC</p>
-            </li>
-             <li>
-                <a href="<?= base_url('ScanIP') ?>">
-                    <i class="fa-solid fa-signal"></i>
-                    <span class="link-name">ScanIP</span>
-                </a>
-                <p class="tool">ScanIP</p>
-            </li>
-            <li>
                 <a href="<?= base_url('admin') ?>">
                     <i class="fa-solid fa-gear"></i>
                     <span class="link-name">settings</span>

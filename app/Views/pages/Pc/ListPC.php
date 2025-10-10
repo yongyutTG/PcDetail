@@ -34,9 +34,9 @@
                 <label for="statusFilter" class="mb-0 fw-bold">สถานะ: </label>
                 <select id="statusFilter"
                   style="padding:6px; font-size: 14px; font-weight: bold; border-radius:6px; border:1px solid #ccc;">
-                  <option value="">ทั้งหมด</option>
                   <option value="A">ใช้งาน</option>
                   <option value="N">ไม่ใช้งาน</option>
+                  <option value="N">ทั้งหมด</option>
                 </select>
                 <br>
                 <button type="button" id="resetBtn" class="btn btn-reset">
@@ -524,7 +524,7 @@
 let selectedRowIndex = -1;
 
     // ฟังก์ชันโหลดข้อมูลทั้งหมด PCหน้าแรก (รองรับค้นหา/กรอง/เปลี่ยนหน้า)
-    async function fetchPCs({ page = 1, keyword = '', property_type = '', status = 'A', br_no } = {}) {
+    async function fetchPCs({ page = 1, keyword = '', property_type = '', status = '', br_no } = {}) {
       spinner.style.display = "block";
       tbody.innerHTML = "";
       let url = (keyword || status || br_no || property_type)

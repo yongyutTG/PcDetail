@@ -222,12 +222,7 @@ class AuthPc extends BaseController
                  'message' => 'มีชื่อผู้ใช้งานนี้แล้ว กรุณาเลือกชื่อใหม่'
             ]);
         }
-        // if ($userModel->where('USER_NAME', $username)->first()) {
-        //     return $this->response->setJSON([
-        //         'status' => 'error',
-        //         'message' => 'มีชื่อผู้ใช้งานนี้แล้ว กรุณาเลือกชื่อใหม่'
-        //     ]);
-        // }
+       
         $newUserId = $userModel->getNextUserId();
 
         $RegisterPassword_gen = substr(str_shuffle('abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 8);
@@ -250,11 +245,32 @@ class AuthPc extends BaseController
         ];
         try {
             $userModel->insert($userData);
-            return $this->response->setJSON([
-                'status' => 'success',
-                'message' => 'สมัครผู้ใช้งานเรียบร้อย'
-            ]);
+            $to = $email;
+            $subject = "รหัสผ่านสำหรับบัญชีของคุณ";
+            $message = "สวัสดีคุณ " . $username . ",\n\n"
+                . "บัญชีของคุณได้ถูกสร้างในระบบ PC Detail.\n"
+                . "รหัสผ่านชั่วคราวคือ: " . $RegisterPassword_gen . "\n\n"
+                . "กรุณาเปลี่ยนรหัสผ่านหลังจากเข้าสู่ระบบครั้งแรกครับ.";
 
+            $emailService = \Config\Services::email();
+            $emailService->setFrom('yongyuttgsaving@gmail.com', 'PC Detail ระบบผู้ใช้งาน');
+            $emailService->setTo($to);
+            $emailService->setSubject($subject);
+            $emailService->setMessage($message);
+
+            if ($emailService->send()) {
+                return $this->response->setJSON([
+                    'status' => 'success',
+                    'message' => 'สมัครผู้ใช้งานเรียบร้อย และส่งรหัสผ่านไปที่อีเมลแล้ว'
+                ]);
+            } else {
+                $debug = $emailService->printDebugger(['headers', 'subject', 'body']);
+                return $this->response->setJSON([
+                    'status' => 'warning',
+                    'message' => 'สมัครผู้ใช้งานสำเร็จ แต่ส่งอีเมลไม่สำเร็จ',
+                    'debug' => $debug
+                ]);
+            }
 
         } catch (\Exception $e) {
             return $this->response->setJSON([

@@ -63,12 +63,6 @@
                         <label class="form-label">ชื่อผู้ใช้</label>
                         <input type="text" name="USER_NAME" class="form-control" required>
                       </div>
-
-                      <div class="mb-3">
-                        <label class="form-label">รหัสผ่าน</label>
-                        <input type="password" name="U_PASSWORD" class="form-control"placeholder='Gernarate Password จากระบบ'>
-                      </div>
-
                       <div class="mb-3">
                         <label class="form-label">EMP_ID (รหัสพนักงาน)</label>
                         <input type="text" name="EMP_ID" class="form-control">

@@ -66,7 +66,7 @@
 
                       <div class="mb-3">
                         <label class="form-label">รหัสผ่าน</label>
-                        <input type="password" name="U_PASSWORD" class="form-control" required>
+                        <input type="password" name="U_PASSWORD" class="form-control"placeholder='Gernarate Password จากระบบ'>
                       </div>
 
                       <div class="mb-3">
@@ -89,6 +89,10 @@
                           <option value="1">Superadmin</option>
                         </select>
                       </div>
+                       <div class="mb-3">
+                        <label class="form-label">อีเมลที่รับรหัสผ่าน</label>
+                        <input type="text" name="EMAIL" class="form-control" required>
+                      </div>
 
                       <!-- hidden fields -->
                       <input type="hidden" name="CREATED_USERID" value="<?= session()->get('USER_ID') ?? 1 ?>">
@@ -107,8 +111,6 @@
                 </div>
               </div>
             </div>
-
-
             <!-- Modal แก้ไขข้อมูลผู้ใช้งาน -->
             <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editLabel" aria-hidden="true">
               <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -161,9 +163,6 @@
                 </div>
               </div>
             </div>
-
-
-
           </div>
         </div>
       </div>
@@ -188,18 +187,22 @@
     e.preventDefault();
 
     const userInput = registerForm.querySelector('input[name="USER_NAME"]');
-    const pwdInput = registerForm.querySelector('input[name="U_PASSWORD"]');
-    const 
-    md5Password = md5(pwdInput.value);
+    const emailInput = registerForm.querySelector('input[name="EMAIL"]');
+    //const pwdInput = registerForm.querySelector('input[name="U_PASSWORD"]');
+    //const md5Password = md5(pwdInput.value);
 
     if (userInput.value.trim() === "") {
       toastr.error("กรุณากรอกชื่อผู้ใช้", "แจ้งเตือน");
       return;
     }
-    if (pwdInput.value.trim() === "") {
-      toastr.error("กรุณากรอกรหัสผ่าน", "แจ้งเตือน");
+     if (emailInput.value.trim() === "") {
+      toastr.error("กรุณากรอกอีเมล", "แจ้งเตือน");
       return;
     }
+    // if (pwdInput.value.trim() === "") {
+    //   toastr.error("กรุณากรอกรหัสผ่าน", "แจ้งเตือน");
+    //   return;
+    // }
 
     registerBtn.disabled = true;
     registerBtn.innerHTML = `

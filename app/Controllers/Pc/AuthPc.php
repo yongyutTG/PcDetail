@@ -211,15 +211,27 @@ class AuthPc extends BaseController
     public function attemptRegister(){
         $userModel = new UserModel();
         $username = $this->request->getPost('USER_NAME');
-        $clientHash = $this->request->getPost('U_PASSWORD'); // md5(password)
-        // ตรวจสอบ
-        if ($userModel->where('USER_NAME', $username)->first()) {
+        $email = $this->request->getPost('EMAIL');
+        //$clientHash = $this->request->getPost('U_PASSWORD'); // md5(password)
+
+        $user = $userModel->getActiveUserByUsername($username);
+            // ตรวจสอบ
+        if ($user) {
             return $this->response->setJSON([
                 'status' => 'error',
-                'message' => 'มีชื่อผู้ใช้งานนี้แล้ว กรุณาเลือกชื่อใหม่'
+                 'message' => 'มีชื่อผู้ใช้งานนี้แล้ว กรุณาเลือกชื่อใหม่'
             ]);
         }
+        // if ($userModel->where('USER_NAME', $username)->first()) {
+        //     return $this->response->setJSON([
+        //         'status' => 'error',
+        //         'message' => 'มีชื่อผู้ใช้งานนี้แล้ว กรุณาเลือกชื่อใหม่'
+        //     ]);
+        // }
         $newUserId = $userModel->getNextUserId();
+
+        $RegisterPassword_gen = substr(str_shuffle('abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 8);
+        $clientHash = md5($RegisterPassword_gen);
         // Hash ซ้อนอีกชั้น
         $finalHash = password_hash($clientHash, PASSWORD_DEFAULT);
         ;
@@ -242,6 +254,7 @@ class AuthPc extends BaseController
                 'status' => 'success',
                 'message' => 'สมัครผู้ใช้งานเรียบร้อย'
             ]);
+
 
         } catch (\Exception $e) {
             return $this->response->setJSON([

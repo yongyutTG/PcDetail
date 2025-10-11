@@ -1039,7 +1039,7 @@ function afterRenderTable() {
         <li class="list-group-item"><strong>Location:</strong> ${pc.location || '-'}</li>
         <li class="list-group-item"><strong>Brand:</strong> ${pc.band || '-'}</li>
         <li class="list-group-item"><strong>Model:</strong> ${pc.model || '-'}</li>
-        <li class="list-group-item d-flex align-items-center justify-content-between">
+        <li class="list-group-item d-flex align-items-center justify-content-between"><strong>IP:</strong>
           <div class="d-flex align-items-center gap-1">
             <span class="ip-text">${pc.ip_address || '-'}</span>
             ${pc.ip_address ? `<button class="btn btn-sm btn-light border copy-ip-btn" 

@@ -206,7 +206,7 @@
 
     try {
       const formData = new FormData(registerForm);
-      formData.set("U_PASSWORD", md5Password);
+      // formData.set("U_PASSWORD", md5Password);
 
       const res = await fetch("<?= base_url('admin/attemptRegister') ?>", {
         method: "POST",

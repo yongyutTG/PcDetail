@@ -153,6 +153,7 @@
                 window.location.href = "<?= base_url('admin') ?>";
               } else {
                 window.location.href = "<?= base_url('all-listPC') ?>";
+                
               }
             });
           } else {

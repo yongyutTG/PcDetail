@@ -392,19 +392,6 @@
                             <option value="<?= esc($o['os']) ?>">
                             <?php endforeach; ?>
                         </datalist>
-
-                         <!-- <select class="form-select" id="add_os" name="add_os" required  style="font-size: 14px;">
-                          <option value="">กรุณาเลือก OS</option>
-                          <option value="ไม่มี">ไม่มี</option>
-                          <option value="Windows XP">Windows XP</option>
-                          <option value="Windows 7">Windows 7</option>
-                          <option value="Windows 10">Windows 10 Pro</option>
-                          <option value="Windows 11">Windows 11 Pro</option>
-                          <option value="Windows Server">Windows Server</option>
-                          <option value="Terminal Server">Terminal Server</option>
-                          <option value="Mac">Mac</option>
-                          <option value="Linux">Linux</option>
-                        </select> -->
                       </div>
                       <div class="mb-3">
                         <label for="add_office" class="form-label">Office</label>
@@ -521,7 +508,7 @@
     const limit = 17;
     let totalPages = 0;
     let totalRecords = 0;
-let selectedRowIndex = -1;
+    let selectedRowIndex = -1;
 
     // ฟังก์ชันโหลดข้อมูลทั้งหมด PCหน้าแรก (รองรับค้นหา/กรอง/เปลี่ยนหน้า)
     async function fetchPCs({ page = 1, keyword = '', property_type = '', status = '', br_no } = {}) {
@@ -1044,6 +1031,7 @@ function afterRenderTable() {
       return `
       <ul class="list-group">
         <li class="list-group-item"><strong>PC ID:</strong> ${pc.pc_id}</li>
+         <li class="list-group-item"><strong>PC ID:</strong> ${pc.user_name}</li>
         <li class="list-group-item"><strong>ComputerName:</strong> ${pc.computer_name || '-'}</li>
         <li class="list-group-item"><strong>LoginUser:</strong> ${pc.login_user || '-'}</li>
         <li class="list-group-item"><strong>TerminalServer:</strong> ${pc.terminal_server || '-'}</li>

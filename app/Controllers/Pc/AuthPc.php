@@ -211,7 +211,7 @@ class AuthPc extends BaseController
     public function attemptRegister(){
         $userModel = new UserModel();
         $username = $this->request->getPost('USER_NAME');
-        $email = $this->request->getPost('EMAIL');
+        $Passwordemail = $this->request->getPost('EMAIL');
         //$clientHash = $this->request->getPost('U_PASSWORD'); // md5(password)
 
         $user = $userModel->getActiveUserByUsername($username);
@@ -245,26 +245,26 @@ class AuthPc extends BaseController
         ];
         try {
             $userModel->insert($userData);
-            $to = $email;
+            $to = $Passwordemail;
             $subject = "รหัสผ่านสำหรับบัญชีของคุณ";
             $message = "สวัสดีคุณ " . $username . ",\n\n"
                 . "บัญชีของคุณได้ถูกสร้างในระบบ PC Detail.\n"
                 . "รหัสผ่านชั่วคราวคือ: " . $RegisterPassword_gen . "\n\n"
                 . "กรุณาเปลี่ยนรหัสผ่านหลังจากเข้าสู่ระบบครั้งแรกครับ.";
 
-            $emailService = \Config\Services::email();
-            $emailService->setFrom('yongyuttgsaving@gmail.com', 'PC Detail ระบบผู้ใช้งาน');
-            $emailService->setTo($to);
-            $emailService->setSubject($subject);
-            $emailService->setMessage($message);
+            $email = \Config\Services::email();
+            $email->setFrom('yongyuttgsaving@gmail.com', 'PC Detail ระบบผู้ใช้งาน');
+            $email->setTo($to);
+            $email->setSubject($subject);
+            $email->setMessage($message);
 
-            if ($emailService->send()) {
+            if ($email->send()) {
                 return $this->response->setJSON([
                     'status' => 'success',
                     'message' => 'สมัครผู้ใช้งานเรียบร้อย และส่งรหัสผ่านไปที่อีเมลแล้ว'
                 ]);
             } else {
-                $debug = $emailService->printDebugger(['headers', 'subject', 'body']);
+                $debug = $email->printDebugger(['headers', 'subject', 'body']);
                 return $this->response->setJSON([
                     'status' => 'warning',
                     'message' => 'สมัครผู้ใช้งานสำเร็จ แต่ส่งอีเมลไม่สำเร็จ',

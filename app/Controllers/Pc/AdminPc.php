@@ -85,7 +85,7 @@ class AdminPc extends BaseController
             $registerDate = date("d/m/Y H:i"); 
             
             $to = $Passwordemail;
-            $subject = "รหัสผ่านสำหรับระบบ PC Detail";
+            $subject = "สมัครบัญชีระบบ PC Detail เรียบร้อยแล้ว";
             $message = "
                         <p>สวัสดีผู้ใช้งานใหม่</p>
                         <p>คุณได้สมัครบัญชีเข้าใช้งานระบบ <strong>PC Detail</strong>.เรียบร้อยแล้ว เมื่อวันที่ <strong>{$registerDate}</strong></p>

@@ -85,9 +85,8 @@ class AdminPc extends BaseController
             $to = $Passwordemail;
             $subject = "รหัสผ่านสำหรับระบบ PC Detail";
             $message = "
-                        <p>สวัสดีคุณ <strong>{$fullname}</strong>,</p>
+                        <p>สวัสดีำกระผู้ใช้งาน <strong>{$fullname}</strong>,</p>
                         <p>คุณได้สมัครบัญชีเข้าใช้งานในระบบ <strong>PC Detail</strong>.เรียบร้อยแล้ว เมื่อ </p>
-                        <p>ชื่อผู้ใช้งานคือ: <strong>{$username}</strong></p>
                         <p>รหัสผ่านชั่วคราวคือ: <strong>{$RegisterPassword_gen}</strong></p>
                         <p>กรุณาเปลี่ยนรหัสผ่านหลังจากเข้าสู่ระบบครั้งแรกครับ.</p>
                         <p><a href='{$loginUrl}' style='display:inline-block;padding:10px 20px;background:#007bff;color:#fff;text-decoration:none;border-radius:5px;'>เข้าสู่ระบบ</a></p>

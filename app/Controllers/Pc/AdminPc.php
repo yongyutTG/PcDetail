@@ -50,7 +50,7 @@ class AdminPc extends BaseController
         //$clientHash = $this->request->getPost('U_PASSWORD'); // md5(password)
 
         $user = $userModel->getActiveUserByUsername($username);
-        $fullname = $user['FULL_NAME'];
+      
             // ตรวจสอบ
         if ($user) {
             return $this->response->setJSON([

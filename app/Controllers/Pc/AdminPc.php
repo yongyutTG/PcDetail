@@ -82,16 +82,25 @@ class AdminPc extends BaseController
             $userModel->insert($userData);
             $to = $Passwordemail;
             $subject = "รหัสผ่านสำหรับบัญชีของคุณ";
-            $message = "สวัสดีคุณ " . $username . ",\n\n"
-                . "บัญชีของคุณได้ถูกสร้างในระบบ PC Detail.\n"
-                . "รหัสผ่านชั่วคราวคือ: " . $RegisterPassword_gen . "\n\n"
-                . "กรุณาเปลี่ยนรหัสผ่านหลังจากเข้าสู่ระบบครั้งแรกครับ.";
+
+            $loginUrl = "https://yourdomain.com/login";
+
+            $message = "
+                <p>สวัสดีคุณ <strong>{$username}</strong>,</p>
+                <p>บัญชีของคุณได้ถูกสร้างในระบบ <strong>PC Detail</strong>.</p>
+                <p>รหัสผ่านชั่วคราวคือ: <strong>{$RegisterPassword_gen}</strong></p>
+                <p>กรุณาเปลี่ยนรหัสผ่านหลังจากเข้าสู่ระบบครั้งแรกครับ.</p>
+                <p><a href='{$loginUrl}' style='display:inline-block;padding:10px 20px;background:#007bff;color:#fff;text-decoration:none;border-radius:5px;'>เข้าสู่ระบบ PC Detail </a></p>
+            ";
 
             $email = \Config\Services::email();
             $email->setFrom('yongyuttgsaving@gmail.com', 'PC Detail ระบบผู้ใช้งาน');
             $email->setTo($to);
             $email->setSubject($subject);
             $email->setMessage($message);
+            $email->setMailType('html'); // ✅ ต้องใส่ถ้าใช้ HTML
+            $email->send();
+
 
             if ($email->send()) {
                 return $this->response->setJSON([

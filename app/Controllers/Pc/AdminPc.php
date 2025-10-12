@@ -99,9 +99,7 @@ class AdminPc extends BaseController
             $email->setSubject($subject);
             $email->setMessage($message);
             $email->setMailType('html'); // ✅ ต้องใส่ถ้าใช้ HTML
-            $email->send();
-
-
+           
             if ($email->send()) {
                 return $this->response->setJSON([
                     'status' => 'success',

@@ -45,7 +45,6 @@ class AuthPc extends BaseController
             'USER_NAME' => $user['USER_NAME'],
             'EMP_ID' => $user['EMP_ID'],
             'FULL_NAME' => $user['full_name'],
-            'ID-CARD' => $user['id_card'],
             'EMAIL' => $user['email'],
             'GROUP_NAME' => $user['GROUP_NAME'],
             'SUP_ADMIN' => $user['SUP_ADMIN'],

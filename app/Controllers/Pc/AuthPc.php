@@ -155,13 +155,19 @@ class AuthPc extends BaseController
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
     
         $userModel->update($user['USER_ID'], ['U_PASSWORD' => $hashedPassword]);
-     
+         $loginUrl = base_url('login');
+        $registerDate = date("d/m/Y H:i"); 
         $to = $email;
-        $subject = "รหัสผ่านใหม่สำหรับบัญชีของคุณ";
-        $message = "สวัสดีผู้ใช้งาน " . $Username . ",\n\n"
-             . "รหัสผ่านใหม่ของคุณคือ: " . $newPassword_gen . "\n\n"
-             . "กรุณาเปลี่ยนรหัสผ่านหลังจากเข้าสู่ระบบครั้งแรกครับ.";
-
+        
+        $subject = "รีเซ็ตรหัสผ่านใหม่สำหรับระบบ PC Detail";
+        $message = "
+                    <p>สวัสดีผู้ใช้งาน {$Username}</p>
+                    <p>คุณได้ทำการรีเซ็ตระหัสผ่านเข้าใช้งานระบบ <strong>PC Detail</strong>.เรียบร้อยแล้ว เมื่อวันที่ <strong>{$registerDate}</strong></p>
+                    <p>รหัสผ่านชั่วคราวคือ: <strong>{$newPassword_gen}</strong></p>
+                    <p>กรุณาเปลี่ยนรหัสผ่านหลังจากเข้าสู่ระบบครั้งแรก.</p>
+                    <p><a href='{$loginUrl}' style='display:inline-block;padding:10px 20px;background:#007bff;color:#fff;text-decoration:none;border-radius:5px;'>เข้าสู่ระบบ</a></p>
+                ";
+     
          // ส่งอีเมลด้วย Email Library ของ CI4
         $email = \Config\Services::email();
         $email->setFrom('yongyuttgsaving@gmail.com', 'PC Detail ระบบรีเซ็ตรหัสผ่าน');

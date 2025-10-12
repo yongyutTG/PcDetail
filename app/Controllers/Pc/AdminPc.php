@@ -46,15 +46,22 @@ class AdminPc extends BaseController
     public function attemptRegister(){
         $userModel = new UserModel();
         $username = $this->request->getPost('USER_NAME');
-        $clientHash = $this->request->getPost('U_PASSWORD'); // md5(password)
-        // ตรวจสอบ
-        if ($userModel->where('USER_NAME', $username)->first()) {
+        $Passwordemail = $this->request->getPost('EMAIL');
+        //$clientHash = $this->request->getPost('U_PASSWORD'); // md5(password)
+
+        $user = $userModel->getActiveUserByUsername($username);
+            // ตรวจสอบ
+        if ($user) {
             return $this->response->setJSON([
                 'status' => 'error',
-                'message' => 'มีชื่อผู้ใช้งานนี้แล้ว กรุณาเลือกชื่อใหม่'
+                 'message' => 'มีชื่อผู้ใช้งานนี้แล้ว กรุณาเลือกชื่อใหม่'
             ]);
         }
+       
         $newUserId = $userModel->getNextUserId();
+
+        $RegisterPassword_gen = substr(str_shuffle('abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 8);
+        $clientHash = md5($RegisterPassword_gen);
         // Hash ซ้อนอีกชั้น
         $finalHash = password_hash($clientHash, PASSWORD_DEFAULT);
         ;
@@ -71,14 +78,34 @@ class AdminPc extends BaseController
             'CREATED_DATE' => $this->request->getPost('CREATED_DATE'),
             'UPDATED_DATE' => $this->request->getPost('UPDATED_DATE'),
         ];
-        // return redirect()->to('login')->with('success', 'สมัครสมาชิกเรียบร้อย สามารถเข้าสู่ระบบได้แล้ว');
         try {
             $userModel->insert($userData);
-            return $this->response->setJSON([
-                'status' => 'success',
-                'message' => 'สมัครผู้ใช้งานเรียบร้อย'
-                //  'redirect' => base_url('/login')
-            ]);
+            $to = $Passwordemail;
+            $subject = "รหัสผ่านสำหรับบัญชีของคุณ";
+            $message = "สวัสดีคุณ " . $username . ",\n\n"
+                . "บัญชีของคุณได้ถูกสร้างในระบบ PC Detail.\n"
+                . "รหัสผ่านชั่วคราวคือ: " . $RegisterPassword_gen . "\n\n"
+                . "กรุณาเปลี่ยนรหัสผ่านหลังจากเข้าสู่ระบบครั้งแรกครับ.";
+
+            $email = \Config\Services::email();
+            $email->setFrom('yongyuttgsaving@gmail.com', 'PC Detail ระบบผู้ใช้งาน');
+            $email->setTo($to);
+            $email->setSubject($subject);
+            $email->setMessage($message);
+
+            if ($email->send()) {
+                return $this->response->setJSON([
+                    'status' => 'success',
+                    'message' => 'สมัครผู้ใช้งานเรียบร้อย และส่งรหัสผ่านไปที่อีเมลแล้ว'
+                ]);
+            } else {
+                $debug = $email->printDebugger(['headers', 'subject', 'body']);
+                return $this->response->setJSON([
+                    'status' => 'warning',
+                    'message' => 'สมัครผู้ใช้งานสำเร็จ แต่ส่งอีเมลไม่สำเร็จ',
+                    'debug' => $debug
+                ]);
+            }
         } catch (\Exception $e) {
             return $this->response->setJSON([
                 'status' => 'error',

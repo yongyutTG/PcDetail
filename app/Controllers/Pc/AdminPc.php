@@ -80,26 +80,24 @@ class AdminPc extends BaseController
         ];
         try {
             $userModel->insert($userData);
+            $loginUrl = "https://yourdomain.com/login";
             $to = $Passwordemail;
             $subject = "รหัสผ่านสำหรับบัญชีของคุณ";
-
-            $loginUrl = "https://yourdomain.com/login";
-
             $message = "
-                <p>สวัสดีคุณ <strong>{$username}</strong>,</p>
-                <p>บัญชีของคุณได้ถูกสร้างในระบบ <strong>PC Detail</strong>.</p>
-                <p>รหัสผ่านชั่วคราวคือ: <strong>{$RegisterPassword_gen}</strong></p>
-                <p>กรุณาเปลี่ยนรหัสผ่านหลังจากเข้าสู่ระบบครั้งแรกครับ.</p>
-                <p><a href='{$loginUrl}' style='display:inline-block;padding:10px 20px;background:#007bff;color:#fff;text-decoration:none;border-radius:5px;'>เข้าสู่ระบบ PC Detail </a></p>
-            ";
+                        <p>สวัสดีคุณ <strong>{$username}</strong>,</p>
+                        <p>บัญชีของคุณได้ถูกสร้างในระบบ <strong>PC Detail</strong>.</p>
+                        <p>รหัสผ่านชั่วคราวคือ: <strong>{$RegisterPassword_gen}</strong></p>
+                        <p>กรุณาเปลี่ยนรหัสผ่านหลังจากเข้าสู่ระบบครั้งแรกครับ.</p>
+                        <p><a href='{$loginUrl}' style='display:inline-block;padding:10px 20px;background:#007bff;color:#fff;text-decoration:none;border-radius:5px;'>เข้าสู่ระบบ</a></p>
+                    ";
 
             $email = \Config\Services::email();
             $email->setFrom('yongyuttgsaving@gmail.com', 'PC Detail ระบบผู้ใช้งาน');
             $email->setTo($to);
             $email->setSubject($subject);
             $email->setMessage($message);
-            $email->setMailType('html'); // ✅ ต้องใส่ถ้าใช้ HTML
-           
+            $email->setMailType('html');
+
             if ($email->send()) {
                 return $this->response->setJSON([
                     'status' => 'success',

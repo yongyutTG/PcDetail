@@ -50,6 +50,7 @@ class AdminPc extends BaseController
         //$clientHash = $this->request->getPost('U_PASSWORD'); // md5(password)
 
         $user = $userModel->getActiveUserByUsername($username);
+        $fullname = $user['FULL_NAME'];
             // ตรวจสอบ
         if ($user) {
             return $this->response->setJSON([
@@ -80,12 +81,13 @@ class AdminPc extends BaseController
         ];
         try {
             $userModel->insert($userData);
-            $loginUrl = "https://yourdomain.com/login";
+            $loginUrl = "http://172.17.1.105/PcDetail/login";
             $to = $Passwordemail;
-            $subject = "รหัสผ่านสำหรับบัญชีของคุณ";
+            $subject = "รหัสผ่านสำหรับระบบ PC Detail";
             $message = "
-                        <p>สวัสดีคุณ <strong>{$username}</strong>,</p>
-                        <p>บัญชีของคุณได้ถูกสร้างในระบบ <strong>PC Detail</strong>.</p>
+                        <p>สวัสดีคุณ <strong>{$fullname}</strong>,</p>
+                        <p>คุณได้สมัครบัญชีเข้าใช้งานในระบบ <strong>PC Detail</strong>.เรียบร้อยแล้ว เมื่อ </p>
+                        <p>ชื่อผู้ใช้งานคือ: <strong>{$username}</strong></p>
                         <p>รหัสผ่านชั่วคราวคือ: <strong>{$RegisterPassword_gen}</strong></p>
                         <p>กรุณาเปลี่ยนรหัสผ่านหลังจากเข้าสู่ระบบครั้งแรกครับ.</p>
                         <p><a href='{$loginUrl}' style='display:inline-block;padding:10px 20px;background:#007bff;color:#fff;text-decoration:none;border-radius:5px;'>เข้าสู่ระบบ</a></p>

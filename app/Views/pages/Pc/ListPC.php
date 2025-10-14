@@ -805,26 +805,28 @@ document.addEventListener("keydown", function(e) {
   }
 });
 
-// ---------- ป้องกันการ click ซ้ำ: disable ปุ่ม view ชั่วคราว แล้ว enable เมื่อ modal ปิด ----------
-document.addEventListener("click", function(e) {
+document.addEventListener("click", function (e) {
   const btn = e.target.closest(".view-btn");
   if (!btn) return;
-  // disable ทันทีก่อนเรียก modal
+
   btn.disabled = true;
 
-  // พยายามหา modal target จาก data-bs-target (Bootstrap) ถ้ามี
+  // หา modal ที่ปุ่มจะเปิด
   const targetSelector = btn.getAttribute("data-bs-target") || btn.dataset.bsTarget;
   const modalEl = targetSelector ? document.querySelector(targetSelector) : document.querySelector(".modal");
 
   if (modalEl) {
-    const handler = () => {
+    // เมื่อ modal ถูกปิด (Bootstrap 5 event)
+    const enableButton = () => {
       btn.disabled = false;
-      modalEl.removeEventListener("hidden.bs.modal", handler);
+      modalEl.removeEventListener("hidden.bs.modal", enableButton);
     };
-    modalEl.addEventListener("hidden.bs.modal", handler);
+
+    // ใช้ Bootstrap Event API เพื่อให้แน่ใจว่าทำงานแน่นอน
+    modalEl.addEventListener("hidden.bs.modal", enableButton);
   } else {
-    // fallback: re-enable หลัง 1s (ถ้า modal library ไม่ใช่ bootstrap)
-    setTimeout(() => { btn.disabled = false; }, 1000);
+    // fallback เผื่อไม่มี modal (ป้องกันปุ่มค้าง)
+    setTimeout(() => (btn.disabled = false), 1000);
   }
 });
 

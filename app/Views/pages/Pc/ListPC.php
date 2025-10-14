@@ -510,7 +510,11 @@
     let totalPages = 0;
     let totalRecords = 0;
     let selectedRowIndex = -1;
-
+    
+    const searchInput = document.getElementById("keywordSearch");
+      if (searchInput) {
+        searchInput.focus();
+      }
     // ฟังก์ชันโหลดข้อมูลทั้งหมด PCหน้าแรก (รองรับค้นหา/กรอง/เปลี่ยนหน้า)
     async function fetchPCs({ page = 1, keyword = '', property_type = '', status = '', br_no } = {}) {
       spinner.style.display = "block";

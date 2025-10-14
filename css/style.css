@@ -15,6 +15,26 @@
   color: #3d216b; 
 } */
 
+/* 🔍 ปรับขอบช่องค้นหาให้สวยขึ้น */
+#keywordSearch {
+  border: 2px solid #6f42c1 !important; /* สีม่วง (primary PC Detail tone) */
+  border-radius: 6px;
+  transition: all 0.2s ease-in-out;
+}
+
+/* ✨ เมื่อ focus */
+#keywordSearch:focus {
+  border-color: #9b59b6 !important; /* สีม่วงอ่อนขึ้นตอน focus */
+  box-shadow: 0 0 6px rgba(155, 89, 182, 0.5); /* แสงเรือง */
+  outline: none !important;
+}
+
+/* 🖱️ เมื่อ hover */
+#keywordSearch:hover {
+  border-color: #8e44ad !important;
+}
+
+
 .dropdown-menu {
    font-size: 14px; 
     color: #3d216b;   

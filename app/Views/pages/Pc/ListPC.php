@@ -808,15 +808,16 @@ document.addEventListener("keydown", function(e) {
 document.addEventListener("click", function (e) {
   const btn = e.target.closest(".view-btn");
   if (!btn) return;
-
+  //ปิดปุ่ม view
   btn.disabled = true;
 
+  //คืนปุ่ม view ให้
   const allModals = document.querySelectorAll(".modal");
-allModals.forEach(modal => {
-  modal.addEventListener("hidden.bs.modal", function () {
-    document.querySelectorAll(".view-btn:disabled").forEach(btn => btn.disabled = false);
+  allModals.forEach(modal => {
+    modal.addEventListener("hidden.bs.modal", function () {
+      document.querySelectorAll(".view-btn:disabled").forEach(btn => btn.disabled = false);
+    });
   });
-});
 
 });
 

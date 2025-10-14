@@ -811,23 +811,13 @@ document.addEventListener("click", function (e) {
 
   btn.disabled = true;
 
-  // หา modal ที่ปุ่มจะเปิด
-  const targetSelector = btn.getAttribute("data-bs-target") || btn.dataset.bsTarget;
-  const modalEl = targetSelector ? document.querySelector(targetSelector) : document.querySelector(".modal");
+  const allModals = document.querySelectorAll(".modal");
+allModals.forEach(modal => {
+  modal.addEventListener("hidden.bs.modal", function () {
+    document.querySelectorAll(".view-btn:disabled").forEach(btn => btn.disabled = false);
+  });
+});
 
-  if (modalEl) {
-    // เมื่อ modal ถูกปิด (Bootstrap 5 event)
-    const enableButton = () => {
-      btn.disabled = false;
-      modalEl.removeEventListener("hidden.bs.modal", enableButton);
-    };
-
-    // ใช้ Bootstrap Event API เพื่อให้แน่ใจว่าทำงานแน่นอน
-    modalEl.addEventListener("hidden.bs.modal", enableButton);
-  } else {
-    // fallback เผื่อไม่มี modal (ป้องกันปุ่มค้าง)
-    setTimeout(() => (btn.disabled = false), 1000);
-  }
 });
 
 // ---------- เรียกใช้หลัง render ตารางเสร็จ ----------

@@ -1024,7 +1024,7 @@ function afterRenderTable() {
       };
       return `
       <ul class="list-group">
-        <li class="list-group-item"><strong>PC ID:</strong> ${pc.pc_id}</li>
+        <li class="list-group-item"><strong>PcID:</strong> ${pc.pc_id}</li>
          <li class="list-group-item"><strong>FristName-LastName:</strong> ${pc.user_name}</li>
         <li class="list-group-item"><strong>ComputerName:</strong> ${pc.computer_name || '-'}</li>
         <li class="list-group-item"><strong>LoginUser:</strong> ${pc.login_user || '-'}</li>

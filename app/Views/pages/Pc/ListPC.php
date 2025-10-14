@@ -695,7 +695,7 @@
 
 function highlightRow(index) {
   const rows = tbody.querySelectorAll("tr");
-  rows.forEach((tr, i) => tr.classList.toggle("table-info", i === index));
+  rows.forEach((tr, i) => tr.classList.toggle("table-light", i === index));
   // rows.forEach((tr, i) => tr.classList.toggle("table-primary", i === index));
   selectedRowIndex = index;
   if (index >= 0) {

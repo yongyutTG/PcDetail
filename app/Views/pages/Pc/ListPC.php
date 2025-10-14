@@ -577,14 +577,14 @@
     <td>${pc.location || '-'}</td>
     <td>
       <div class="d-flex align-items-center gap-1">
-        <span>${pc.ip_address || '-'}</span>
-        ${
+        <span> ${
           pc.ip_address
             ? `<button class="btn btn-sm btn-light border copy-ip-btn" data-ip="${pc.ip_address}" title="คัดลอก">
                 <i class="fa-regular fa-copy"></i>
                </button>`
             : ''
-        }
+        }${pc.ip_address || '-'}</span>
+       
       </div>
     </td>  
     <td>${statusBadge}</td>

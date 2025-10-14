@@ -63,7 +63,7 @@
                         <th style="width: 16%;">ServerTerminal</th>
                         <th style="width: 16%;">TerminalLogin</th>
                         <th style="width: 15%;">Location</th>
-                        <th style="width: 12%;">IP</th>
+                        <th style="width: 15%;">IP</th>
                         <th style="width: 12%;">UseStatus</th>
                         <th style="width: 12%;">Branch</th>
                         <th style="width: 16%;">Action</th>

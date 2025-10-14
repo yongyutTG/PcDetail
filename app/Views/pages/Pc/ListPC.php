@@ -563,7 +563,7 @@
       };
       const statusBadge = pc.use_status === 'A'
         ? '<span class="badge bg-success">ใช้งาน</span>'
-        : '<span class="badge bg-danger">ไม่ใช้</span>';
+        : '<span class="badge bg-danger">ไม่ใช้งาน</span>';
 
       row.innerHTML = `
     <td>${pc.pc_id || ''}</td>

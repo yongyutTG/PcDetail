@@ -1130,11 +1130,6 @@ function afterRenderTable() {
     });
   });
 
-
-  const searchInput = document.getElementById("keywordSearch");
-    if (searchInput) {
-      searchInput.focus();
-    }
     
  document.addEventListener("click", function (e) {
   const btn = e.target.closest(".copy-ip-btn");

@@ -53,7 +53,8 @@
                   <!-- <div class="table-responsive"> -->
                   <!-- <table class="table table-striped table-hover table-fixed text-center"> -->
                   <table class="table table-striped table-hover table-fixed">
-                    <thead class="table-light">
+                    <!-- <thead class="table-light"> -->
+                    <thead> 
                       <tr>
                         <th style="width: 7%;">PcID</th>
                         <th style="width: 25%;">FirstName-LastName</th>

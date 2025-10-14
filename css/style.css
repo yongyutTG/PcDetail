@@ -16,10 +16,9 @@
 } */
 
 
-.form-input {
-  border-color: #f2f3f5 !important;
-   border-radius: 10px;
-
+.form-control {
+  border-color: #f5f8fc !important; /* สีฟ้า */
+  box-shadow: none !important;
 }
 
 

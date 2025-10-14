@@ -10,7 +10,7 @@
           <div class="card shadow-sm">
             <div class="card-body">
               <div class="d-flex align-items-center gap-2 mb-3">
-                <input type="text" id="keywordSearch" class="form-control" style="width:400px;" placeholder="ค้นหา...">
+                <input type="text" id="keywordSearch" class="form-input" style="width:400px;" placeholder="ค้นหา...">
                 <br>
                 <label for="typeFilter" class="mb-0 fw-bold">ประเภทอุปกรณ์: </label>
                 <select id="typeFilter"

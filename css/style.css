@@ -17,8 +17,9 @@
 
 
 .form-input {
-  border-color: #8f9193 !important; /* สีฟ้า */
-  box-shadow: none !important;
+  border-color: #f2f3f5 !important;
+   border-radius: 10px;
+
 }
 
 

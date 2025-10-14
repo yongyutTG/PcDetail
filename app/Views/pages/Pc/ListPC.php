@@ -53,10 +53,9 @@
                   <!-- <div class="table-responsive"> -->
                   <!-- <table class="table table-striped table-hover table-fixed text-center"> -->
                   <table class="table table-striped table-hover table-fixed">
-                    <!-- <thead class="table-light"> -->
-                    <thead> 
+                    <thead class="table-light">
                       <tr>
-                        <th style="width: 7%;">PcID</th>
+                        <th style="width: 7%;">PC ID</th>
                         <th style="width: 25%;">FirstName-LastName</th>
                         <th style="width: 18%;">ComputerName</th>
                         <th style="width: 8%;">Brand</th>

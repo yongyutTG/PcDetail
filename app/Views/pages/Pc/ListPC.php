@@ -576,7 +576,7 @@
     <td>${pc.terminal_login || '-'}</td>
     <td>${pc.location || '-'}</td>
     <td>
-      <div class="d-flex align-items-center gap-1">
+      <div>
         <span> ${
           pc.ip_address
             ? `<button class="btn btn-sm btn-light border copy-ip-btn" data-ip="${pc.ip_address}" title="คัดลอก">

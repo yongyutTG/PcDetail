@@ -51,7 +51,8 @@
               <div class="table-container">
                 <div class="table-responsive flex-grow-1">
                   <!-- <div class="table-responsive"> -->
-                  <table class="table table-striped table-hover table-fixed">
+                  <table class="table table-striped table-hover table-fixed text-center">
+                  <!-- <table class="table table-striped table-hover table-fixed"> -->
                     <thead class="table-light">
                       <tr>
                         <th style="width: 7%;">PcID</th>

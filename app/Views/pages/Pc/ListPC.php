@@ -213,10 +213,7 @@
                         <label for="edit_model" class="form-label">Model</label>
                         <input type="text" class="form-control" id="edit_model" name="model">
                       </div>
-                      <!-- <div class="mb-3">
-                        <label for="edit_ip_address" class="form-label">IPAddress</label>
-                        <input type="text" class="form-control" id="edit_ip_address" name="ip_address">
-                      </div> -->
+                     
                       <div class="mb-3">
                         <label for="edit_ip_address" class="form-label">IPAddress</label>
                         <div class="input-group">
@@ -1149,10 +1146,11 @@ function afterRenderTable() {
 
     // ping ip หน้าเพิ่มข้อมูล
   document.getElementById('btnPing').addEventListener('click', function() {
-    const ip = document.getElementById('add_ip_address').value.trim();
+    const addIp = document.getElementById('add_ip_address').value.trim();
+    const editIp = document.getElementById('edit_ip_address').value.trim();
     const btnPing = document.getElementById('btnPing'); 
     const originalText = btnPing.innerHTML;
-
+    const ip = addIp || editIp;
     if (ip === '') {
       toastr.warning('กรุณากรอก IP Address ก่อน');
       return;

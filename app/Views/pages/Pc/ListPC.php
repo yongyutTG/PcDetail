@@ -213,20 +213,11 @@
                         <label for="edit_model" class="form-label">Model</label>
                         <input type="text" class="form-control" id="edit_model" name="model">
                       </div>
-                      <!-- <div class="mb-3">
-                        <label for="edit_ip_address" class="form-label">IPAddress</label>
-                        <input type="text" class="form-control" id="edit_ip_address" name="ip_address">
-                      </div> -->
                       <div class="mb-3">
                         <label for="edit_ip_address" class="form-label">IPAddress</label>
-                        <div class="input-group">
-                          <input type="text" class="form-control" id="edit_ip_address" name="ip_address" placeholder="เช่น 192.168.1.100">
-                          <button type="button" class="btn btn-outline-primary" id="editbtnPing">
-                            Ping
-                          </button>
-                        </div>
-                        <small id="pingResult" class="text-muted"></small>
+                        <input type="text" class="form-control" id="edit_ip_address" name="ip_address">
                       </div>
+                     
                       <div class="mb-3">
                         <label for="edit_ram" class="form-label">Ram</label>
                         <input type="text" class="form-control" id="edit_ram" name="ram">
@@ -386,7 +377,7 @@
                         <label for="edit_ip_address" class="form-label">IPAddress</label>
                         <div class="input-group">
                           <input type="text" class="form-control" id="add_ip_address" name="ip_address" required>
-                          <button type="button" class="btn btn-outline-primary" id="btnPing">
+                          <button type="button" class="btn-save" id="btnPing">
                             Ping
                           </button>
                         </div>
@@ -1146,29 +1137,27 @@ function afterRenderTable() {
   });
   fetchPCs();
 
-  document.getElementById('btnPing').addEventListener('click', function() {
-  const ip = document.getElementById('add_ip_address').value.trim();
-  
-  if (ip === '') {
-    toastr.warning('กรุณากรอก IP Address ก่อน');
-    return;
-  }
-
-  toastr.info('กำลัง Ping...', 'โปรดรอสักครู่');
-
-  fetch(`${pingurl}/${ip}`)
-    .then(response => response.json())
-    .then(data => {
-      if (data.status === "online") {
-        toastr.success(`ตรวจสอบ IP มีการใช้งานแล้ว (${data.time} ms)`, '✅ Ping สำเร็จ');
-      } else {
-        toastr.error('ตรวจสอบ IP ยังไม่มีการใช้งาน (Timeout)', '❌ Ping ไม่สำเร็จ');
-      }
-    })
-    .catch(() => {
-      toastr.error('เกิดข้อผิดพลาดในการ Ping', 'Error');
+    //ping ip หน้าเพิ่มข้อมูล
+    document.getElementById('btnPing').addEventListener('click', function() {
+    const ip = document.getElementById('add_ip_address').value.trim();
+    if (ip === '') {
+      toastr.warning('กรุณากรอก IP Address ก่อน');
+      return;
+    }
+    //toastr.info('กำลัง Ping...', 'โปรดรอสักครู่');
+    fetch(`${pingurl}/${ip}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === "online") {
+          toastr.success(`ตรวจสอบ IP มีการใช้งานแล้ว`, '✅ Ping สำเร็จ');
+        } else {
+          toastr.error('ตรวจสอบ IP ยังไม่มีการใช้งาน (Timeout)', '❌ Ping ไม่สำเร็จ');
+        }
+      })
+      .catch(() => {
+        toastr.error('เกิดข้อผิดพลาดในการ Ping', 'Error');
+      });
     });
-});
 
 
     resetAddPcBtn.addEventListener("click", function () {

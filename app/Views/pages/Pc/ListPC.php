@@ -1159,7 +1159,7 @@ function afterRenderTable() {
   fetch(`${pingurl}/${ip}`)
     .then(response => response.json())
     .then(data => {
-      if (data.status === 'success') {
+      if (data.status === "online") {
         toastr.success(`ตรวจสอบ IP มีการใช้งานแล้ว (${data.time} ms)`, '✅ Ping สำเร็จ');
       } else {
         toastr.error('ตรวจสอบ IP ยังไม่มีการใช้งาน (Timeout)', '❌ Ping ไม่สำเร็จ');

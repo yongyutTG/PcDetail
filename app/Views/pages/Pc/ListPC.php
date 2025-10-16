@@ -1160,9 +1160,9 @@ function afterRenderTable() {
     .then(response => response.json())
     .then(data => {
       if (data.status === 'success') {
-        toastr.success(`พบเครื่อง (${data.time} ms)`, '✅ Ping สำเร็จ');
+        toastr.success(`ตรวจสอบ IP มีการใช้งานแล้ว (${data.time} ms)`, '✅ Ping สำเร็จ');
       } else {
-        toastr.error('ไม่พบเครื่อง (Timeout)', '❌ Ping ไม่สำเร็จ');
+        toastr.error('ตรวจสอบ IP ยังไม่มีการใช้งาน (Timeout)', '❌ Ping ไม่สำเร็จ');
       }
     })
     .catch(() => {

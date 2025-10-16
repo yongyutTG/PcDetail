@@ -213,9 +213,19 @@
                         <label for="edit_model" class="form-label">Model</label>
                         <input type="text" class="form-control" id="edit_model" name="model">
                       </div>
-                      <div class="mb-3">
+                      <!-- <div class="mb-3">
                         <label for="edit_ip_address" class="form-label">IPAddress</label>
                         <input type="text" class="form-control" id="edit_ip_address" name="ip_address">
+                      </div> -->
+                      <div class="mb-3">
+                        <label for="edit_ip_address" class="form-label">IPAddress</label>
+                        <div class="input-group">
+                          <input type="text" class="form-control" id="edit_ip_address" name="ip_address" required>
+                          <button type="button" class="btn-cancel" id="btnPing">
+                            Ping
+                          </button>
+                        </div>
+                        <small id="pingResult" class="text-muted"></small>
                       </div>
                      
                       <div class="mb-3">
@@ -1156,9 +1166,9 @@ function afterRenderTable() {
       .then(response => response.json())
       .then(data => {
         if (data.status === "online") {
-          toastr.success('ตรวจสอบ IP มีการใช้งานแล้ว', '✅ Ping สำเร็จ');
+          toastr.success('ตรวจสอบ IP มีการใช้งานแล้ว', 'Ping สำเร็จ');
         } else {
-          toastr.error('ตรวจสอบ IP ยังไม่มีการใช้งาน (Timeout)', '❌ Ping ไม่สำเร็จ');
+          toastr.error('ตรวจสอบ IP ยังไม่มีการใช้งาน (Timeout)', 'Ping ไม่สำเร็จ');
         }
       })
       .catch(() => {

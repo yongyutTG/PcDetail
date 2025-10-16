@@ -1146,34 +1146,28 @@ function afterRenderTable() {
   });
   fetchPCs();
 
-      document.getElementById('btnPing').addEventListener('click', function() {
-      const ip = document.getElementById('add_ip_address').value.trim();
-      const resultEl = document.getElementById('pingResult');
-      
-      if (ip === '') {
-        resultEl.textContent = 'กรุณากรอก IP Address ก่อน';
-        resultEl.className = 'text-danger';
-        return;
+  document.getElementById('btnPing').addEventListener('click', function() {
+  const ip = document.getElementById('add_ip_address').value.trim();
+  
+  if (ip === '') {
+    toastr.warning('กรุณากรอก IP Address ก่อน');
+    return;
+  }
+
+  toastr.info('กำลัง Ping...', 'โปรดรอสักครู่');
+
+  fetch(`${pingurl}/${ip}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 'success') {
+        toastr.success(`พบเครื่อง (${data.time} ms)`, '✅ Ping สำเร็จ');
+      } else {
+        toastr.error('ไม่พบเครื่อง (Timeout)', '❌ Ping ไม่สำเร็จ');
       }
-
-      resultEl.textContent = 'กำลัง Ping...';
-      resultEl.className = 'text-muted';
-
-      fetch(`${pingurl}/${ip}`)
-        .then(response => response.json())
-        .then(data => {
-    if (data.status === 'success') {
-      resultEl.textContent = `✅ พบเครื่อง (${data.time} ms)`;
-      resultEl.className = 'text-success';
-    } else {
-      resultEl.textContent = '❌ ไม่พบเครื่อง (Timeout)';
-      resultEl.className = 'text-danger';
-    }
-  })
-  .catch(() => {
-    resultEl.textContent = 'เกิดข้อผิดพลาดในการ Ping';
-    resultEl.className = 'text-danger';
-  });
+    })
+    .catch(() => {
+      toastr.error('เกิดข้อผิดพลาดในการ Ping', 'Error');
+    });
 });
 
 

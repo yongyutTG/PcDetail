@@ -213,9 +213,19 @@
                         <label for="edit_model" class="form-label">Model</label>
                         <input type="text" class="form-control" id="edit_model" name="model">
                       </div>
-                      <div class="mb-3">
+                      <!-- <div class="mb-3">
                         <label for="edit_ip_address" class="form-label">IPAddress</label>
                         <input type="text" class="form-control" id="edit_ip_address" name="ip_address">
+                      </div> -->
+                      <div class="mb-3">
+                        <label for="edit_ip_address" class="form-label">IPAddress</label>
+                        <div class="input-group">
+                          <input type="text" class="form-control" id="edit_ip_address" name="ip_address" placeholder="เช่น 192.168.1.100">
+                          <button type="button" class="btn btn-outline-primary" id="btnPing">
+                            Ping
+                          </button>
+                        </div>
+                        <small id="pingResult" class="text-muted"></small>
                       </div>
                       <div class="mb-3">
                         <label for="edit_ram" class="form-label">Ram</label>

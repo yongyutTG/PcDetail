@@ -221,7 +221,7 @@
                         <label for="edit_ip_address" class="form-label">IPAddress</label>
                         <div class="input-group">
                           <input type="text" class="form-control" id="edit_ip_address" name="ip_address" placeholder="เช่น 192.168.1.100">
-                          <button type="button" class="btn btn-outline-primary" id="btnPing">
+                          <button type="button" class="btn btn-outline-primary" id="editbtnPing">
                             Ping
                           </button>
                         </div>

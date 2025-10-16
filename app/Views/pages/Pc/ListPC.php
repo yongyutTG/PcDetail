@@ -1137,37 +1137,39 @@ function afterRenderTable() {
   });
   fetchPCs();
 
-    //ping ip หน้าเพิ่มข้อมูล
-    document.getElementById('btnPing').addEventListener('click', function() {
+    // ping ip หน้าเพิ่มข้อมูล
+  document.getElementById('btnPing').addEventListener('click', function() {
     const ip = document.getElementById('add_ip_address').value.trim();
-
-      btnPing.disabled = true;
-      const originalText = btnPing.innerHTML;
-      btnPing.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> กำลัง Ping...';
-
+    const btnPing = document.getElementById('btnPing'); 
+    const originalText = btnPing.innerHTML;
 
     if (ip === '') {
       toastr.warning('กรุณากรอก IP Address ก่อน');
       return;
     }
-    //toastr.info('กำลัง Ping...', 'โปรดรอสักครู่');
+
+    // disable ปุ่ม 
+    btnPing.disabled = true;
+    btnPing.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> กำลัง Ping...';
+
     fetch(`${pingurl}/${ip}`)
       .then(response => response.json())
       .then(data => {
         if (data.status === "online") {
-          toastr.success(`ตรวจสอบ IP มีการใช้งานแล้ว`, '✅ Ping สำเร็จ');
+          toastr.success('ตรวจสอบ IP มีการใช้งานแล้ว', '✅ Ping สำเร็จ');
         } else {
           toastr.error('ตรวจสอบ IP ยังไม่มีการใช้งาน (Timeout)', '❌ Ping ไม่สำเร็จ');
         }
       })
       .catch(() => {
         toastr.error('เกิดข้อผิดพลาดในการ Ping', 'Error');
-      });
-       .finally(() => {
+      })
+      .finally(() => {  
         btnPing.disabled = false;
         btnPing.innerHTML = originalText;
-      })
-    });
+      });
+  });
+
 
 
     resetAddPcBtn.addEventListener("click", function () {

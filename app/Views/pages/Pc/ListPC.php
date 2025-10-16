@@ -1146,8 +1146,8 @@ function afterRenderTable() {
 
     // ping ip หน้าเพิ่มข้อมูล
   document.getElementById('btnPing').addEventListener('click', function() {
-    const addIp = document.getElementById('add_ip_address').value.trim();
-    const editIp = document.getElementById('edit_ip_address').value.trim();
+    const addIp = document.getElementById('add_ip_address')?.value.trim() || '';
+    const editIp = document.getElementById('edit_ip_address')?.value.trim() || '';
     const btnPing = document.getElementById('btnPing'); 
     const originalText = btnPing.innerHTML;
     const ip = addIp || editIp;

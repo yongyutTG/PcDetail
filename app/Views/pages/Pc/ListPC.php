@@ -1160,6 +1160,7 @@ function afterRenderTable() {
           toastr.error('ตรวจสอบ IP ยังไม่มีการใช้งาน (Timeout)', '❌ Ping ไม่สำเร็จ');
         }
       })
+       btnPing.disabled = false;
       .catch(() => {
         toastr.error('เกิดข้อผิดพลาดในการ Ping', 'Error');
       });

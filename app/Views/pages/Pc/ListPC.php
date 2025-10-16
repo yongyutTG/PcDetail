@@ -377,7 +377,7 @@
                         <label for="edit_ip_address" class="form-label">IPAddress</label>
                         <div class="input-group">
                           <input type="text" class="form-control" id="add_ip_address" name="ip_address" required>
-                          <button type="button" class="btn-save" id="btnPing">
+                          <button type="button" class="btn-cancel" id="btnPing">
                             Ping
                           </button>
                         </div>
@@ -1140,6 +1140,12 @@ function afterRenderTable() {
     //ping ip หน้าเพิ่มข้อมูล
     document.getElementById('btnPing').addEventListener('click', function() {
     const ip = document.getElementById('add_ip_address').value.trim();
+
+      btnPing.disabled = true;
+      const originalText = btnPing.innerHTML;
+      btnPing.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> กำลัง Ping...';
+
+
     if (ip === '') {
       toastr.warning('กรุณากรอก IP Address ก่อน');
       return;

@@ -1161,21 +1161,21 @@ function afterRenderTable() {
 
       fetch(`${pingurl}/${ip}`)
         .then(response => response.json())
-        .then(result => {
-          if (result.status === "online") {
-            statusSpan.innerHTML = "🟢 Online";
-            statusSpan.className = "ms-2 text-success fw-bold";
-          } else {
-            statusSpan.innerHTML = "🔴 Offline";
-            statusSpan.className = "ms-2 text-danger fw-bold";
-          }
-        })
-        .catch(err => {
-          console.error("Ping error:", err);
-          statusSpan.innerHTML = "⚠️ Error";
-          statusSpan.className = "ms-2 text-warning fw-bold";
-        });
-    });
+        .then(data => {
+    if (data.status === 'success') {
+      resultEl.textContent = `✅ พบเครื่อง (${data.time} ms)`;
+      resultEl.className = 'text-success';
+    } else {
+      resultEl.textContent = '❌ ไม่พบเครื่อง (Timeout)';
+      resultEl.className = 'text-danger';
+    }
+  })
+  .catch(() => {
+    resultEl.textContent = 'เกิดข้อผิดพลาดในการ Ping';
+    resultEl.className = 'text-danger';
+  });
+});
+
 
     resetAddPcBtn.addEventListener("click", function () {
       addPcForm.reset();

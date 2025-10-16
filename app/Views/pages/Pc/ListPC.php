@@ -378,9 +378,19 @@
                         <label for="add_model" class="form-label">Model</label>
                         <input type="text" class="form-control" id="add_model" name="model">
                       </div>
-                      <div class="mb-3">
+                      <!-- <div class="mb-3">
                         <label for="add_ip_address" class="form-label">IPAddress</label>
                         <input type="text" class="form-control" id="add_ip_address" name="ip_address" required>
+                      </div> -->
+                      <div class="mb-3">
+                        <label for="edit_ip_address" class="form-label">IPAddress</label>
+                        <div class="input-group">
+                          <input type="text" class="form-control" id="add_ip_address" name="ip_address" required>
+                          <button type="button" class="btn btn-outline-primary" id="btnPing">
+                            Ping
+                          </button>
+                        </div>
+                        <small id="pingResult" class="text-muted"></small>
                       </div>
                       <div class="mb-3">
                         <label for="add_ram" class="form-label">Ram</label>
@@ -1075,66 +1085,97 @@ function afterRenderTable() {
     }
 
     //เพิ่มข้อมูล pc
-    document.getElementById('addPcForm').addEventListener('submit', async function (e) {
-      e.preventDefault();
+  document.getElementById('addPcForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
 
-      const form = e.target;
-      const formData = new FormData(form);
+    const form = e.target;
+    const formData = new FormData(form);
 
-      const data = {};
+    const data = {};
 
-      formData.forEach((value, key) => {
-        if (key === 'buy_date') {
-          if (value && value !== "") {
-            // value จาก <input type="date"> = "YYYY-MM-DD"
-            // เวลา default = ตอนบันทึก หรือ 00:00:00
-            const now = new Date();
-            const time = now.toTimeString().split(' ')[0]; // HH:MM:SS
-            data[key] = `${value} ${time}`; // ส่งเป็น "YYYY-MM-DD HH:MM:SS"
-          } else {
-            data[key] = null; // ถ้าไม่เลือก → ส่ง null
-          }
+    formData.forEach((value, key) => {
+      if (key === 'buy_date') {
+        if (value && value !== "") {
+          // value จาก <input type="date"> = "YYYY-MM-DD"
+          // เวลา default = ตอนบันทึก หรือ 00:00:00
+          const now = new Date();
+          const time = now.toTimeString().split(' ')[0]; // HH:MM:SS
+          data[key] = `${value} ${time}`; // ส่งเป็น "YYYY-MM-DD HH:MM:SS"
         } else {
-          data[key] = value === "" ? null : value;
+          data[key] = null; // ถ้าไม่เลือก → ส่ง null
         }
-      });
-
-
-      // ปุ่มบันทึก
-      const saveBtn = document.getElementById('save_addPc');
-      if (saveBtn) {
-        saveBtn.disabled = true;
-        saveBtn.innerHTML = `
-              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> กำลังบันทึก...
-          `;
-      }
-      try {
-        const response = await fetch(`${apiBaseUrl}/create`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-
-        const result = await response.json();
-
-        if (response.ok) {
-          fetchPCs();
-          bootstrap.Modal.getInstance(document.getElementById("addPcModal")).hide();
-          toastr.success("บันทึกเพิ่มข้อมูลเรียบร้อยแล้ว", "สำเร็จ");
-          form.reset();
-        } else {
-          toastr.error(result.message || 'เพิ่มข้อมูลไม่สำเร็จ', 'Error');
-        }
-      } catch (error) {
-        toastr.error(`Error: ${error.message}`, 'Error');
-      } finally {
-        if (saveBtn) {
-          saveBtn.disabled = false;
-          saveBtn.innerHTML = 'บันทึกเพิ่มข้อมูล';
-        }
+      } else {
+        data[key] = value === "" ? null : value;
       }
     });
-    fetchPCs();
+
+
+    // ปุ่มบันทึก
+    const saveBtn = document.getElementById('save_addPc');
+    if (saveBtn) {
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = `
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> กำลังบันทึก...
+        `;
+    }
+    try {
+      const response = await fetch(`${apiBaseUrl}/create`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        fetchPCs();
+        bootstrap.Modal.getInstance(document.getElementById("addPcModal")).hide();
+        toastr.success("บันทึกเพิ่มข้อมูลเรียบร้อยแล้ว", "สำเร็จ");
+        form.reset();
+      } else {
+        toastr.error(result.message || 'เพิ่มข้อมูลไม่สำเร็จ', 'Error');
+      }
+    } catch (error) {
+      toastr.error(`Error: ${error.message}`, 'Error');
+    } finally {
+      if (saveBtn) {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = 'บันทึกเพิ่มข้อมูล';
+      }
+    }
+  });
+  fetchPCs();
+
+      document.getElementById('btnPing').addEventListener('click', function() {
+      const ip = document.getElementById('add_ip_address').value.trim();
+      const resultEl = document.getElementById('pingResult');
+      
+      if (ip === '') {
+        resultEl.textContent = 'กรุณากรอก IP Address ก่อน';
+        resultEl.className = 'text-danger';
+        return;
+      }
+
+      resultEl.textContent = 'กำลัง Ping...';
+      resultEl.className = 'text-muted';
+
+      fetch(`${pingurl}/${ip}`)
+        .then(response => response.json())
+        .then(result => {
+          if (result.status === "online") {
+            statusSpan.innerHTML = "🟢 Online";
+            statusSpan.className = "ms-2 text-success fw-bold";
+          } else {
+            statusSpan.innerHTML = "🔴 Offline";
+            statusSpan.className = "ms-2 text-danger fw-bold";
+          }
+        })
+        .catch(err => {
+          console.error("Ping error:", err);
+          statusSpan.innerHTML = "⚠️ Error";
+          statusSpan.className = "ms-2 text-warning fw-bold";
+        });
+    });
 
     resetAddPcBtn.addEventListener("click", function () {
       addPcForm.reset();

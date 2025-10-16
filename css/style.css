@@ -20,6 +20,10 @@
   border-color: #898989 !important; /* สีฟ้า */
   box-shadow: none !important;
 }
+.form-label {
+  border-color: #898989 !important; /* สีฟ้า */
+  box-shadow: none !important;
+}
 
 
 .dropdown-menu {

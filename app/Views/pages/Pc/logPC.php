@@ -37,13 +37,16 @@
                       <p>กำลังโหลดข้อมูล...</p>
                     </div>
                      <!-- Pagination Controls -->
-                     <div class="pagination-controls align-items-center mt-3 gap-2">
-                    <button id="firstPage" class="btn btn-sm">หน้าแรก</button>
-                    <button id="prevPage" class="btn btn-sm">ก่อนหน้า</button>
-                    <span id="pageInfo" class="fw-bold"></span>
-                    <button id="nextPage" class="btn btn-sm">ถัดไป</button>
-                    <button id="lastPage" class="btn btn-sm">หน้าสุดท้าย</button>
-                  </div>
+                     <div class="pagination-controls d-flex justify-content-between align-items-center mt-3">
+                        <div id="recordInfo" class="text-start"></div>
+                        <div>
+                          <button id="firstPage" class="btn btn-sm">หน้าแรก</button>
+                          <button id="prevPage" class="btn btn-sm">ก่อนหน้า</button>
+                          <span id="pageInfo" class="fw-bold"></span>
+                          <button id="nextPage" class="btn btn-sm">ถัดไป</button>
+                          <button id="lastPage" class="btn btn-sm">หน้าสุดท้าย</button>
+                        </div>
+                      </div>
                   </div>
                 </div>
               </div>
@@ -81,15 +84,24 @@
         const result = await res.json();
         spinner.style.display = "none";
 
-        if (result.status === 'success' && result.data?.length > 0) {
-          tbody.innerHTML = "";
-          result.data.forEach(addTableRow);
-          currentPage = result.page;
-          totalPages = result.totalPages;
-          updatePaginationInfo();
-        } else {
-          tbody.innerHTML = `<tr><td colspan="14" class="text-center text-danger">ไม่พบข้อมูล</td></tr>`;
-        }
+        if (result.status === 'success') {
+           if (result.data && result.data.length > 0) {
+              tbody.innerHTML = "";
+              result.data.forEach(addTableRow);
+              currentPage = result.page;
+              totalPages = result.totalPages;
+              totalRows = result.totalRows;
+              
+            } else {
+              tbody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">ไม่พบข้อมูล</td></tr>`;
+              currentPage = 1;  
+              totalPages = 0;
+              totalRows = 0;
+            }
+            updatePaginationInfo();
+          } else {
+          tbody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">เกิดข้อผิดพลาด</td></tr>`;
+        }  
       } catch (err) {
         spinner.style.display = "none";
         toastr.error(err.message || 'เกิดข้อผิดพลาดในการโหลดข้อมูล', 'Error');
@@ -125,6 +137,26 @@
     }
 
     function updatePaginationInfo() {
+      document.getElementById("pageInfo").textContent = `หน้า ${currentPage} / ${totalPages}`;
+      document.getElementById("firstPage").disabled = (currentPage === 1);
+      document.getElementById("prevPage").disabled = (currentPage === 1);
+      document.getElementById("nextPage").disabled = (currentPage === totalPages);
+      document.getElementById("lastPage").disabled = (currentPage === totalPages);
+    }
+
+
+    // อัปเดตสถานะปุ่มและ info หน้า
+    function updatePaginationInfo() {
+
+      // คำนวณ record เริ่ม-สิ้นสุด
+      let start = (currentPage - 1) * limit + 1;
+      let end = Math.min(currentPage * limit, totalRows);
+
+      // อัปเดต info ซ้าย
+      document.getElementById("recordInfo").textContent =
+        `แสดง ${start} ถึง ${end} จากทั้งหมด ${totalRows} รายการ`;
+
+
       document.getElementById("pageInfo").textContent = `หน้า ${currentPage} / ${totalPages}`;
       document.getElementById("firstPage").disabled = (currentPage === 1);
       document.getElementById("prevPage").disabled = (currentPage === 1);

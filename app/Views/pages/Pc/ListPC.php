@@ -543,6 +543,7 @@
         if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
         const result = await res.json();
         spinner.style.display = "none";
+        
         if (result.status === 'success') {
           if (result.data && result.data.length > 0) {
             tbody.innerHTML = "";

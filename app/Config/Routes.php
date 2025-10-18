@@ -1,13 +1,10 @@
 <?php
-
 $routes->get('/', 'Pc\AuthPc::login');
 $routes->get('login', 'Pc\AuthPc::login');    // หน้า login
 $routes->post('auth/chk_login', 'Pc\AuthPc::chk_login');
 // $routes->post('login', 'Pc\AuthPc::attemptRegister');    // หน้า login
 $routes->post('auth/forgot-password', 'Pc\AuthPc::forgotPassword');  // หน้า forgotPassword
 $routes->post('user/changePassword', 'Pc\AuthPc::changePassword'); //หน้าเปลี่ยนรหัสผ่าน
-
-
 
 
 //หน้าadmin

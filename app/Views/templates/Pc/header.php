@@ -266,8 +266,7 @@ document.addEventListener("DOMContentLoaded", function () {
             'ยืนยัน',
             {
                 closeButton: true,
-                 positionClass: 'toast-center-center', // ใช้ตำแหน่ง custom
-                //timeOut: 0, 
+              
                
             }
         );

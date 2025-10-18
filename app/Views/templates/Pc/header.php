@@ -268,8 +268,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 closeButton: true,
                  positionClass: 'toast-center-center', // ใช้ตำแหน่ง custom
                 //timeOut: 0, 
-                extendedTimeOut: 0,
-                tapToDismiss: false
+               
             }
         );
         $(document).on("click", "#btnYes", function () {

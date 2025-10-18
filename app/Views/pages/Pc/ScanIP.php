@@ -203,7 +203,6 @@ async function scanIP() {
   applyFilterAndRender(false);
 }
 
-
   resetButton(scanBtn);
   stopBtn.disabled = true;
 }
@@ -218,10 +217,7 @@ function applyFilterAndRender(resetPage = true) {
   if (resetPage) currentPage = 1;
   renderPage(currentPage);
 }
-
-
-console.log('filteredResults', filteredResults);
-
+// console.log('filteredResults', filteredResults);
 
 function renderPage(page = 1) {
   const tbody = document.getElementById('resultBody');
@@ -257,7 +253,6 @@ function renderPage(page = 1) {
 function stopScan() {
   isScanning = false;
   if (controller) controller.abort();
-  // toastr.info("หยุดการสแกนแล้ว", "ยกเลิก");
 }
 
 function resetForm() {
@@ -268,7 +263,7 @@ function resetForm() {
   allResults = [];
   filteredResults = [];
   currentPage = 1;
-  document.getElementById('resultBody').innerHTML = `<tr><td colspan="2" class="text-muted text-center align-middle">กรุณากดสแกนเพื่อแสดงผลลัพธ์</td></tr>`;
+  document.getElementById('resultBody').innerHTML = `<tr><td colspan="4" class="text-muted text-center align-middle">กรุณากดสแกนเพื่อแสดงผลลัพธ์</td></tr>`;
   updateProgress(0,1);
 }
 

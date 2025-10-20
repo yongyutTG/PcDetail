@@ -3,16 +3,17 @@
 $db = \Config\Database::connect();
 $dbName = $db->database;
 
-$query = $db->query("SELECT CONVERT(varchar(19), GETDATE(), 120) AS current_date");
+$query = $db->query("SELECT CONVERT(varchar(19), GETDATE(), 120) AS [db_date]");
 $row = $query->getRow();
 
-// ✅ ตรวจสอบว่ามีค่ากลับมาหรือไม่
-if ($row && isset($row->current_date)) {
-    $date = new \DateTime($row->current_date);
-    $data['dbDate'] = $date->format('d/m/Y'); // ตัวอย่าง: 20/10/2025
+if ($row && isset($row->db_date)) {
+    $date = new \DateTime($row->db_date);
+    $data['dbDate'] = $date->format('d/m/Y');
 } else {
     $data['dbDate'] = '-';
 }
+
+$data['dbName'] = $db->database;
 ?>
 
 <head>

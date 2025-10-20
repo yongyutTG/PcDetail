@@ -6,12 +6,10 @@ $dbName = $db->database;
 $query = $db->query("SELECT CONVERT(varchar(19), GETDATE(), 120) AS [db_date]");
 $row = $query->getRow();
 
-if ($row && isset($row->db_date)) {
-    $date = new \DateTime($row->db_date);
-    $data['dbDate'] = $date->format('d/m/Y H:i:s');
-} else {
-    $data['dbDate'] = '-';
-}
+$data['dbDate'] = $row->db_date ?? '-';
+    // $date = new \DateTime($row->db_date);
+    // $data['dbDate'] = $date->format('d/m/Y H:i:s');
+
 
 $data['dbName'] = $db->database;
 ?>

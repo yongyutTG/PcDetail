@@ -1,3 +1,9 @@
+
+<?php
+$db = \Config\Database::connect();
+$dbName = $db->database;
+?>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -122,6 +128,7 @@
                             <div>
                                 ชื่อผู้ใช้: <?= esc(session()->get('USER_NAME')) ?>
                                 ฝ่าย: <?= esc(session()->get('GROUP_NAME')) ?>
+                                ฐานข้อมูล: <span class="text-primary"><?= esc($dbName ?? '-') ?></span>
                             </div>
                             <div class="fw-bold">
                                 <?= esc(session()->get('FULL_NAME')) ?>

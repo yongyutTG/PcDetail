@@ -17,7 +17,6 @@ class listPC extends BaseController
         $os = $pcModel->getDistinctOs();
         $property_type = $pcModel->getDistinctPropertyType();
 
-        
 
         $data = [
             'locations' => $locations,

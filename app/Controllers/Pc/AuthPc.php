@@ -122,11 +122,7 @@ class AuthPc extends BaseController {
         }    
 
          //กรณีไรับค่ารหัสผ่านใหม่จาก user
-       //$newPassword_gen = $this->request->getPost('new_password');
-       $newPassword_gen = substr(str_shuffle('abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 8);
-        //$newPassword = substr(md5(uniqid(rand(), true)), 0, 8); // รหัสผ่านใหม่ 8 ตัวอักษร
-       
-       
+       $newPassword_gen = substr(str_shuffle('abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 8);       
         $newPassword = md5($newPassword_gen);
         // Hash ซ้อนอีกชั้น
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
@@ -144,15 +140,11 @@ class AuthPc extends BaseController {
                     <p>กรุณาเปลี่ยนรหัสผ่านหลังจากเข้าสู่ระบบครั้งแรก.</p>
                     <p><a href='{$loginUrl}' style='display:inline-block;padding:10px 20px;background:#007bff;color:#fff;text-decoration:none;border-radius:5px;'>เข้าสู่ระบบ</a></p>
                 ";
-     
-         // ส่งอีเมลด้วย Email Library ของ CI4
         $email = \Config\Services::email();
         $email->setFrom('yongyuttgsaving@gmail.com', 'PC Detail ระบบรีเซ็ตรหัสผ่าน');
         $email->setTo($to);
         $email->setSubject($subject);
         $email->setMessage($message);
-
-       
         if ($email->send()) {
             return $this->response->setJSON([
                 'status' => 'success',
@@ -167,7 +159,6 @@ class AuthPc extends BaseController {
         ]);
         }
     }
-
 
     // ต่ออายุ session
     public function extendSession()
@@ -272,11 +263,7 @@ class AuthPc extends BaseController {
         ]);
     }
 
-
-
-
-
-        // ดึงข้อมูลผู้ใช้งานตาม ID
+    // ดึงข้อมูลผู้ใช้งานตาม ID
     public function getUserById($id) {
         $user = $this->userModel->find($id);
         if ($user) {
@@ -294,7 +281,7 @@ class AuthPc extends BaseController {
         return $this->response->setJSON(['status'=>'success','message'=>'แก้ไขสำเร็จ']);
     }
 
-        // ลบผู้ใช้งาน
+     // ลบผู้ใช้งาน
     public function deleteUser($id) {
         $this->userModel->delete($id);
         return $this->response->setJSON(['status'=>'success','message'=>'ลบสำเร็จ']);

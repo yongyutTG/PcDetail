@@ -127,8 +127,7 @@ $dbName = $db->database;
                             href="#" data-bs-toggle="dropdown">
                             <div>
                                 ชื่อผู้ใช้: <?= esc(session()->get('USER_NAME')) ?>
-                                ฝ่าย: <?= esc(session()->get('GROUP_NAME')) ?>
-                                ฐานข้อมูล: <span class="text-primary"><?= esc($dbName ?? '-') ?></span>
+                                ฐานข้อมูล: <?= esc($dbName ?? '-') ?>
                             </div>
                             <div class="fw-bold">
                                 <?= esc(session()->get('FULL_NAME')) ?>

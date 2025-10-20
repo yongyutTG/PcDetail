@@ -6,12 +6,13 @@ $dbName = $db->database;
 $query = $db->query("SELECT CONVERT(varchar(19), GETDATE(), 120) AS [db_date]");
 $row = $query->getRow();
 
-$data['dbDate'] = $row->db_date ?? '-';
-    // $date = new \DateTime($row->db_date);
-    // $data['dbDate'] = $date->format('d/m/Y H:i:s');
+if ($row && isset($row->db_date)) {
+    $date = new \DateTime($row->db_date);
+    $data['dbDate'] = $date->format('d/m/Y H:i:s'); // 20/10/2025 22:10:31
+} else {
+    $data['dbDate'] = '-';
+}
 
-
-$data['dbName'] = $db->database;
 ?>
 
 <head>
@@ -138,7 +139,7 @@ $data['dbName'] = $db->database;
                             <div>
                                 ชื่อผู้ใช้: <?= esc(session()->get('USER_NAME')) ?>
                                 ฐานข้อมูล: <?= esc($dbName ?? '-') ?>
-                                <!-- วันที่: <span class="text-success"><?= esc($dbDate ?? '-') ?></span> -->
+                                วันที่: <span class="text-success"><?= esc($dbDate ?? '-') ?></span>
                             </div>
                             <div class="fw-bold">
                                 <?= esc(session()->get('FULL_NAME')) ?>

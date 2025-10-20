@@ -53,7 +53,26 @@ abstract class BaseController extends Controller
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
         // Do Not Edit This Line
-        parent::initController($request, $response, $logger);
+        //parent::initController($request, $response, $logger);
+  // โหลด session ถ้ายังไม่ได้เปิด
+    $this->session = \Config\Services::session();
+
+    // ✅ ดึงชื่อฐานข้อมูล + วันที่
+    $db = \Config\Database::connect();
+    $query = $db->query("SELECT CONVERT(varchar(19), GETDATE(), 120) AS db_date");
+    $row = $query->getRow();
+
+    $this->dbName = $db->database;
+    if ($row && isset($row->db_date)) {
+        $date = new \DateTime($row->db_date);
+        $this->dbDate = $date->format('d/m/Y H:i:s');
+    } else {
+        $this->dbDate = '-';
+    }
+
+    // ✅ แชร์ตัวแปรไปยังทุก view
+    view()->setVar('dbName', $this->dbName);
+    view()->setVar('dbDate', $this->dbDate);
 
         // Preload any models, libraries, etc, here.
 

@@ -324,7 +324,7 @@
                   <div class="modal-body">
                     <form id="addPcForm">
                       <div class="mb-3">
-                            <label for="add_pc_id" class="form-label">PcId</label>
+                            <label for="add_pc_id" class="form-label">PcID</label>
                             <input type="number" class="form-control" id="add_pc_id" name="pc_id" value="<?= esc($newPcId) ?>" readonly>
                           </div>
                       <div class="mb-3">

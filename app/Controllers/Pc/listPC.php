@@ -23,7 +23,7 @@ class listPC extends BaseController
             'locations' => $locations,
             'os' => $os,
             'property_type' => $property_type,
-            'newId' => $newPcId
+            'newPcId' => $newPcId
         ];
 
         return view('templates/Pc/header', $data)

@@ -139,7 +139,7 @@ if ($row && isset($row->db_date)) {
                             <div>
                                 ชื่อผู้ใช้: <?= esc(session()->get('USER_NAME')) ?>
                                 ฐานข้อมูล: <?= esc($dbName ?? '-') ?>
-                                วันที่: <span class="text-success"><?= esc($dbDate ?? '-') ?></span>
+                                <!-- วันที่: <span class="text-success"><?= esc($dbDate ?? '-') ?></span> -->
                             </div>
                             <div class="fw-bold">
                                 <?= esc(session()->get('FULL_NAME')) ?>

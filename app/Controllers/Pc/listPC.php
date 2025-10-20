@@ -14,7 +14,7 @@ class listPC extends BaseController
         
         $pcModel = new PcModel();
         $locations = $pcModel->getDistinctLocations();
-         $newPcId = $pcModel->getNextId();
+        $newPcId = $pcModel->getNextId();
         $os = $pcModel->getDistinctOs();
         $property_type = $pcModel->getDistinctPropertyType();
 

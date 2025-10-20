@@ -101,16 +101,16 @@ public function getDetailsByIp()
             return $this->failNotFound('ไม่พบประวัติของเครื่องนี้');
         }
     
-public function getNewPcId()
-{
-    $builder = $this->PcModel->builder();
-    $maxId = $builder->selectMax('pc_id')->get()->getRowArray()['pc_id'] ?? 0;
-    $newId = $maxId + 1;
+// public function getNewPcId()
+// {
+//     $builder = $this->PcModel->builder();
+//     $maxId = $builder->selectMax('pc_id')->get()->getRowArray()['pc_id'] ?? 0;
+//     $newId = $maxId + 1;
 
-    return $this->response->setJSON([
-        'pc_id' => $newId
-    ]);
-}
+//     return $this->response->setJSON([
+//         'pc_id' => $newId
+//     ]);
+// }
 
     
     public function create()

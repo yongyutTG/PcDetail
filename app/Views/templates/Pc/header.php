@@ -3,11 +3,11 @@
 $db = \Config\Database::connect();
 $dbName = $db->database;
 
-// ดึงวันที่ปัจจุบันจาก SQL Server
-$query = $db->query("SELECT CONVERT(varchar, GETDATE(), 120) AS current_date");
+// ดึงวันที่ปัจจุบันจาก SQL Serve
+$query = $db->query("SELECT CONVERT(varchar(19), GETDATE(), 120) AS current_date");
 $row = $query->getRow();
 $data['dbDate'] = $row->current_date ?? '-';
-
+$data['dbDate'] = $date->format('d/m/Y H:i:s'); // หรือปรับเป็นไทยก็ได้
 ?>
 
 <head>

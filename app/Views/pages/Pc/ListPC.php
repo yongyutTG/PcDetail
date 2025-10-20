@@ -323,10 +323,10 @@
                   </div>
                   <div class="modal-body">
                     <form id="addPcForm">
-                      <!-- <div class="mb-3">
+                      <div class="mb-3">
                             <label for="add_pc_id" class="form-label">PcId</label>
-                            <input type="number" class="form-control" id="add_pc_id" name="pc_id" readonly>
-                          </div> -->
+                            <input type="number" class="form-control" id="add_pc_id" name="pc_id" value="<?= esc($newPcId) ?>" readonly>
+                          </div>
                       <div class="mb-3">
                         <label for="add_user_name" class="form-label">FirstName-LastName</label>
                         <input type="text" class="form-control" id="add_user_name" name="user_name" required>

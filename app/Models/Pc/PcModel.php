@@ -145,6 +145,14 @@ return $query->getRow();
 }
 
 
+// ฟังก์ชันหาค่า next PC_ID
+    public function getNextId()
+    {
+        $row = $this->selectMax('pc_id')->first();
+        $maxId = $row['pc_id'] ?? 0;
+        return $maxId + 1;
+    }
+    
 public function insertData()
 {
     $data = $this->request->getJSON(true) ?? $this->request->getPost();

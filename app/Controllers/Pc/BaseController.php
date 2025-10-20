@@ -72,9 +72,7 @@ abstract class BaseController extends Controller
         $this->dbDate = '-';
     }
 
-    // ✅ แชร์ตัวแปรไปยังทุก view
-    view()->setVar('dbName', $this->dbName);
-    view()->setVar('dbDate', $this->dbDate);
+
 
         // E.g.: $this->session = \Config\Services::session();
     }

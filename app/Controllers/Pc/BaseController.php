@@ -53,7 +53,9 @@ abstract class BaseController extends Controller
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
         // Do Not Edit This Line
-        //parent::initController($request, $response, $logger);
+        parent::initController($request, $response, $logger);
+
+        // Preload any models, libraries, etc, here.
   // โหลด session ถ้ายังไม่ได้เปิด
     $this->session = \Config\Services::session();
 
@@ -73,8 +75,6 @@ abstract class BaseController extends Controller
     // ✅ แชร์ตัวแปรไปยังทุก view
     view()->setVar('dbName', $this->dbName);
     view()->setVar('dbDate', $this->dbDate);
-
-        // Preload any models, libraries, etc, here.
 
         // E.g.: $this->session = \Config\Services::session();
     }

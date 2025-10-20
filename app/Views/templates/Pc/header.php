@@ -2,6 +2,12 @@
 <?php
 $db = \Config\Database::connect();
 $dbName = $db->database;
+
+// ดึงวันที่ปัจจุบันจาก SQL Server
+$query = $db->query("SELECT CONVERT(varchar, GETDATE(), 120) AS current_date");
+$row = $query->getRow();
+$data['dbDate'] = $row->current_date ?? '-';
+
 ?>
 
 <head>
@@ -128,6 +134,7 @@ $dbName = $db->database;
                             <div>
                                 ชื่อผู้ใช้: <?= esc(session()->get('USER_NAME')) ?>
                                 ฐานข้อมูล: <?= esc($dbName ?? '-') ?>
+                                วันที่: <span class="text-success"><?= esc($dbDate ?? '-') ?></span>
                             </div>
                             <div class="fw-bold">
                                 <?= esc(session()->get('FULL_NAME')) ?>

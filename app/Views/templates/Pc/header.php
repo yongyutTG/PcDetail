@@ -3,12 +3,16 @@
 $db = \Config\Database::connect();
 $dbName = $db->database;
 
-// ดึงวันที่ปัจจุบันจาก SQL Serve
 $query = $db->query("SELECT CONVERT(varchar(19), GETDATE(), 120) AS current_date");
 $row = $query->getRow();
-$data['dbDate'] = $row->current_date ?? '-';
 
-$data['dbDate'] = $date->format('d/m/Y'); // หรือปรับเป็นไทยก็ได้
+// ✅ ตรวจสอบว่ามีค่ากลับมาหรือไม่
+if ($row && isset($row->current_date)) {
+    $date = new \DateTime($row->current_date);
+    $data['dbDate'] = $date->format('d/m/Y'); // ตัวอย่าง: 20/10/2025
+} else {
+    $data['dbDate'] = '-';
+}
 ?>
 
 <head>

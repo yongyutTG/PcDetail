@@ -9,7 +9,7 @@ use CodeIgniter\Filters\FilterInterface;
 class SessionTimeoutFilter implements FilterInterface
 {
     // ตั้งเวลาหมดอายุ (หน่วย: วินาที)
-    private $timeout = 900; // 15 นาที
+    private $timeout = 300; // 15 นาที  วิธีคิด 5 นาที × 60 = 300 วินาที
 
     public function before(RequestInterface $request, $arguments = null)
     {

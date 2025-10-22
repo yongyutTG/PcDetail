@@ -31,7 +31,7 @@ class SessionTimeoutFilter implements FilterInterface
             return service('response')
                 ->setJSON(['status' => 'timeout']);
         }
-        return redirect()->to(site_url('login'));
+        // return redirect()->to(site_url('login'));
         }
        
         // อัปเดตเวลาใหม่ทุกครั้งที่มี request

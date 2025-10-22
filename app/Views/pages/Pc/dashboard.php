@@ -1,3 +1,7 @@
+
+<?= $this->extend('templates/Pc/main') ?>
+
+<?= $this->section('content') ?>
 <section>
   <main role="main" class="container-fluid py-4">
     <div class="home-content">

@@ -57,7 +57,7 @@ if ($row && isset($row->db_date)) {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- ================= JS ================= -->
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <link rel="stylesheet" href="css/style.css">
 

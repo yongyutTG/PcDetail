@@ -11,6 +11,7 @@ class ScanIP extends Controller
             return redirect()->to('login');
         }
         return view('templates/Pc/header')
+         . view('pages/Pc/main')
              . view('pages/Pc/ScanIP')
              . view('templates/Pc/footer');
     }

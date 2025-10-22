@@ -49,6 +49,7 @@ class Dashboard extends BaseController
     ];
 
     return  view('templates/Pc/header', $data) 
+     . view('pages/Pc/main', $data)
         . view('pages/Pc/dashboard', $data)
         . view('templates/Pc/footer', $data);
     }

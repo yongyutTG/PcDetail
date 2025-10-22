@@ -2,18 +2,18 @@
 $routes->get('/', 'Pc\AuthPc::login');
 $routes->get('login', 'Pc\AuthPc::login');    // หน้า login
 $routes->post('auth/chk_login', 'Pc\AuthPc::chk_login');
+$routes->get('logout', 'Pc\AuthPc::logout');
 // $routes->post('login', 'Pc\AuthPc::attemptRegister');    // หน้า login
 $routes->post('auth/forgot-password', 'Pc\AuthPc::forgotPassword');  // หน้า forgotPassword
 $routes->post('user/changePassword', 'Pc\AuthPc::changePassword'); //หน้าเปลี่ยนรหัสผ่าน
 
+$routes->get('check-session', 'SessionController::check');
 
 $routes->group('', ['filter' => 'timeout'], function($routes) {
     //หน้าadmin
     $routes->get('admin', 'Pc\AdminPc::register');
     $routes->post('admin/attemptRegister', 'Pc\AdminPc::attemptRegister');
 
-
-    $routes->get('logout', 'Pc\AuthPc::logout');
     $routes->get('dashboard', 'Pc\Dashboard::index'); // หน้า Dashboard
     $routes->get('all-listPC', 'Pc\listPC::index'); // หน้า
     $routes->get('logPC', 'Pc\LogPC::index'); // หน้า logPC

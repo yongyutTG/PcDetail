@@ -25,9 +25,11 @@ class SessionTimeoutFilter implements FilterInterface
         if ($lastActivity && (time() - $lastActivity > $this->timeout)) {
             // ลบ session และ redirect
             $session->destroy();
-            return redirect()->to(site_url('login'))->with('error', 'หมดเวลาการใช้งาน กรุณาเข้าสู่ระบบใหม่');
+            // ส่ง response บอกว่า timeout
+            return service('response')
+                ->setStatusCode(440) // 440 Login Timeout
+                ->setJSON(['status' => 'timeout']);
         }
-
         // อัปเดตเวลาใหม่ทุกครั้งที่มี request
         $session->set('last_activity', time());
     }

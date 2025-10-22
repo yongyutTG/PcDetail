@@ -27,7 +27,7 @@ class SessionTimeoutFilter implements FilterInterface
             $session->destroy();
             // ส่ง response บอกว่า timeout
             return service('response')
-                ->setStatusCode(440) // 440 Login Timeout
+                //->setStatusCode(440) // 440 Login Timeout
                 ->setJSON(['status' => 'timeout']);
         }
         // อัปเดตเวลาใหม่ทุกครั้งที่มี request

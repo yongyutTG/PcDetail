@@ -43,7 +43,7 @@ class AuthPc extends BaseController {
             'GROUP_NAME' => $user_login['GROUP_NAME'],
             'SUP_ADMIN' => $user_login['SUP_ADMIN'],
             'logged_in' => true,
-            'last_activity' => time()   //ใช้สำหรับตรวจสอบ session timeout
+            'last_activity' => time()   //เก็บค่าไว้ใช้สำหรับตรวจสอบ session timeout
         ]);
        //ถ้าเป็น admin → ไปหน้า admin
         if (strtolower($user_login['USER_NAME']) === 'it0007') {

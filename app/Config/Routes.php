@@ -7,22 +7,21 @@ $routes->post('auth/forgot-password', 'Pc\AuthPc::forgotPassword');  // หน�
 $routes->post('user/changePassword', 'Pc\AuthPc::changePassword'); //หน้าเปลี่ยนรหัสผ่าน
 
 
-//หน้าadmin
-$routes->get('admin', 'Pc\AdminPc::register');
-$routes->post('admin/attemptRegister', 'Pc\AdminPc::attemptRegister');
+$routes->group('', ['filter' => 'timeout'], function($routes) {
+    //หน้าadmin
+    $routes->get('admin', 'Pc\AdminPc::register');
+    $routes->post('admin/attemptRegister', 'Pc\AdminPc::attemptRegister');
 
 
-$routes->get('extend-session', 'Pc\AuthPc::extendSession');
-$routes->get('logout', 'Pc\AuthPc::logout');
+    $routes->get('logout', 'Pc\AuthPc::logout');
+    $routes->get('dashboard', 'Pc\Dashboard::index'); // หน้า Dashboard
+    $routes->get('all-listPC', 'Pc\listPC::index'); // หน้า
+    $routes->get('logPC', 'Pc\LogPC::index'); // หน้า logPC
+    $routes->get('ScanIP', 'Pc\ScanIP::index');   // เปิดหน้า Scan ทั้งหมด
+    $routes->get('scanip/scan', 'Pc\ScanIP::scan');  // API สำหรับสแกน (ใช้ POST เท่านั้น)
 
-// Protect Routes ด้วย Filter "AuthPc"
-// $routes->group('', ['filter' => 'AuthPc'], function ($routes) {
-$routes->get('dashboard', 'Pc\Dashboard::index'); // หน้า Dashboard
-$routes->get('all-listPC', 'Pc\listPC::index'); // หน้า
-$routes->get('logPC', 'Pc\LogPC::index'); // หน้า logPC
-//  });
-$routes->get('ScanIP', 'Pc\ScanIP::index');   // เปิดหน้า Scan ทั้งหมด
-$routes->get('scanip/scan', 'Pc\ScanIP::scan');  // API สำหรับสแกน (ใช้ POST เท่านั้น)
+});
+
 
 
 //$routes->get('api/members', 'Api\MemberController::index', ['filter' => 'apikey']);

@@ -20,6 +20,7 @@ class Filters extends BaseConfig
 
 
     public array $aliases = [
+      'timeout'  => \App\Filters\SessionTimeoutFilter::class, // 👈 เพิ่มบรรทัดนี้
     // 'csrf'     => \CodeIgniter\Filters\CSRF::class,
 
     // 'auth'     => \App\Filters\AuthFilter::class, 

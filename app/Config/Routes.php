@@ -3,13 +3,13 @@ $routes->get('/', 'Pc\AuthPc::login');
 $routes->get('login', 'Pc\AuthPc::login');    // หน้า login
 $routes->post('auth/chk_login', 'Pc\AuthPc::chk_login');
 $routes->get('logout', 'Pc\AuthPc::logout');
+$routes->get('check-session', 'Pc\SessionController::check');
 // $routes->post('login', 'Pc\AuthPc::attemptRegister');    // หน้า login
 $routes->post('auth/forgot-password', 'Pc\AuthPc::forgotPassword');  // หน้า forgotPassword
 $routes->post('user/changePassword', 'Pc\AuthPc::changePassword'); //หน้าเปลี่ยนรหัสผ่าน
 
-$routes->get('check-session', 'Pc\SessionController::check');
 
-$routes->group('', ['filter' => 'timeout'], function($routes) {
+$routes->group('', ['filter' => 'timeout'], static function ($routes) {
     //หน้าadmin
     $routes->get('admin', 'Pc\AdminPc::register');
     $routes->post('admin/attemptRegister', 'Pc\AdminPc::attemptRegister');

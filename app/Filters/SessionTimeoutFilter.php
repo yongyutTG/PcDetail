@@ -27,14 +27,10 @@ class SessionTimeoutFilter implements FilterInterface
             $session->destroy();
             // ส่ง response บอกว่า timeout
             // ถ้าเป็น AJAX / fetch → return JSON
-        // if ($request->isAJAX()) {
-        //     return service('response')
-        //         ->setJSON(['status' => 'timeout']);
-        // }
-         return service('response')
-                ->setStatusCode(440)
-                ->setJSON(['status' => 'timeout']);
-        // return redirect()->to(site_url('login'));
+            if ($request->isAJAX()) {
+                return service('response')
+                    ->setJSON(['status' => 'timeout']);
+            }
         }
        
         // อัปเดตเวลาใหม่ทุกครั้งที่มี request

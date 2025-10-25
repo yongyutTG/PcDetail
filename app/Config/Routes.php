@@ -7,7 +7,7 @@ $routes->get('logout', 'Pc\AuthPc::logout');
 $routes->post('auth/forgot-password', 'Pc\AuthPc::forgotPassword');  // หน้า forgotPassword
 $routes->post('user/changePassword', 'Pc\AuthPc::changePassword'); //หน้าเปลี่ยนรหัสผ่าน
 
-$routes->get('check-session', 'SessionController::check');
+$routes->get('check-session', 'Pc\SessionController::check');
 
 $routes->group('', ['filter' => 'timeout'], function($routes) {
     //หน้าadmin

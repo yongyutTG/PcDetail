@@ -10,7 +10,7 @@ class SessionController extends Controller
     {
         $session = session();
         if (!$session->get('logged_in')) {
-            return $this->response->setJSON(['status' => 'expired']);
+            return $this->response->setJSON(['status' => 'timeout']);
         }
         return $this->response->setJSON(['status' => 'active']);
     }

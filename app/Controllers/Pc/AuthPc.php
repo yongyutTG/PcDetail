@@ -161,6 +161,14 @@ class AuthPc extends BaseController {
         }
     }
 
+
+
+    //ตรวจสอบ session
+
+
+
+
+
     // ต่ออายุ session
     public function extendSession()
     {

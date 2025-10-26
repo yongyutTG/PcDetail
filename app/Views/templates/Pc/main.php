@@ -34,13 +34,12 @@
                 confirmButtonText: 'ตกลง'
                 }).then(() => {
                 // กดตกลง → logout แล้ว redirect
-                fetch("<?= site_url('logout') ?>")
-                    .then(() => window.location.href = "<?= site_url('login') ?>");
+                    window.location.href = "<?= site_url('logout') ?>";
                 });
             }
             })
             .catch(console.error);
-        }, 30000); // ตรวจทุก 30 วินาที
+        }, 10000); // ตรวจทุก 10 วินาที
   </script>
 </body>
 </html>

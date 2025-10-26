@@ -20,11 +20,11 @@ class SessionTimeoutFilter implements FilterInterface
             return redirect()->to(site_url('login'));
         }
 
-        
-        // ตรวจ session timeout
-        $lastActivity = $this->session->get('last_activity');
+        // ตรวจเวลาล่าสุดที่ใช้งาน
+        $lastActivity = $session->get('last_activity');
         if ($lastActivity && (time() - $lastActivity > $this->timeout)) {
-            $this->session->destroy();
+            // ลบ session และ redirect
+           $this->session->destroy();
             return redirect()->to('login')->send();
         }
        

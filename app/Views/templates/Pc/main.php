@@ -13,9 +13,9 @@
   <!-- ✅ Header -->
   <?= $this->include('templates/Pc/header') ?>
 
-  <main class="container py-4">
+
     <?= $this->renderSection('content') ?>
-  </main>
+  
 
   <!-- ✅ Footer -->
   <?= $this->include('templates/Pc/footer') ?>

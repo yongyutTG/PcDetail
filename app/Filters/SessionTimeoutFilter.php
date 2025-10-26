@@ -22,15 +22,11 @@ class SessionTimeoutFilter implements FilterInterface
 
         // ตรวจเวลาล่าสุดที่ใช้งาน
         $lastActivity = $session->get('last_activity');
+        // ตรวจ session timeout
+        $lastActivity = $this->session->get('last_activity');
         if ($lastActivity && (time() - $lastActivity > $this->timeout)) {
-            // ลบ session และ redirect
-            $session->destroy();
-            // ส่ง response บอกว่า timeout
-            // ถ้าเป็น AJAX / fetch → return JSON
-            if ($request->isAJAX()) {
-                return service('response')
-                    ->setJSON(['status' => 'timeout']);
-            }
+            $this->session->destroy();
+            return redirect()->to('login')->send();
         }
        
         // อัปเดตเวลาใหม่ทุกครั้งที่มี request

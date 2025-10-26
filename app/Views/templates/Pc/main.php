@@ -22,24 +22,29 @@
 
   <!-- ✅ Script ตรวจ session timeout -->
   <script>
-    setInterval(() => {
-        fetch("<?= site_url('check-session') ?>")
-            .then(res => res.json())
-            .then(data => {
-            if (data.status === 'timeout') {
-                Swal.fire({
-                title: 'หมดเวลาการใช้งาน',
-                text: 'กรุณาเข้าสู่ระบบใหม่',
-                icon: 'warning',
-                confirmButtonText: 'ตกลง'
-                }).then(() => {
-                // กดตกลง → logout แล้ว redirect
-                    window.location.href = "<?= site_url('logout') ?>";
-                });
-            }
-            })
-            .catch(console.error);
-        }, 10000); // ตรวจทุก 10 วินาที
+     // ตรวจ session timeout ทุก 10 วินาที
+    async function checkSession() {
+      try {
+        const res = await fetch('<?= site_url('check-session') ?>');
+        const data = await res.json();
+
+        if (data.status === 'timeout') {
+          Swal.fire({
+            title: 'หมดเวลาการใช้งาน',
+            text: 'กรุณาเข้าสู่ระบบใหม่',
+            icon: 'warning',
+            confirmButtonText: 'ตกลง',
+            allowOutsideClick: false
+          }).then(() => {
+            window.location.href = '<?= site_url('logout') ?>';
+          });
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    setInterval(checkSession, 10000); // ทุก 10 วินาที
   </script>
 </body>
 </html>

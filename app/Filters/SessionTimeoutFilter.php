@@ -24,7 +24,7 @@ class SessionTimeoutFilter implements FilterInterface
         $lastActivity = $session->get('last_activity');
         if ($lastActivity && (time() - $lastActivity > $this->timeout)) {
             // ลบ session และ redirect
-           $this->session->destroy();
+            $session->destroy();
             return redirect()->to('login')->send();
         }
        

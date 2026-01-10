@@ -103,24 +103,24 @@ class AuthPc extends BaseController {
         $userModel = new UserModel();
         $output_empidForgot = $userModel->getActiveUserByUsername($input_empid);
         // ตรวจสอบ
-        // if (!$output_empidForgot) {
-        //     return $this->response->setJSON([
-        //         'status' => 'error',
-        //         'message' => 'ชื่อผู้ใช้งาน '.$input_userForgot.'ไม่ถูกต้อง'
-        //     ]);
-        // }
+        if (!$output_empidForgot) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'เลขพนักงาน '.$input_empid.'ไม่ถูกต้อง'
+            ]);
+        }
          if (strtolower(trim($output_empidForgot['USER_NAME'])) !== strtolower(trim($input_userForgot))) {
             return $this->response->setJSON([
                 'status' => 'error',
                 'message' => 'ชื่อผู้ใช้งาน '.$input_userForgot.' ไม่ถูกต้อง'
             ]);
         }
-         if (strtolower(trim($output_empidForgot['EMP_ID'])) !== strtolower(trim($input_empid))) {
-            return $this->response->setJSON([
-                'status' => 'error',
-                'message' => 'เลขพนักงาน '.$input_empid.' ไม่ถูกต้อง'
-            ]);
-        }    
+        //  if (strtolower(trim($output_empidForgot['EMP_ID'])) !== strtolower(trim($input_empid))) {
+        //     return $this->response->setJSON([
+        //         'status' => 'error',
+        //         'message' => 'เลขพนักงาน '.$input_empid.' ไม่ถูกต้อง'
+        //     ]);
+        // }    
         if (strtolower(trim($output_empidForgot['email'])) !== strtolower(trim($email))) {
             return $this->response->setJSON([
                 'status' => 'error',

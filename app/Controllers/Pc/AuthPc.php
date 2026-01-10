@@ -98,27 +98,33 @@ class AuthPc extends BaseController {
     //รีเซ็ตรหัสผ่าน"
     public function forgotPassword() {
         $input_userForgot = $this->request->getPost('forgot_input');
-        $empid    = $this->request->getPost('forgot_empid');
+        $input_empid    = $this->request->getPost('forgot_empid');
         $email    = $this->request->getPost('forgot_email');
         $userModel = new UserModel();
-        $output_userForgot = $userModel->getActiveUserByUsername($input_userForgot);
+        $output_empidForgot = $userModel->getActiveUserByUsername($input_empid);
         // ตรวจสอบ
-        if (!$output_userForgot) {
+        // if (!$output_empidForgot) {
+        //     return $this->response->setJSON([
+        //         'status' => 'error',
+        //         'message' => 'ชื่อผู้ใช้งาน '.$input_userForgot.'ไม่ถูกต้อง'
+        //     ]);
+        // }
+         if (strtolower(trim($output_empidForgot['USER_NAME'])) !== strtolower(trim($input_userForgot))) {
             return $this->response->setJSON([
                 'status' => 'error',
-                'message' => 'ไม่พบชื่อผู้ใช้งานนี้ในระบบ'
+                'message' => 'ชื่อผู้ใช้งาน '.$input_userForgot.' ไม่ถูกต้อง'
             ]);
         }
-         if (strtolower(trim($output_userForgot['EMP_ID'])) !== strtolower(trim($empid))) {
+         if (strtolower(trim($output_empidForgot['EMP_ID'])) !== strtolower(trim($input_empid))) {
             return $this->response->setJSON([
                 'status' => 'error',
-                'message' => 'ไม่พบเลขพนักงานนี้ในระบบ'
+                'message' => 'เลขพนักงาน '.$input_empid.' ไม่ถูกต้อง'
             ]);
         }    
-        if (strtolower(trim($output_userForgot['email'])) !== strtolower(trim($email))) {
+        if (strtolower(trim($output_empidForgot['email'])) !== strtolower(trim($email))) {
             return $this->response->setJSON([
                 'status' => 'error',
-                'message' => 'อีเมลที่กรอกไม่ตรงกับข้อมูลในระบบ'
+                'message' => 'อีเมล '.$email.' ไม่ถูกต้อง'
             ]);
         }    
 
@@ -128,7 +134,7 @@ class AuthPc extends BaseController {
         // Hash ซ้อนอีกชั้น
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
     
-        $userModel->update($output_userForgot['USER_ID'], ['U_PASSWORD' => $hashedPassword]);
+        $userModel->update($output_empidForgot['USER_ID'], ['U_PASSWORD' => $hashedPassword]);
         $loginUrl = base_url('login');
         $registerDate = date("d/m/Y H:i"); 
         $to = $email;

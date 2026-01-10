@@ -38,7 +38,7 @@ class UserModel extends Model
 //     return $query->getRowArray(); // คืนค่าเป็น array
 // }
 
-    public function getActiveUserByUsername($username){
+    public function getActiveUserByUsername($empId){
     $sql = "SELECT 
                 u.USER_NAME,
                 u.USER_ID,
@@ -56,10 +56,10 @@ class UserModel extends Model
                 ON t.ptitle_id = p.ptitle_id    
             LEFT JOIN usr_group g
                 ON g.GROUP_ID = u.GROUP_ID
-            WHERE u.USER_NAME = ?
+            WHERE u.EMP_ID = ?
               AND u.IS_ACTIVE = '1'";
 
-    $query = $this->db->query($sql, [$username]);
+    $query = $this->db->query($sql, [$empId]);
     return $query->getRowArray(); // คืนค่าเป็น array
 }
 

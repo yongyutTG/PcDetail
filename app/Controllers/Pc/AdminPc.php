@@ -46,16 +46,17 @@ class AdminPc extends BaseController
     public function attemptRegister(){
         $userModel = new UserModel();
         $username = $this->request->getPost('USER_NAME');
+        $empId = $this->request->getPost('EMP_ID');
         $Passwordemail = $this->request->getPost('EMAIL');
         //$clientHash = $this->request->getPost('U_PASSWORD'); // md5(password)
 
-        $user = $userModel->getActiveUserByUsername($username);
-      
-            // ตรวจสอบ
-        if ($user) {
+        //ตรวจสอบว่าเป็นพนักงานหรือไม่
+        $emp = $userModel->getActiveUserByUsername($empId);
+        //$user = $userModel->getActiveUserByUsername($username);
+        if ($emp) {
             return $this->response->setJSON([
                 'status' => 'error',
-                 'message' => 'มีชื่อผู้ใช้งานนี้แล้ว กรุณาเลือกชื่อใหม่'
+                 'message' => 'รหัสพนักงาน (' . $empId . ') มีชื่อผู้ใช้งานแล้ว'
             ]);
         }
        

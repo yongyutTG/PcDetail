@@ -16,7 +16,7 @@ class UserModel extends Model
 
 
 // ตรวจสอบ user สำหรับ login
-//     public function getActiveUserByUsername($username){
+//     public function getActiveUserByEmpid($username){
 //     $sql = "SELECT 
 //                 u.USER_NAME,
 //                 u.USER_ID,
@@ -38,7 +38,7 @@ class UserModel extends Model
 //     return $query->getRowArray(); // คืนค่าเป็น array
 // }
 
-    public function getActiveUserByUsername($empId){
+    public function getActiveUserByEmpid($empId){
     $sql = "SELECT 
                 u.USER_NAME,
                 u.USER_ID,

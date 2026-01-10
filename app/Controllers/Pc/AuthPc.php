@@ -20,7 +20,7 @@ class AuthPc extends BaseController {
         $userModel = new UserModel();
         $input_username = $this->request->getPost('USER_NAME');
         $clientHash = $this->request->getPost('U_PASSWORD');  //MD5
-        $user_login = $userModel->getActiveUserByUsername($input_username);
+        $user_login = $userModel->getActiveUserByEmpid($input_username);
         if (!$user_login) {
             return $this->response->setJSON([
                 'status' => 'error',
@@ -70,7 +70,7 @@ class AuthPc extends BaseController {
             ]);
         }
         $userModel = new UserModel();
-        $output_userChangePassword = $userModel->getActiveUserByUsername($UsernameChang);
+        $output_userChangePassword = $userModel->getActiveUserByEmpid($UsernameChang);
         if (!$output_userChangePassword) {
             return $this->response->setJSON([
                 'status' => 'error',
@@ -101,7 +101,7 @@ class AuthPc extends BaseController {
         $input_empid    = $this->request->getPost('forgot_empid');
         $email    = $this->request->getPost('forgot_email');
         $userModel = new UserModel();
-        $output_empidForgot = $userModel->getActiveUserByUsername($input_empid);
+        $output_empidForgot = $userModel->getActiveUserByEmpid($input_empid);
         // ตรวจสอบ
         if (!$output_empidForgot) {
             return $this->response->setJSON([
@@ -115,12 +115,6 @@ class AuthPc extends BaseController {
                 'message' => 'ชื่อผู้ใช้งาน '.$input_userForgot.' ไม่ถูกต้อง'
             ]);
         }
-        //  if (strtolower(trim($output_empidForgot['EMP_ID'])) !== strtolower(trim($input_empid))) {
-        //     return $this->response->setJSON([
-        //         'status' => 'error',
-        //         'message' => 'เลขพนักงาน '.$input_empid.' ไม่ถูกต้อง'
-        //     ]);
-        // }    
         if (strtolower(trim($output_empidForgot['email'])) !== strtolower(trim($email))) {
             return $this->response->setJSON([
                 'status' => 'error',
@@ -200,7 +194,7 @@ class AuthPc extends BaseController {
         $userModel = new UserModel();
         $input_userRegister = $this->request->getPost('USER_NAME');
         $Passwordemail = $this->request->getPost('EMAIL');
-        $output_userRegister = $userModel->getActiveUserByUsername($input_userRegister);
+        $output_userRegister = $userModel->getActiveUserByEmpid($input_userRegister);
             // ตรวจสอบ
         if ($output_userRegister) {
             return $this->response->setJSON([

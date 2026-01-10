@@ -51,7 +51,7 @@ class AdminPc extends BaseController
         //$clientHash = $this->request->getPost('U_PASSWORD'); // md5(password)
 
         //ตรวจสอบว่าเป็นพนักงานหรือไม่
-        $emp = $userModel->getActiveUserByUsername($empId);
+        $emp = $userModel->getActiveUserByEmpid($empId);
         //$user = $userModel->getActiveUserByUsername($username);
         if ($emp) {
             return $this->response->setJSON([

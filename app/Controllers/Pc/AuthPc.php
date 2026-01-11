@@ -103,25 +103,31 @@ class AuthPc extends BaseController {
         $userModel = new UserModel();
         $output_empidForgot = $userModel->getActiveUserByEmpid($input_empid);
         // ตรวจสอบ
-        if (!$output_empidForgot) {
-            return $this->response->setJSON([
-                'status' => 'error',
-                'message' => 'เลขพนักงาน '.$input_empid.'ไม่ถูกต้อง'
-            ]);
-        }
-         if (strtolower(trim($output_empidForgot['USER_NAME'])) !== strtolower(trim($input_userForgot))) {
-            return $this->response->setJSON([
-                'status' => 'error',
-                'message' => 'ชื่อผู้ใช้งาน '.$input_userForgot.' ไม่ถูกต้อง'
-            ]);
-        }
-        if (strtolower(trim($output_empidForgot['email'])) !== strtolower(trim($email))) {
-            return $this->response->setJSON([
-                'status' => 'error',
-                'message' => 'อีเมล '.$email.' ไม่ถูกต้อง'
-            ]);
-        }    
+        if ($output_empidForgot) {
+            if ( strtolower(trim($output_empidForgot['USER_NAME'])) === $input_userForgot &&
+                strtolower(trim($output_empidForgot['email'])) === $email) {
+                // ผ่าน
+            } else {
+                return $this->response->setJSON([
+                    'status' => 'error',
+                    'message' => 'ข้อมูลไม่ถูกต้อง กรุณาตรวจสอบใหม่'
+                ]);
 
+            }
+        }
+        //  if (strtolower(trim($output_empidForgot['USER_NAME'])) !== strtolower(trim($input_userForgot))) {
+        //     return $this->response->setJSON([
+        //         'status' => 'error',
+        //         'message' => 'ชื่อผู้ใช้งาน '.$input_userForgot.' ไม่ถูกต้อง'
+        //     ]);
+        // }
+        // if (strtolower(trim($output_empidForgot['email'])) !== strtolower(trim($email))) {
+        //     return $this->response->setJSON([
+        //         'status' => 'error',
+        //         'message' => 'อีเมล '.$email.' ไม่ถูกต้อง'
+        //     ]);
+        // }    
+       
          //กรณีไรับค่ารหัสผ่านใหม่จาก user
        $newPassword_gen = substr(str_shuffle('abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 8);       
         $newPassword = md5($newPassword_gen);

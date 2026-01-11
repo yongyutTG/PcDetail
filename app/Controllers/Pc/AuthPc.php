@@ -106,14 +106,11 @@ class AuthPc extends BaseController {
         if ($output_empidForgot) {
             if ( strtolower(trim($output_empidForgot['USER_NAME'])) === $input_userForgot &&
                 strtolower(trim($output_empidForgot['email'])) === $email) {
-                // ผ่าน
-            } else {
+                // ผ่านการตรวจสอบ
                 return $this->response->setJSON([
                     'status' => 'error',
                     'message' => 'ข้อมูลไม่ถูกต้อง กรุณาตรวจสอบใหม่'
                 ]);
-
-            }
         }
         //  if (strtolower(trim($output_empidForgot['USER_NAME'])) !== strtolower(trim($input_userForgot))) {
         //     return $this->response->setJSON([

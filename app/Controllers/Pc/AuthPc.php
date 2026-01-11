@@ -111,6 +111,7 @@ class AuthPc extends BaseController {
                     'status' => 'error',
                     'message' => 'ข้อมูลไม่ถูกต้อง กรุณาตรวจสอบใหม่'
                 ]);
+            }
         }
         //  if (strtolower(trim($output_empidForgot['USER_NAME'])) !== strtolower(trim($input_userForgot))) {
         //     return $this->response->setJSON([

@@ -104,30 +104,26 @@ class AuthPc extends BaseController {
         $output_empidForgot = $userModel->getActiveUserByEmpid($input_empid);
         // ตรวจสอบ
         if (!$output_empidForgot) {
-            if ( strtolower(trim($output_empidForgot['USER_NAME'])) !== $input_userForgot &&
-                strtolower(trim($output_empidForgot['email'])) !== $email) {
-                // ผ่านการตรวจสอบ
-                return $this->response->setJSON([
-                    'status' => 'error'
-                    'message' => 'ข้อมูลไม่ถูกต้อง กรุณาตรวจสอบใหม่'
-                ]);
-            }
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'ข้อมูลไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง'
+            ]);
         }
-        //  if (strtolower(trim($output_empidForgot['USER_NAME'])) !== strtolower(trim($input_userForgot))) {
-        //     return $this->response->setJSON([
-        //         'status' => 'error',
-        //         'message' => 'ชื่อผู้ใช้งาน '.$input_userForgot.' ไม่ถูกต้อง'
-        //     ]);
-        // }
-        // if (strtolower(trim($output_empidForgot['email'])) !== strtolower(trim($email))) {
-        //     return $this->response->setJSON([
-        //         'status' => 'error',
-        //         'message' => 'อีเมล '.$email.' ไม่ถูกต้อง'
-        //     ]);
-        // }    
+         if (strtolower(trim($output_empidForgot['USER_NAME'])) !== strtolower(trim($input_userForgot))) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'ข้อมูลไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง'
+            ]);
+        }
+        if (strtolower(trim($output_empidForgot['email'])) !== strtolower(trim($email))) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'ข้อมูลไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง'
+            ]);
+        }    
        
          //กรณีไรับค่ารหัสผ่านใหม่จาก user
-       $newPassword_gen = substr(str_shuffle('abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 8);       
+        $newPassword_gen = substr(str_shuffle('abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 8);       
         $newPassword = md5($newPassword_gen);
         // Hash ซ้อนอีกชั้น
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
@@ -160,7 +156,6 @@ class AuthPc extends BaseController {
             return $this->response->setJSON([
             'status' => 'error',
             'message' => 'ไม่สามารถส่งอีเมลได้ กรุณาลองใหม่อีกครั้ง',
-            'debug' => $input_userForgot
         ]);
         }
     }

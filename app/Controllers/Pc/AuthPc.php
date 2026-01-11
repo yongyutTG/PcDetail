@@ -103,12 +103,12 @@ class AuthPc extends BaseController {
         $userModel = new UserModel();
         $output_empidForgot = $userModel->getActiveUserByEmpid($input_empid);
         // ตรวจสอบ
-        if ($output_empidForgot) {
+        if (!$output_empidForgot) {
             if ( strtolower(trim($output_empidForgot['USER_NAME'])) !== $input_userForgot &&
                 strtolower(trim($output_empidForgot['email'])) !== $email) {
                 // ผ่านการตรวจสอบ
                 return $this->response->setJSON([
-                    'status' => 'error',
+                    'status' => 'error'
                     'message' => 'ข้อมูลไม่ถูกต้อง กรุณาตรวจสอบใหม่'
                 ]);
             }

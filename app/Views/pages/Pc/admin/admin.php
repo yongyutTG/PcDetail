@@ -193,7 +193,11 @@
       toastr.error("กรุณากรอกอีเมล", "แจ้งเตือน");
       return;
     }
-  
+    // if (pwdInput.value.trim() === "") {
+    //   toastr.error("กรุณากรอกรหัสผ่าน", "แจ้งเตือน");
+    //   return;
+    // }
+
     registerBtn.disabled = true;
     registerBtn.innerHTML = `
     <span class="spinner-border spinner-border-sm me-2 text-white" role="status"></span>

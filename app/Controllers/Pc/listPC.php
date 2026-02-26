@@ -28,7 +28,7 @@ class listPC extends BaseController
 
         return view('templates/Pc/header', $data)
         . view('templates/Pc/main', $data)
-            . view('pages/Pc/listPC', $data)
+            . view('pages/Pc/ListPC', $data)
             . view('templates/Pc/footer', $data);
     }
 }

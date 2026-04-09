@@ -25,9 +25,9 @@ class listPC extends BaseController
             'property_type' => $property_type,
             'newPcId' => $newPcId
         ];
+
         return view('templates/Pc/header', $data)
-        . view('templates/Pc/main', $data)
-            . view('pages/Pc/ListPC', $data)
+            . view('pages/Pc/listPC', $data)
             . view('templates/Pc/footer', $data);
     }
 }

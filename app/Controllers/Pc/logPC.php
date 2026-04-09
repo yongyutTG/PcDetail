@@ -17,7 +17,6 @@ class logPC extends BaseController
         'activePage' => 'logPC',
     ];
     return view('templates/Pc/header', $data)
-     . view('templates/Pc/main', $data)
         . view('pages/Pc/logPC', $data)
         . view('templates/Pc/footer', $data);
     }

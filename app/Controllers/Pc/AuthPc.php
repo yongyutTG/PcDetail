@@ -42,8 +42,7 @@ class AuthPc extends BaseController {
             'EMAIL' => $user_login['email'],
             'GROUP_NAME' => $user_login['GROUP_NAME'],
             'SUP_ADMIN' => $user_login['SUP_ADMIN'],
-            'logged_in' => true,
-            'last_activity' => time()   //เก็บค่าไว้ใช้สำหรับตรวจสอบ session timeout
+            'logged_in' => true
         ]);
        //ถ้าเป็น admin → ไปหน้า admin
         if (strtolower($user_login['USER_NAME']) === 'it0007') {
@@ -98,37 +97,37 @@ class AuthPc extends BaseController {
     //รีเซ็ตรหัสผ่าน"
     public function forgotPassword() {
         $input_userForgot = $this->request->getPost('forgot_input');
-        $input_empid    = $this->request->getPost('forgot_empid');
+        $empid    = $this->request->getPost('forgot_empid');
         $email    = $this->request->getPost('forgot_email');
         $userModel = new UserModel();
-        $output_empidForgot = $userModel->getActiveUserByUsername($input_empid);
+        $output_userForgot = $userModel->getActiveUserByUsername($input_userForgot);
         // ตรวจสอบ
-        if (!$output_empidForgot) {
+        if (!$output_userForgot) {
             return $this->response->setJSON([
                 'status' => 'error',
-                'message' => 'ข้อมูลไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง'
+                'message' => 'ไม่พบชื่อผู้ใช้งานนี้ในระบบ'
             ]);
         }
-         if (strtolower(trim($output_empidForgot['USER_NAME'])) !== strtolower(trim($input_userForgot))) {
+         if (strtolower(trim($output_userForgot['EMP_ID'])) !== strtolower(trim($empid))) {
             return $this->response->setJSON([
                 'status' => 'error',
-                'message' => 'ข้อมูลไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง'
-            ]);
-        }
-        if (strtolower(trim($output_empidForgot['email'])) !== strtolower(trim($email))) {
-            return $this->response->setJSON([
-                'status' => 'error',
-                'message' => 'ข้อมูลไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง'
+                'message' => 'ไม่พบเลขพนักงานนี้ในระบบ'
             ]);
         }    
-       
+        if (strtolower(trim($output_userForgot['email'])) !== strtolower(trim($email))) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'อีเมลที่กรอกไม่ตรงกับข้อมูลในระบบ'
+            ]);
+        }    
+
          //กรณีไรับค่ารหัสผ่านใหม่จาก user
-        $newPassword_gen = substr(str_shuffle('abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 8);       
+       $newPassword_gen = substr(str_shuffle('abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 8);       
         $newPassword = md5($newPassword_gen);
         // Hash ซ้อนอีกชั้น
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
     
-        $userModel->update($output_empidForgot['USER_ID'], ['U_PASSWORD' => $hashedPassword]);
+        $userModel->update($output_userForgot['USER_ID'], ['U_PASSWORD' => $hashedPassword]);
         $loginUrl = base_url('login');
         $registerDate = date("d/m/Y H:i"); 
         $to = $email;
@@ -156,17 +155,10 @@ class AuthPc extends BaseController {
             return $this->response->setJSON([
             'status' => 'error',
             'message' => 'ไม่สามารถส่งอีเมลได้ กรุณาลองใหม่อีกครั้ง',
+            'debug' => $input_userForgot
         ]);
         }
     }
-
-
-
-    //ตรวจสอบ session
-
-
-
-
 
     // ต่ออายุ session
     public function extendSession()

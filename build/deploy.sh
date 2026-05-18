@@ -2,7 +2,7 @@
 
 echo "===== START DEPLOY ====="
 
-cd /var/www/html/ci4-project
+cd /var/www/html/PcDetail
 
 echo "Pull ล่าสุดจาก GitHub"
 git pull origin main

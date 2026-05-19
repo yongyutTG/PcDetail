@@ -1,7 +1,6 @@
 <?php
 namespace App\Models\Pc;
 use CodeIgniter\Model;
-
 class PcModel extends Model{
      protected $table = 'pc_detail_master'; 
     protected $primaryKey = 'pc_id';        
@@ -9,8 +8,7 @@ class PcModel extends Model{
     protected $useAutoIncrement = false;
 
 
-public function getAllDetails($limit =17, int $offset = 0)
-{
+public function getAllDetails($limit =17, int $offset = 0){
 $sql = "SELECT * 
         FROM pc_detail_master  
         ORDER BY pc_id
@@ -48,8 +46,7 @@ public function getFilteredDetails($ip = null, $ips = null, $limit = 17, int $of
     return $this->db->query($sql, $params)->getResultArray();
 }
 
-public function countFilteredDetails($ip = null, $ips = null)
-{
+public function countFilteredDetails($ip = null, $ips = null){
     $sql = "SELECT COUNT(*) AS total FROM pc_detail_master WHERE 1=1";
     $params = [];
 
@@ -77,8 +74,7 @@ SELECT * FROM pc_detail_master WHERE pc_id = ?", [$id]);
 return $query->getRow();
 }
 
-   public function getHistoryById($id)
-    {
+   public function getHistoryById($id){
         $query = $this->db->query("
             SELECT 
                 s.pc_id,
@@ -97,7 +93,6 @@ return $query->getRow();
     }
 
     public function updateDataById($id, $data){
-    // Convert empty string or '1900-01-01 00:00:00' to null for all fields
     $fields = [
         'user_name', 'computer_name', 'login_user', 'terminal_server', 'terminal_login',
         'location', 'band', 'model', 'ip_address', 'ram', 'harddisk', 'cpu', 'os', 'office',
@@ -146,15 +141,13 @@ return $query->getRow();
 
 
 // ฟังก์ชันหาค่า next PC_ID
-    public function getNextId()
-    {
+    public function getNextId(){
         $row = $this->selectMax('pc_id')->first();
         $maxId = $row['pc_id'] ?? 0;
         return $maxId + 1;
     }
     
-public function insertData()
-{
+public function insertData(){
     $data = $this->request->getJSON(true) ?? $this->request->getPost();
 
     if (!$data) {
@@ -222,8 +215,7 @@ public function insertData()
 }
 
 
-public function getSearchStatus(string $property_type = '' ,string $br_no = '', string $status = '', string $keyword = '', int $limit = 17, int $offset = 0)
-{
+public function getSearchStatus(string $property_type = '' ,string $br_no = '', string $status = '', string $keyword = '', int $limit = 17, int $offset = 0){
     $sql = "SELECT * FROM pc_detail_master WHERE 1=1";
     $params = [];
 
@@ -284,8 +276,7 @@ public function getSearchStatus(string $property_type = '' ,string $br_no = '', 
     $params[] = (int)$offset;
     $params[] = (int)$limit;
 
-    return $this->db->query($sql, $params)->getResultArray();
-}
+    return $this->db->query($sql, $params)->getResultArray();}
 
 public function countSearchStatus(string $property_type = '' , string $br_no = '', string $status = '', string $keyword = '')
 {

@@ -693,7 +693,7 @@
     typeFilter.addEventListener('change', () => fetchPCs({ page: 1, keyword: searchInput.value, status: statusFilter.value, br_no: brnoFilter.value, property_type: typeFilter.value }));
     resetBtn.addEventListener("click", () => {
       searchInput.value = "";
-      statusFilter.value = "";
+      statusFilter.value = "A";
       brnoFilter.value = "";
       typeFilter.value = "";
       fetchPCs({ page: 1 });

@@ -19,7 +19,7 @@ $routes->get('logout', 'Pc\AuthPc::logout');
 // $routes->group('', ['filter' => 'AuthPc'], function ($routes) {
 $routes->get('dashboard', 'Pc\Dashboard::index'); // หน้า Dashboard
 $routes->get('all-listPC', 'Pc\listPC::index'); // หน้า
-$routes->get('logPC', 'Pc\LogPC::index'); // หน้า logPC
+$routes->get('logPC', 'Pc\logPC::index'); // หน้า logPC
 //  });
 $routes->get('ScanIP', 'Pc\ScanIP::index');   // เปิดหน้า Scan ทั้งหมด
 $routes->get('scanip/scan', 'Pc\ScanIP::scan');  // API สำหรับสแกน (ใช้ POST เท่านั้น)

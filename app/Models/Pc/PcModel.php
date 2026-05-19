@@ -216,7 +216,7 @@ public function insertData(){
 }
 
 
-public function getSearchStatus(string $property_type = '' ,string $br_no = '', string $status = '', string $keyword = '', int $limit = 17, int $offset = 0){
+public function getSearchStatus(string $property_type = '' ,string $br_no = '', string $status = 'A', string $keyword = '', int $limit = 17, int $offset = 0){
     $sql = "SELECT * FROM pc_detail_master WHERE 1=1";
     $params = [];
 

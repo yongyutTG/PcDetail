@@ -11,6 +11,7 @@ class PcModel extends Model{
 public function getAllDetails($limit =17, int $offset = 0){
 $sql = "SELECT * 
         FROM pc_detail_master  
+        Where use_status = 'A'
         ORDER BY pc_id
         OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 return $this->db->query($sql, [$offset, $limit])->getResultArray();

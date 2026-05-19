@@ -11,7 +11,7 @@ class AuthPc extends BaseController {
     //หน้า login
     public function login(){
         return 
-          view('templates/Pc/header-login')
+        view('templates/Pc/header-login')
         .view('pages/Pc/auth/login')
         .view('templates/Pc/footer');
     }
@@ -56,8 +56,7 @@ class AuthPc extends BaseController {
             'redirect' => $redirectUrl
         ]);
     }
-
-    //เปลี่ยนรหัสผ่าน
+    
     public function changePassword(){
         $session = session();
         $input_userChang = $this->request->getJSON(true) ?? $this->request->getPost();

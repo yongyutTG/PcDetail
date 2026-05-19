@@ -11,21 +11,21 @@ class PcModel extends Model{
 public function getAllDetails($limit =17, int $offset = 0){
 $sql = "SELECT * 
         FROM pc_detail_master  
-        -- Where use_status = 'A'
+        WHERE use_status = 'A'
         ORDER BY pc_id
         OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 return $this->db->query($sql, [$offset, $limit])->getResultArray();
 }
 public function countAllDetails()
 {
-    $sql = "SELECT COUNT(*) AS total FROM pc_detail_master";
+    $sql = "SELECT COUNT(*) AS total FROM pc_detail_master where use_status = 'A'";
     $row = $this->db->query($sql)->getRowArray();
     return $row['total'] ?? 0;
 }
 
 public function getFilteredDetails($ip = null, $ips = null, $limit = 17, int $offset = 0)
 {
-    $sql = "SELECT * FROM pc_detail_master WHERE 1=1";
+    $sql = "SELECT * FROM pc_detail_master WHERE use_status = 'A' AND 1=1";
     $params = [];
 
     if ($ip) {
@@ -216,7 +216,7 @@ public function insertData(){
 }
 
 
-public function getSearchStatus(string $property_type = '' ,string $br_no = '', string $status = 'A', string $keyword = '', int $limit = 17, int $offset = 0){
+public function getSearchStatus(string $property_type = '' ,string $br_no = '', string $status = '', string $keyword = '', int $limit = 17, int $offset = 0){
     $sql = "SELECT * FROM pc_detail_master WHERE 1=1";
     $params = [];
 

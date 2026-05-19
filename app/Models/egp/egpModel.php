@@ -2,7 +2,6 @@
 
 namespace App\Models\egp;
 use CodeIgniter\Model;
-
 class egpModel extends Model
 {
     protected $db;
@@ -14,8 +13,6 @@ class egpModel extends Model
         $this->db = \Config\Database::connect();
     }
   
-
-    // ดึงข้อมูล
     public function EgpgetMembersByMonthYear($limit = 100, $offset = 0, $month = null, $year = null)
     {
         $sql = "

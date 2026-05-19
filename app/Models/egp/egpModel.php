@@ -2,16 +2,13 @@
 
 namespace App\Models\egp;
 use CodeIgniter\Model;
-class egpModel extends Model
-{
+class egpModel extends Model{
     protected $db;
     protected $table = 'mem_h_member';
     protected $primaryKey = 'mem_id';
 
-    public function __construct()
-    {
-        $this->db = \Config\Database::connect();
-    }
+    public function __construct(){
+        $this->db = \Config\Database::connect();}
   
     public function EgpgetMembersByMonthYear($limit = 100, $offset = 0, $month = null, $year = null)
     {
@@ -68,8 +65,7 @@ class egpModel extends Model
         }
     }
 
-    public function EgpcountMembersByMonthYear($month = null, $year = null)
-    {
+    public function EgpcountMembersByMonthYear($month = null, $year = null){
         $sql = "SELECT COUNT(*) AS total FROM mem_h_member m
                 JOIN view_shr_mem_new v ON m.mem_id = v.mem_id
                 WHERE v.shr_sum_bth > 0

@@ -215,7 +215,7 @@ public function update($id = null)
 public function searchstatus()
 {
     $page    = (int) ($this->request->getGet('page') ?? 1);
-    $limit   = (int) ($this->request->getGet('limit') ?? 20);
+    $limit   = (int) ($this->request->getGet('limit') ?? 17);
     $property_type = $this->request->getGet('property_type') ?? '';
     $br_no  = $this->request->getGet('br_no') ?? '';
     $status  = $this->request->getGet('status') ?? '';
@@ -266,7 +266,7 @@ public function searchstatus()
  public function historyLog()
 {
     $page   = (int) ($this->request->getGet('page') ?? 1);
-    $limit  = (int) ($this->request->getGet('limit') ?? 20);
+    $limit  = (int) ($this->request->getGet('limit') ?? 17);
     $offset = ($page - 1) * $limit;
 
     $totalRows  = $this->PcModel->countAllDetailsLog();
@@ -287,7 +287,7 @@ public function searchstatus()
 public function searchstatusLog()
 {
     $page    = (int) ($this->request->getGet('page') ?? 1);
-    $limit   = (int) ($this->request->getGet('limit') ?? 20);
+    $limit   = (int) ($this->request->getGet('limit') ?? 17);
     $keyword = $this->request->getGet('keyword') ?? '';
 
     $offset = ($page - 1) * $limit;

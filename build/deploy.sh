@@ -10,4 +10,5 @@ git pull origin main
 # echo "Reload NGINX"
 # sudo systemctl reload nginx
 
+
 echo "===== DEPLOY SUCCESS ====="

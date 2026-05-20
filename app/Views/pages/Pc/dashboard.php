@@ -178,12 +178,19 @@
 
 
 document.addEventListener('DOMContentLoaded', function() {
+      const jwtToken = localStorage.getItem('jwtToken');
+      const apiHeaders = {};
+      if (jwtToken) {
+        apiHeaders['Authorization'] = `Bearer ${jwtToken}`;
+      }
+
       // ฟังก์ชันโหลดข้อมูลการเพิ่มเครื่องล่าสุด
     function loadRecentPcAdditions() {
       const recentAdditionsUrl = '<?= base_url('api-pc/recent-additions') ?>';
       $.ajax({
           url: recentAdditionsUrl,
           method: 'GET',
+          headers: apiHeaders,
           success: function (data) {
               const tableBody = $('#recentPcAddTable tbody');
               tableBody.empty();
@@ -209,6 +216,7 @@ document.addEventListener('DOMContentLoaded', function() {
       $.ajax({
           url: recentEditionsUrl,
           method: 'GET',
+          headers: apiHeaders,
           success: function (data) {
               const tableBody = $('#recentPcEditTable tbody');
               tableBody.empty();

@@ -91,6 +91,7 @@
   };
   
   document.addEventListener("DOMContentLoaded", function () {
+    localStorage.removeItem('jwtToken');
     const form = document.getElementById("loginForm");
     const loginBtn = document.getElementById("loginBtn");
 
@@ -134,6 +135,7 @@
         const data = await res.json();
 
         if (data.status === "success") {
+          localStorage.setItem('jwtToken', data.token);
           toastr.success(data.message, "สำเร็จ");
 
           // ✅ ตรวจสอบว่าเป็น admin ไหม

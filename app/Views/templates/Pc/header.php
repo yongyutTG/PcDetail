@@ -289,6 +289,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         );
         $(document).on("click", "#btnYes", function () {
+            localStorage.removeItem('jwtToken');
             window.location.href = "<?= site_url('logout') ?>";
         });
 

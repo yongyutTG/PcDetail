@@ -36,7 +36,7 @@
                   style="padding:6px; font-size: 14px; font-weight: bold; border-radius:6px; border:1px solid #ccc;">
                   <option value="A">ใช้งาน</option>
                   <option value="N">ไม่ใช้งาน</option>
-                   <option value="">ทั้งหมด</option>
+                   <!-- <option value="">ทั้งหมด</option> -->
                 </select>
                 <br>
                 <button type="button" id="resetBtn" class="btn btn-reset">
@@ -518,6 +518,13 @@
     const historyUrl = "<?= base_url('api-pc/history') ?>";
     const editForm = document.getElementById('editPcForm');
     const pingurl = "<?= base_url('api-pc/ping') ?>";
+    const jwtToken = localStorage.getItem('jwtToken');
+    const apiHeaders = {
+      'Accept': 'application/json',
+    };
+    if (jwtToken) {
+      apiHeaders['Authorization'] = `Bearer ${jwtToken}`;
+    }
     let currentPage = 1;
     const limit = 17;
     let totalPages = 0;
@@ -535,10 +542,7 @@
       try {
         const res = await fetch(url, {
           method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          }
+          headers: apiHeaders,
         });
         if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
         const result = await res.json();
@@ -635,7 +639,10 @@
     `;
       statusSpan.className = "ms-2 text-primary";
 
-      fetch(`${pingurl}/${ip}`)
+      fetch(`${pingurl}/${ip}`, {
+          method: 'GET',
+          headers: apiHeaders,
+        })
         .then(response => response.json())
         .then(result => {
           if (result.status === "online") {
@@ -856,7 +863,10 @@ function afterRenderTable() {
       }
       const editBtn = event.target.closest(".edit-btn");
       if (editBtn) {
-        fetch(`${apiBaseUrl}/${editBtn.getAttribute("data-id")}`)
+        fetch(`${apiBaseUrl}/${editBtn.getAttribute("data-id")}`, {
+            method: 'GET',
+            headers: apiHeaders,
+          })
           .then(res => res.json())
           .then(result => {
             if (result.status === 'success') {
@@ -900,8 +910,8 @@ function afterRenderTable() {
         const res = await fetch(`${apiBaseUrl}/${pcId}`, {
           method: 'PUT',
           headers: {
+            ...apiHeaders,
             'Content-Type': 'application/json',
-            'Accept': 'application/json'
           },
           body: JSON.stringify(data)
         });
@@ -927,7 +937,7 @@ function afterRenderTable() {
       try {
         const res = await fetch(`${apiBaseUrl}/${pcId}`, {
           method: 'GET',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+          headers: apiHeaders,
         });
         if (!res.ok) throw new Error(`ไม่สามารถโหลดรายละเอียด PC ${pcId}`);
         const result = await res.json();
@@ -967,7 +977,10 @@ function afterRenderTable() {
 
          
             // ดึงประวัติย้อนหลัง LogPC หลัง render รายละเอียดเสร็จ
-            fetch(`${historyUrl}/${pcId}`)
+            fetch(`${historyUrl}/${pcId}`, {
+                method: 'GET',
+                headers: apiHeaders,
+              })
               .then(res => res.json())
               .then(historyResult => {
                 if (historyResult.status === 'success') {
@@ -1108,7 +1121,10 @@ function afterRenderTable() {
     try {
       const response = await fetch(`${apiBaseUrl}/create`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          ...apiHeaders,
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify(data)
       });
 
@@ -1147,7 +1163,10 @@ function afterRenderTable() {
     btnPing.disabled = true;
     btnPing.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> กำลัง Ping...';
 
-    fetch(`${pingurl}/${ip}`)
+    fetch(`${pingurl}/${ip}`, {
+        method: 'GET',
+        headers: apiHeaders,
+      })
       .then(response => response.json())
       .then(data => {
         if (data.status === "online") {

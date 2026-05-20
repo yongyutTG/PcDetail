@@ -25,24 +25,29 @@ $routes->get('ScanIP', 'Pc\ScanIP::index');   // เปิดหน้า Scan �
 $routes->get('scanip/scan', 'Pc\ScanIP::scan');  // API สำหรับสแกน (ใช้ POST เท่านั้น)
 
 
-//$routes->get('api/members', 'Api\MemberController::index', ['filter' => 'apikey']);
-$routes->get('api-pc', 'Pc\ApiPcController::index'); // ดึงข้อมูลทั้งหมด
-$routes->get('api-pc/ip', 'Pc\ApiPcController::getDetailsByIp'); // ดึงข้อมูลเฉพาะ IP
-$routes->get('api-pc/(:num)', 'Pc\ApiPcController::show/$1'); // ดึงข้อมูลตาม ID
-$routes->post('api-pc/create', 'Pc\ApiPcController::create'); // สร้างข้อมูลใหม่
-$routes->put('api-pc/(:num)', 'Pc\ApiPcController::update/$1'); // อัพเดตข้อมูลตาม ID
-// $routes->delete('api-pc/(:num)', 'Pc\ApiPcController::delete/$1'); // ลบข้อมูลตาม ID
-$routes->get('api-pc/searchstatus', 'Pc\ApiPcController::searchstatus'); //ค้นหาและ filter
-$routes->get('api-pc/history/(:num)', 'Pc\ApiPcController::history/$1'); // ดึงข้อมูลประวัติของเครื่องตาม ID
-$routes->get('/api-pc/ping/(:any)', 'Pc\ApiPcController::ping/$1');
+//$routes->group('api-pc', ['filter' => 'apikey'], function ($routes) {
+$routes->group('api-pc', ['filter' => 'jwtauth'], function ($routes) {
+    $routes->get('', 'Pc\ApiPcController::index'); // ดึงข้อมูลทั้งหมด
+    $routes->get('ip', 'Pc\ApiPcController::getDetailsByIp'); // ดึงข้อมูลเฉพาะ IP
+    $routes->get('(:num)', 'Pc\ApiPcController::show/$1'); // ดึงข้อมูลตาม ID
+    $routes->post('create', 'Pc\ApiPcController::create'); // สร้างข้อมูลใหม่
+    $routes->put('(:num)', 'Pc\ApiPcController::update/$1'); // อัพเดตข้อมูลตาม ID
+    // $routes->delete('(:num)', 'Pc\ApiPcController::delete/$1'); // ลบข้อมูลตาม ID
+    $routes->get('searchstatus', 'Pc\ApiPcController::searchstatus'); //ค้นหาและ filter
+    $routes->get('history/(:num)', 'Pc\ApiPcController::history/$1'); // ดึงข้อมูลประวัติของเครื่องตาม ID
+    $routes->get('ping/(:any)', 'Pc\ApiPcController::ping/$1');
 
+    //LogPc
+    $routes->get('historyLog', 'Pc\ApiPcController::historyLog');
+    $routes->get('searchstatusLog', 'Pc\ApiPcController::searchstatusLog'); //ค้นหา
+    $routes->get('recent-additions', 'Pc\ApiPcController::recentAdditions');
+    $routes->get('recent-editions', 'Pc\ApiPcController::recentEditions');
+});
 
-//LogPc
-$routes->get('api-pc/historyLog', 'Pc\ApiPcController::historyLog');
-$routes->get('api-pc/searchstatusLog', 'Pc\ApiPcController::searchstatusLog'); //ค้นหา
-$routes->get('api-pc/recent-additions', 'Pc\ApiPcController::recentAdditions');
-$routes->get('api-pc/recent-editions', 'Pc\ApiPcController::recentEditions');
-
+$routes->post('jwt/create', 'Pc\JwtController::createToken');
+$routes->post('jwt/login', 'Pc\JwtController::login');
+$routes->get('jwt/verify', 'Pc\JwtController::verifyToken');
+$routes->post('jwt/verify', 'Pc\JwtController::verifyToken');
 
 $routes->get('remote/rdp/(:segment)', 'Remote::rdp/$1');
 

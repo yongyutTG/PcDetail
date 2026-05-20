@@ -13,12 +13,17 @@ class ApiKeyAuth implements FilterInterface
         // API Key ที่ถูกต้อง (กำหนดเอง หรือดึงจาก .env)
         $validApiKey = getenv('API_KEY');   // ✅ ต้องตรงกับชื่อใน .env
 
-        // ดึงค่า API Key จาก Header
+        // ดึงค่า API Key จาก Header ก่อน
         $apiKey = $request->getHeaderLine('X-API-KEY');
+
+        // ถ้าไม่มี header ก็รับจาก query string: ?api_key=...
+        if (empty($apiKey)) {
+            $apiKey = $request->getVar('api_key');
+        }
 
         if ($apiKey !== $validApiKey) {
             return service('response')
-                ->setJSON(['error' => 'ไม่พบ API Key'])
+                ->setJSON(['error' => 'ไม่พบหรือไม่ถูกต้อง API Key'])
                 ->setStatusCode(401);
         }
     }

@@ -64,6 +64,11 @@
     const tbody = document.getElementById('tableBody');
     const searchInput = document.getElementById('keywordSearch');
     const resetBtn = document.getElementById('resetBtn');
+    const jwtToken = localStorage.getItem('jwtToken');
+    const apiHeaders = {};
+    if (jwtToken) {
+      apiHeaders['Authorization'] = `Bearer ${jwtToken}`;
+    }
 
     const searchUrlstatusLog = '<?= base_url('api-pc/searchstatusLog') ?>';
     const historyUrl = '<?= base_url('api-pc/historyLog') ?>';
@@ -79,7 +84,7 @@
         ? `${searchUrlstatusLog}?page=${page}&limit=${limit}&keyword=${encodeURIComponent(keyword)}`
         : `${historyUrl}?page=${page}&limit=${limit}`;
       try {
-        const res = await fetch(url);
+        const res = await fetch(url, { headers: apiHeaders });
         if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
         const result = await res.json();
         spinner.style.display = "none";

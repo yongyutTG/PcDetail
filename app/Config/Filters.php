@@ -20,11 +20,13 @@ class Filters extends BaseConfig
 
 
     public array $aliases = [
-    // 'csrf'     => \CodeIgniter\Filters\CSRF::class,
+        // 'csrf'     => \CodeIgniter\Filters\CSRF::class,
 
-    // 'auth'     => \App\Filters\AuthFilter::class, 
+        // 'auth'     => \App\Filters\AuthFilter::class,
+        'apikey'   => \App\Filters\ApiKeyAuth::class,
+        'jwtauth'  => \App\Filters\JWTAuth::class,
 
-];
+    ];
 
     
    }

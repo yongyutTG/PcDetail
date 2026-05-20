@@ -174,7 +174,14 @@ async function scanIP() {
 
       // ✅ เรียก API เพื่อเอาข้อมูลชื่อเครื่อง/ผู้ใช้
       try {
-        const pcRes = await fetch(`${apiIpBaseUrl}?ip=${ip}`);
+        const jwtToken = localStorage.getItem('jwtToken');
+        const headers = {};
+        if (jwtToken) {
+          headers['Authorization'] = `Bearer ${jwtToken}`;
+        }
+        const pcRes = await fetch(`${apiIpBaseUrl}?ip=${ip}`, {
+          headers
+        });
         const pcData = await pcRes.json();
         if (pcData) {
           result.hostname = pcData.hostname || "-";

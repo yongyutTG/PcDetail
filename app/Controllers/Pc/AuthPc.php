@@ -2,6 +2,7 @@
 namespace App\Controllers\Pc;
 use App\Models\Pc\UserModel;
 use CodeIgniter\CLI\Console;
+use Firebase\JWT\JWT;
 
 class AuthPc extends BaseController {
     protected $userModel;
@@ -44,6 +45,21 @@ class AuthPc extends BaseController {
             'SUP_ADMIN' => $user_login['SUP_ADMIN'],
             'logged_in' => true
         ]);
+
+        $jwtSecret = getenv('JWT_SECRET_KEY');
+        $issuedAt = time();
+        $expirationTime = $issuedAt + 3600;
+        $payload = [
+            'iat' => $issuedAt,
+            'exp' => $expirationTime,
+            'data' => [
+                'id' => $user_login['USER_ID'],
+                'username' => $user_login['USER_NAME'],
+                'role' => $user_login['GROUP_NAME'],
+            ]
+        ];
+        $token = JWT::encode($payload, $jwtSecret, 'HS256');
+
        //ถ้าเป็น admin → ไปหน้า admin
         if (strtolower($user_login['USER_NAME']) === 'it0007') {
             $redirectUrl = base_url('admin');
@@ -53,7 +69,8 @@ class AuthPc extends BaseController {
         return $this->response->setJSON([
             'status'   => 'success',
             'message'  => 'เข้าสู่ระบบสำเร็จ',
-            'redirect' => $redirectUrl
+            'redirect' => $redirectUrl,
+            'token'    => $token
         ]);
     }
     

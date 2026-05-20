@@ -5,45 +5,16 @@ namespace App\Controllers\Pc;
 use App\Models\Pc\UserModel;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use Firebase\JWT\ExpiredException;
 use CodeIgniter\RESTful\ResourceController;
 
 class JwtController extends ResourceController{
     private $secretKey;
     public function __construct(){
         $this->secretKey = getenv('JWT_SECRET_KEY');
-    }
-
-
-    //สร้าง JWT Token
-    public function createToken()
-    {
-        $input =  $this->request->getPost();
-    
-        // ตรวจสอบว่า
-        if (!isset($input['id']) || !isset($input['username']) || !isset($input['role'])) {
-            return $this->fail('กรุณากรอกข้อมูลให้ครบ', 400);
-        }
-        $issuedAt = time(); // เวลาเริ่มต้น
-        $expirationTime = $issuedAt + 3600; // เวลาหมดอายุ (1 ชั่วโมง)
-    
-        // กำหนดข้อมูล JWT Payload
-        $payload = [
-            'iat' => $issuedAt,
-            'exp' => $expirationTime,
-            'data' => [
-                'id' => $input['id'],
-                'username' => $input['username'],
-                'role' => $input['role']
-            ]
-        ];
-    
-        // สร้าง Token
-        $token = JWT::encode($payload, $this->secretKey, 'HS256');
-    
-        return $this->respond([
-            'status' => 'success',
-            'token' => $token
-        ]);
+        // Allow small clock skew (seconds). Configure via .env: JWT_LEEWAY
+        $leeway = getenv('JWT_LEEWAY') ?: 60;
+        \Firebase\JWT\JWT::$leeway = (int) $leeway;
     }
 
     // login และสร้าง JWT token
@@ -136,6 +107,11 @@ class JwtController extends ResourceController{
                 'status' => 'success',
                 'data' => $decoded
             ]);
+        } catch (ExpiredException $e) {
+            return $this->respond([
+                'status' => 'error',
+                'message' => 'Token expired'
+            ], 401);
         } catch (\Exception $e) {
             return $this->respond([
                 'status' => 'error',

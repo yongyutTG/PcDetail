@@ -18,7 +18,7 @@ class JWTAuth implements FilterInterface
         if (!$authHeader) {
             return service('response')->setJSON([
                 'status' => 'error',
-                'message' => 'Token not provided'
+                'message' => 'ไม่พบ Token ติดต่อผู้ให้บริการ'
             ])->setStatusCode(401);
         }
 
@@ -31,7 +31,7 @@ class JWTAuth implements FilterInterface
         } catch (\Exception $e) {
             return service('response')->setJSON([
                 'status' => 'error',
-                'message' => 'Invalid token: ' . $e->getMessage()
+                'message' => 'Token ไม่ถูกต้อง: ' . $e->getMessage()
             ])->setStatusCode(401);
         }
     }

@@ -42,6 +42,41 @@
 
     <!-- <link rel="stylesheet" href="css/login.css"> -->
     <script src="<?= base_url('js/app.js') ?>"></script>
+    <script>
+        (function(){
+            const loginUrl = '<?= site_url('login') ?>';
+            const redirectToLogin = () => {
+                try { localStorage.removeItem('jwtToken'); } catch (e) {}
+                toastr.warning('Token หมดอายุ กรุณาเข้าสู่ระบบใหม่', 'หมดเวลา', {
+                    timeOut: 2000,
+                    progressBar: true,
+                    closeButton: true
+                });
+                setTimeout(() => window.location.href = loginUrl, 2000);
+            };
+
+            if (window.fetch) {
+                const originalFetch = window.fetch.bind(window);
+                window.fetch = function(input, init) {
+                    return originalFetch(input, init).then(async res => {
+                        if (res && res.status === 401) {
+                            redirectToLogin();
+                            return Promise.reject(new Error('Unauthorized'));
+                        }
+                        return res;
+                    });
+                };
+            }
+
+            if (window.jQuery) {
+                $(document).ajaxError(function(event, jqxhr) {
+                    if (jqxhr && jqxhr.status === 401) {
+                        redirectToLogin();
+                    }
+                });
+            }
+        })();
+    </script>
     <title>PC Detail</title>
 
 </head>

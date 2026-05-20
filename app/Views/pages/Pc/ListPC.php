@@ -544,6 +544,14 @@
           method: 'GET',
           headers: apiHeaders,
         });
+
+            // token หมดอายุ
+        // if (res.status === 401) {
+        //     localStorage.removeItem('jwtToken');
+        //     window.location.href = "<?= base_url('login') ?>";
+        //     return;
+        // }
+
         if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
         const result = await res.json();
         spinner.style.display = "none";

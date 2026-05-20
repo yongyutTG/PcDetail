@@ -188,8 +188,12 @@ class AuthPc extends BaseController {
     public function logout()
     {
         session()->destroy();
+        //localStorage.removeItem('token');
+       
         return redirect()->to('login');
     }
+
+
 
     // หน้า register
     public function register(){

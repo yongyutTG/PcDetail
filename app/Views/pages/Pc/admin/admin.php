@@ -10,7 +10,7 @@
             <div class="card-body">
               <div class="d-flex align-items-center gap-2 mb-3">
                 <input type="text" id="keywordSearch" class="form-control" style="width: 550px;"
-                  placeholder="ค้นหา...)">
+                  placeholder="ค้นหา...">
                 <label for="statusFilter" class="mb-0 fw-bold">ตามแผนก: </label>
                 <select id="statusFilter" class="form-select" style="width: 160px;">
                   <option value="">ทั้งหมด</option>
@@ -32,7 +32,7 @@
                   <thead class="table-light">
                     <tr>
                       <th>#</th>
-                      <th>USER_ID</th>
+                      <th>ID</th>
                       <th>ชื่อผู้ใช้</th>
                       <th>รหัสพนักงาน</th>
                       <th>สถานะ</th>

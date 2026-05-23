@@ -1,4 +1,3 @@
-
 <?php
 $db = \Config\Database::connect();
 $dbName = $db->database;
@@ -42,7 +41,7 @@ if ($row && isset($row->db_date)) {
 
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
 
     <!-- Include flatpickr CSS & JS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -64,10 +63,12 @@ if ($row && isset($row->db_date)) {
     <!-- <link rel="stylesheet" href="css/login.css"> -->
     <script src="<?= base_url('js/app.js') ?>"></script>
     <script>
-        (function(){
+        (function() {
             const loginUrl = '<?= site_url('login') ?>';
             const redirectToLogin = () => {
-                try { localStorage.removeItem('jwtToken'); } catch (e) {}
+                try {
+                    localStorage.removeItem('jwtToken');
+                } catch (e) {}
                 toastr.warning('Token หมดอายุ กรุณาเข้าสู่ระบบใหม่', 'หมดเวลา', {
                     timeOut: 2000,
                     progressBar: true,
@@ -181,7 +182,7 @@ if ($row && isset($row->db_date)) {
                                 <i class="bi bi-person-circle fs-4 ms-2"></i> <!-- ไอคอนชิดขวา -->
                             </div>
                         </a>
-                       
+
 
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li>
@@ -204,6 +205,7 @@ if ($row && isset($row->db_date)) {
         </nav>
     </header>
 </body>
+/* ================== Modal profile ================== */
 <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -215,8 +217,8 @@ if ($row && isset($row->db_date)) {
                 <p><strong>ชื่อผู้ใช้:</strong> <?= esc(session()->get('USER_NAME')) ?></p>
                 <p><strong>ฝ่าย:</strong> <?= esc(session()->get('GROUP_NAME')) ?></p>
                 <p><strong>ชื่อ-นามสกุล:</strong> <?= esc(session()->get('FULL_NAME')) ?></p>
-               
-                 <p><strong>Email:</strong> <?= esc(session()->get('EMAIL')) ?></p>
+
+                <p><strong>Email:</strong> <?= esc(session()->get('EMAIL')) ?></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
@@ -225,89 +227,89 @@ if ($row && isset($row->db_date)) {
     </div>
 </div>
 
-
+/* ================== Modal change password ================== */
 <div class="modal fade" id="changPasswordModal" tabindex="-1" aria-labelledby="changPasswordModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header custom-header">
-        <h5 class="modal-title" id="changPasswordModalLabel"><i class="bi bi-key-fill"></i> เปลี่ยนรหัสผ่าน</h5>
-         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="ปิด"></button>
-      </div>
-      <div class="modal-body">
-        <form id="changePasswordForm">
-          <div class="mb-3">
-            <label>รหัสผ่านเดิม</label>
-            <input type="password" name="old_password" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label>รหัสผ่านใหม่</label>
-            <input type="password" name="new_password" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label>ยืนยันรหัสผ่านใหม่</label>
-            <input type="password" name="confirm_password" class="form-control"required >
-          </div>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-save">บันทึกรหัสผ่านใหม่</button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
-          </div>
-        </form>
-      </div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header custom-header">
+                <h5 class="modal-title" id="changPasswordModalLabel"><i class="bi bi-key-fill"></i> เปลี่ยนรหัสผ่าน</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="ปิด"></button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <div class="mb-3">
+                        <label>รหัสผ่านเดิม</label>
+                        <input type="password" name="old_password" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>รหัสผ่านใหม่</label>
+                        <input type="password" name="new_password" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>ยืนยันรหัสผ่านใหม่</label>
+                        <input type="password" name="confirm_password" class="form-control" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-save">บันทึกรหัสผ่านใหม่</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("changePasswordForm");
+    document.addEventListener("DOMContentLoaded", function() {
+        const form = document.getElementById("changePasswordForm");
 
-    form.addEventListener("submit", async function (e) {
-        e.preventDefault();
+        form.addEventListener("submit", async function(e) {
+            e.preventDefault();
 
-        const oldPass = form.old_password.value.trim();
-        const newPass = form.new_password.value.trim();
-        const confirmPass = form.confirm_password.value.trim();
+            const oldPass = form.old_password.value.trim();
+            const newPass = form.new_password.value.trim();
+            const confirmPass = form.confirm_password.value.trim();
 
 
 
-        if (newPass !== confirmPass) {
-            toastr.error("รหัสผ่านใหม่ไม่ตรงกัน");
-            return;
-        }
-
-        // เข้ารหัสก่อนส่ง
-        const md5oldPass = md5(oldPass);
-        const md5newPass = md5(newPass);
-
-        try {
-            const response = await fetch("<?= site_url('user/changePassword') ?>", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    old_password: md5oldPass,
-                    new_password: md5newPass
-                }),
-            });
-
-            const result = await response.json();
-
-            if (result.status === "success") {
-                toastr.success(result.message);
-                form.reset();
-                const modal = bootstrap.Modal.getInstance(document.getElementById("changPasswordModal"));
-                modal.hide();
-            } else {
-                toastr.error(result.message);
+            if (newPass !== confirmPass) {
+                toastr.error("รหัสผ่านใหม่ไม่ตรงกัน");
+                return;
             }
-        } catch (error) {
-            toastr.error("เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์");
-        }
+
+            // เข้ารหัสก่อนส่ง
+            const md5oldPass = md5(oldPass);
+            const md5newPass = md5(newPass);
+
+            try {
+                const response = await fetch("<?= site_url('user/changePassword') ?>", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        old_password: md5oldPass,
+                        new_password: md5newPass
+                    }),
+                });
+
+                const result = await response.json();
+
+                if (result.status === "success") {
+                    toastr.success(result.message);
+                    form.reset();
+                    const modal = bootstrap.Modal.getInstance(document.getElementById("changPasswordModal"));
+                    modal.hide();
+                } else {
+                    toastr.error(result.message);
+                }
+            } catch (error) {
+                toastr.error("เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์");
+            }
+        });
     });
-});
 </script>
-
-
 
 <script>
     function confirmLogout() {
@@ -316,21 +318,20 @@ document.addEventListener("DOMContentLoaded", function () {
             '<button type="button" id="btnYes" class="btn btn-sm btn-danger">ออกจากระบบ</button> ' +
             '<button type="button" id="btnNo" class="btn btn-sm btn-secondary">ยกเลิก</button>' +
             '</div>',
-            'ยืนยัน',
-            {
+            'ยืนยัน', {
                 closeButton: true,
-              
-               
+
+
             }
         );
-        $(document).on("click", "#btnYes", function () {
+        $(document).on("click", "#btnYes", function() {
             localStorage.removeItem('jwtToken');
             window.location.href = "<?= site_url('logout') ?>";
         });
 
 
-        $(document).on("click", "#btnNo", function () {
+        $(document).on("click", "#btnNo", function() {
             toastr.close();
         });
     }
-    </script>
+</script>

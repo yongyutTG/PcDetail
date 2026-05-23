@@ -68,7 +68,8 @@ class JwtController extends ResourceController{
         ];
 
         $token = JWT::encode($payload, $this->secretKey, 'HS256');
-
+        log_message('info', 'Generated JWT Token: ' . $token);
+       
         return $this->respond([
             'status' => 'success',
             'token' => $token,

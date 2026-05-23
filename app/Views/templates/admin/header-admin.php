@@ -1,26 +1,41 @@
+<?php
+$db = \Config\Database::connect();
+$dbName = $db->database;
+
+$query = $db->query("SELECT CONVERT(varchar(19), GETDATE(), 120) AS [db_date]");
+$row = $query->getRow();
+
+if ($row && isset($row->db_date)) {
+    $date = new \DateTime($row->db_date);
+    $data['dbDate'] = $date->format('d/m/Y H:i:s'); // 20/10/2025 22:10:31
+} else {
+    $data['dbDate'] = '-';
+}
+
+?>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <script src="https://kit.fontawesome.com/347f221dac.js" crossorigin="anonymous"></script>
-    
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
     <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet">
 
     <!-- toastr -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 
     <!-- Include flatpickr CSS & JS -->
@@ -34,19 +49,19 @@
 
     <!-- โหลด Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<!-- ================= JS ================= -->
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
-
+    <!-- ================= JS ================= -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 
     <link rel="stylesheet" href="css/style.css">
 
-    <!-- <link rel="stylesheet" href="css/login.css"> -->
     <script src="<?= base_url('js/app.js') ?>"></script>
     <script>
-        (function(){
+        (function() {
             const loginUrl = '<?= site_url('login') ?>';
             const redirectToLogin = () => {
-                try { localStorage.removeItem('jwtToken'); } catch (e) {}
+                try {
+                    localStorage.removeItem('jwtToken');
+                } catch (e) {}
                 toastr.warning('Token หมดอายุ กรุณาเข้าสู่ระบบใหม่', 'หมดเวลา', {
                     timeOut: 2000,
                     progressBar: true,
@@ -123,15 +138,16 @@
                     </div>
                 </a>
 
-               
+
                 <!-- ฝั่งขวา: โปรไฟล์ -->
                 <div class="dropdown">
                     <div class="dropdown ms-lg-3 mt-2 mt-lg-0">
-                        <a class="btn btn-light dropdown-toggle w-100 d-flex flex-column align-items-end text-end" 
-                        href="#" data-bs-toggle="dropdown">
+                        <a class="btn btn-light dropdown-toggle w-100 d-flex flex-column align-items-end text-end"
+                            href="#" data-bs-toggle="dropdown">
                             <div>
-                                ชื่อผู้ใช้: <?= esc(session()->get('USER_NAME')) ?> 
-                                ฝ่าย: <?= esc(session()->get('GROUP_NAME')) ?>
+                                ชื่อผู้ใช้: <?= esc(session()->get('USER_NAME')) ?>
+                                 ฐานข้อมูล: <?= esc($dbName ?? '-') ?>
+                                <!-- วันที่: <span class="text-success"><?= esc($dbDate ?? '-') ?></span> -->
                             </div>
                             <div class="fw-bold">
                                 <?= esc(session()->get('FULL_NAME')) ?>
@@ -139,41 +155,101 @@
                             </div>
                         </a>
 
+
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li>
-                                <a class="dropdown-item" href="#"><i class="bi bi-person"></i> โปรไฟล์</a>
+                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#profileModal"><i class="bi bi-person"></i> โปรไฟล์</a>
                             </li>
                             <li>
-                                <a class="dropdown-item text-danger" href="javascript:void(0)" onclick="confirmLogout()">
+                                <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#changPasswordModal"><i class="bi bi-key-fill"></i> เปลี่ยนรหัสผ่าน</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="javascript:void(0)"
+                                    onclick="confirmLogout()">
                                     <i class="bi bi-box-arrow-right"></i> ออกจากระบบ
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </div>
-
         </nav>
     </header>
-  <script>
-function confirmLogout() {
-    toastr.info(
-        '<div style="text-align:center;">คุณต้องการออกจากระบบหรือไม่ ?<br><br>' +
-        '<button type="button" id="btnYes" class="btn btn-sm btn-danger">ออกจากระบบ</button> ' +
-        '<button type="button" id="btnNo" class="btn btn-sm btn-secondary">ยกเลิก</button>' +
-        '</div>',
-        'ยืนยัน',
-        {
-            closeButton: true,
-         }
-    );
-    $(document).on("click", "#btnYes", function() {
-        localStorage.removeItem('jwtToken');
-        window.location.href = "<?= site_url('logout') ?>";
-    });
+</body>
+/* ================== Modal profile ================== */
+<div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header custom-header">
+                <h5 class="modal-title" id="profileModalLabel">โปรไฟล์</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>ชื่อผู้ใช้:</strong> <?= esc(session()->get('USER_NAME')) ?></p>
+                <p><strong>ฝ่าย:</strong> <?= esc(session()->get('GROUP_NAME')) ?></p>
+                <p><strong>ชื่อ-นามสกุล:</strong> <?= esc(session()->get('FULL_NAME')) ?></p>
 
-   
-    $(document).on("click", "#btnNo", function() {
-        toastr.close();
-    });
-}
+                <p><strong>Email:</strong> <?= esc(session()->get('EMAIL')) ?></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+/* ================== Modal change password ================== */
+<div class="modal fade" id="changPasswordModal" tabindex="-1" aria-labelledby="changPasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header custom-header">
+                <h5 class="modal-title" id="changPasswordModalLabel"><i class="bi bi-key-fill"></i> เปลี่ยนรหัสผ่าน</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="ปิด"></button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <div class="mb-3">
+                        <label>รหัสผ่านเดิม</label>
+                        <input type="password" name="old_password" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>รหัสผ่านใหม่</label>
+                        <input type="password" name="new_password" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>ยืนยันรหัสผ่านใหม่</label>
+                        <input type="password" name="confirm_password" class="form-control" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-save">บันทึกรหัสผ่านใหม่</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function confirmLogout() {
+        toastr.info(
+            '<div style="text-align:center;">คุณต้องการออกจากระบบหรือไม่ ?<br><br>' +
+            '<button type="button" id="btnYes" class="btn btn-sm btn-danger">ออกจากระบบ</button> ' +
+            '<button type="button" id="btnNo" class="btn btn-sm btn-secondary">ยกเลิก</button>' +
+            '</div>',
+            'ยืนยัน', {
+                closeButton: true,
+            }
+        );
+        $(document).on("click", "#btnYes", function() {
+            localStorage.removeItem('jwtToken');
+            window.location.href = "<?= site_url('logout') ?>";
+        });
+
+
+        $(document).on("click", "#btnNo", function() {
+            toastr.close();
+        });
+    }
 </script>

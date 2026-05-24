@@ -8,9 +8,7 @@ on:
 jobs:
 
   deploy:
-    runs-on:
-    - self-hosted
-    - pcdetail
+    runs-on: self-hosted
 
     steps:
 

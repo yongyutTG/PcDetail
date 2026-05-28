@@ -62,7 +62,7 @@ if ($row && isset($row->db_date)) {
 
     <!-- <link rel="stylesheet" href="css/login.css"> -->
     <script src="<?= base_url('js/app.js') ?>"></script>
-    <script>
+    <!-- <script>
         (function() {
             const loginUrl = '<?= site_url('login') ?>';
             const redirectToLogin = () => {
@@ -98,7 +98,7 @@ if ($row && isset($row->db_date)) {
                 });
             }
         })();
-    </script>
+    </script> -->
     <title>PC Detail</title>
 
 </head>

@@ -102,9 +102,9 @@
                 <div class="modal-content">
                   <div class="modal-header custom-header">
                     <h5 class="modal-title" id="pcDetailLabel">View PC Detail</h5>
-                    <button id="rdpDownloadBtn" class="btn btn-outline-light btn-sm ms-3" target="_blank"><i class="fa-solid fa-download"></i>
+                    <!-- <button id="rdpDownloadBtn" class="btn btn-outline-light btn-sm ms-3" target="_blank"><i class="fa-solid fa-download"></i>
                       ดาวน์โหลด .rdp
-                    </button>
+                    </button> -->
 
                     <button id="pingBtn" class="btn btn-outline-light btn-sm ms-3"><i class="fa-solid fa-signal"></i>
                       (Ping)

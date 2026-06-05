@@ -52,53 +52,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Recent Tables -->
-      <!-- <div class="row g-4">
-        <div class="col-md-6">
-          <div class="card shadow-sm">
-            <div class="card-body">
-              <h6 class="card-title mb-3"><i class="fa-solid fa-clock-rotate-left me-2"></i> รายการเพิ่มเครื่องคอมพิวเตอร์ล่าสุด</h6>
-              <div class="table-responsive">
-                <table id="recentPcAddTable" class="table table-striped table-hover align-middle">
-                  <thead class="table-dark">
-                    <tr>
-                      <th>PC ID</th>
-                      <th>ชื่อขนามสกุล</th>
-                      <th>ชื่อเครื่อง</th>
-                      <th>วันที่ซื้อ</th>
-                      <th>สถานะ</th>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6">
-          <div class="card shadow-sm">
-            <div class="card-body">
-              <h6 class="card-title mb-3"><i class="fa-solid fa-clock-rotate-left me-2"></i> รายการแก้ไขเครื่องคอมพิวเตอร์ล่าสุด</h6>
-              <div class="table-responsive">
-                <table id="recentPcEditTable" class="table table-striped table-hover align-middle">
-                  <thead class="table-dark">
-                    <tr>
-                      <th>PC ID</th>
-                      <th>รายละเอียด</th>
-                      <th>ผู้แก้ไข</th>
-                      <th>วันที่ปรับปรุง</th>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> -->
-
     </div>
   </main>
 </section>
@@ -177,65 +130,100 @@
     });
 
 
-document.addEventListener('DOMContentLoaded', function() {
-      const jwtToken = localStorage.getItem('jwtToken');
-      const apiHeaders = {};
-      if (jwtToken) {
-        apiHeaders['Authorization'] = `Bearer ${jwtToken}`;
-      }
+// document.addEventListener('DOMContentLoaded', function() {
+//   const jwtToken = localStorage.getItem('jwtToken');
+//   const apiHeaders = {};
+//   if (jwtToken) {
+//     apiHeaders['Authorization'] = `Bearer ${jwtToken}`;
+//   }
 
-      // ฟังก์ชันโหลดข้อมูลการเพิ่มเครื่องล่าสุด
-    function loadRecentPcAdditions() {
-      const recentAdditionsUrl = '<?= base_url('api-pc/recent-additions') ?>';
-      $.ajax({
-          url: recentAdditionsUrl,
-          method: 'GET',
-          headers: apiHeaders,
-          success: function (data) {
-              const tableBody = $('#recentPcAddTable tbody');
-              tableBody.empty();
-              data.forEach(item => {
-                  const row = `
-                      <tr>
-                          <td>${item.pc_id}</td>
-                          <td>${item.user_name}</td>
-                          <td>${item.computer_name}</td>
-                          <td>${item.buy_date}</td>
-                          <td>${item.use_status}</td>
-                      </tr>
-                  `;
-                  tableBody.append(row);
-              });
-          }
-      });
-      }
-      loadRecentPcAdditions();
+//   // ฟังก์ชันโหลดข้อมูลการเพิ่มเครื่องล่าสุด
+//   async function loadRecentPcAdditions() {
+//     try {
+//       const res = await fetch(
+//           "<?= base_url('api-pc/recent-additions') ?>",
+//           {
+//               method: 'GET',
+//               headers: apiHeaders
+//           }
+//       );
+//       if (res.status === 401) {
+//           localStorage.removeItem(
+//               'jwtToken'
+//           );
+//           window.location.href =
+//               "<?= base_url('login') ?>";
+//           return;
+//       }
 
-      function loadRecentPcEditions() {
-      const recentEditionsUrl = '<?= base_url('api-pc/recent-editions') ?>';
-      $.ajax({
-          url: recentEditionsUrl,
-          method: 'GET',
-          headers: apiHeaders,
-          success: function (data) {
-              const tableBody = $('#recentPcEditTable tbody');
-              tableBody.empty();
-              data.forEach(item => {
-                  const row = `
-                      <tr>
-                          <td>${item.pc_id}</td>
-                          <td>${item.detail}</td>
-                          <td>${item.userid}</td>
-                          <td>${item.last_update}</td>
-                      </tr>
-                  `;
-                  tableBody.append(row);
-              });
-          }
-      });
-      }
-      loadRecentPcEditions();
-    });
+//       if (!res.ok) {
+//           throw new Error(
+//               'โหลดข้อมูลไม่สำเร็จ'
+//           );
+//       }
+//       const data = await res.json();
+//       const tableBody =
+//         document.querySelector(
+//             '#recentPcAddTable tbody'
+//         );
+//         tableBody.innerHTML = '';
+//         data.forEach(item => {
+//           tableBody.innerHTML += `
+//           <tr>
+//             <td>${item.pc_id}</td>
+//             <td>${item.user_name}</td>
+//             <td>${item.computer_name}</td>
+//             <td>${item.buy_date}</td>
+//             <td>${item.use_status}</td>
+//           </tr>
+//           `;
+//       });
+//     } catch(err) {
+//       console.error(err);
+//     }
+//   }
+//   loadRecentPcAdditions();
+
+
+//   // ฟังก์ชันโหลดข้อมูลการแก้ไขเครื่องล่าสุด
+//   async function loadRecentPcEditions() {
+//   try {
+//       const res = await fetch(
+//           "<?= base_url('api-pc/recent-editions') ?>",
+//           {
+//             headers: apiHeaders
+//           }
+//       );
+//       if (res.status === 401) {
+//          localStorage.removeItem(
+//             'jwtToken'
+//          );
+//          window.location.href =
+//             "<?= base_url('login') ?>";
+//          return;
+//       }
+//       const data = await res.json();
+//       const tbody =
+//         document.querySelector(
+//            '#recentPcEditTable tbody'
+//       );
+//       tbody.innerHTML = '';
+//       data.forEach(item => {
+//          tbody.innerHTML += `
+//          <tr>
+//             <td>${item.pc_id}</td>
+//             <td>${item.detail}</td>
+//             <td>${item.userid}</td>
+//             <td>${item.last_update}</td>
+//          </tr>
+//          `;
+//       });
+//    } catch(err){
+//       console.error(err);
+//    }
+//   }
+//   loadRecentPcEditions();
+// });
 </script>
 
 

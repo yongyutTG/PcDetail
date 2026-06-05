@@ -1,6 +1,11 @@
+<?php
+$locations = $locations ?? [];
+$os = $os ?? [];
+$property_type = $property_type ?? [];
+$newPcId = $newPcId ?? 1;
+?>
 <section>
   <main role="main" class="container-fluid">
-    <!-- <div class="container my-3"> -->
     <div class="home-content">
       <br>
       <br>
@@ -18,8 +23,8 @@
                   <option value="">ทั้งหมด</option>
                   <option value="PC">PC</option>
                   <option value="NOTEBOOK">Notebook</option>
-                  <option value="PRINTER">Printer</option>
-                  <option value="SERVER">Server</option>
+                  <!-- <option value="PRINTER">Printer</option>
+                  <option value="SERVER">Server</option> -->
                 </select>
                 <br>
                 <label for="brnoFilter" class="mb-0 fw-bold">สาขา: </label>
@@ -36,7 +41,7 @@
                   style="padding:6px; font-size: 14px; font-weight: bold; border-radius:6px; border:1px solid #ccc;">
                   <option value="A">ใช้งาน</option>
                   <option value="N">ไม่ใช้งาน</option>
-                   <!-- <option value="">ทั้งหมด</option> -->
+                  <!-- <option value="">ทั้งหมด</option> -->
                 </select>
                 <br>
                 <button type="button" id="resetBtn" class="btn btn-reset">
@@ -102,14 +107,10 @@
                 <div class="modal-content">
                   <div class="modal-header custom-header">
                     <h5 class="modal-title" id="pcDetailLabel">View PC Detail</h5>
-                    <!-- <button id="rdpDownloadBtn" class="btn btn-outline-light btn-sm ms-3" target="_blank"><i class="fa-solid fa-download"></i>
-                      ดาวน์โหลด .rdp
-                    </button> -->
-
                     <button id="pingBtn" class="btn btn-outline-light btn-sm ms-3"><i class="fa-solid fa-signal"></i>
                       (Ping)
                     </button>
-                   
+
 
                     <span id="pingStatus" class="ms-2 text-muted">-</span>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="ปิด"></button>
@@ -213,14 +214,14 @@
                         <label for="edit_model" class="form-label">Model</label>
                         <input type="text" class="form-control" id="edit_model" name="model">
                       </div>
-                     
+
                       <div class="mb-3">
                         <label for="edit_ip_address" class="form-label">IPAddress</label>
                         <div class="input-group">
                           <input type="text" class="form-control" id="edit_ip_address" name="ip_address" required>
                         </div>
                       </div>
-                     
+
                       <div class="mb-3">
                         <label for="edit_ram" class="form-label">Ram</label>
                         <input type="text" class="form-control" id="edit_ram" name="ram">
@@ -324,9 +325,9 @@
                   <div class="modal-body">
                     <form id="addPcForm">
                       <div class="mb-3">
-                            <label for="add_pc_id" class="form-label">PcID</label>
-                            <input type="number" class="form-control" id="add_pc_id" name="pc_id" value="<?= esc($newPcId) ?>" readonly>
-                          </div>
+                        <label for="add_pc_id" class="form-label">PcID</label>
+                        <input type="number" class="form-control" id="add_pc_id" name="pc_id" value="<?= esc($newPcId) ?>" readonly>
+                      </div>
                       <div class="mb-3">
                         <label for="add_user_name" class="form-label">FirstName-LastName</label>
                         <input type="text" class="form-control" id="add_user_name" name="user_name" required>
@@ -355,9 +356,9 @@
                       </div>
                       <div class="mb-3">
                         <label for="add_location" class="form-label">ฝ่าย/ส่วนงาน</label>
-                        <input class="form-control" list="locations" id="add_location" name="location" required
+                        <input class="form-control" list="Addlocations" id="add_location" name="location" required
                           placeholder="เลือกหรือพิมพ์ฝ่าย/ส่วนงาน">
-                        <datalist id="locations">
+                        <datalist id="Addlocations">
                           <?php foreach ($locations as $loc): ?>
                             <option value="<?= esc($loc['location']) ?>">
                             <?php endforeach; ?>
@@ -399,9 +400,9 @@
                       </div>
                       <div class="mb-3">
                         <label for="add_os" class="form-label">OS</label>
-                         <input class="form-control" list="os" id="add_os" name="os" required
+                        <input class="form-control" list="os" id="add_os" name="os" required
                           placeholder="เลือกหรือพิมพ์ OS">
-                          <datalist id="os">
+                        <datalist id="os">
                           <?php foreach ($os as $o): ?>
                             <option value="<?= esc($o['os']) ?>">
                             <?php endforeach; ?>
@@ -430,7 +431,7 @@
                       <div class="mb-3">
                         <label for="add_use_status" class="form-label">UseStatus</label>
                         <select class="form-select" id="add_use_status" name="use_status" required style="font-size: 14px;">
-                         <option value="">กรุณาเลือก</option>  
+                          <option value="">กรุณาเลือก</option>
                           <option value="A">ใช้งาน</option>
                           <option value="N">ไม่ใช้งาน</option>
                         </select>
@@ -503,8 +504,8 @@
   };
 
 
-  
-  document.addEventListener("DOMContentLoaded", function () {
+
+  document.addEventListener("DOMContentLoaded", function() {
     const spinner = document.getElementById("loading-spinner");
     const tbody = document.getElementById('tableBody');
     const searchInput = document.getElementById('keywordSearch');
@@ -520,7 +521,9 @@
     const pingurl = "<?= base_url('api-pc/ping') ?>";
     const jwtToken = localStorage.getItem('jwtToken');
     const apiHeaders = {
-      'Accept': 'application/json',
+      'Accept': 'application/json', 
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': '<?= csrf_hash() ?>'
     };
     if (jwtToken) {
       apiHeaders['Authorization'] = `Bearer ${jwtToken}`;
@@ -531,31 +534,42 @@
     let totalRecords = 0;
     let selectedRowIndex = -1;
 
-     document.getElementById('keywordSearch').focus();
-//ฟังก์ชันโหลดข้อมูลทั้งหมด PCหน้าแรก (รองรับค้นหา/กรอง/เปลี่ยนหน้า)
-    async function fetchPCs({ page = 1, keyword = '', property_type = '', status = '', br_no } = {}) {
+    document.getElementById('keywordSearch').focus();
+    //ฟังก์ชันโหลดข้อมูลทั้งหมด PCหน้าแรก (รองรับค้นหา/กรอง/เปลี่ยนหน้า)
+    async function fetchPCs({
+      page = 1,
+      keyword = '',
+      property_type = '',
+      status = '',
+      br_no
+    } = {}) {
       spinner.style.display = "block";
       tbody.innerHTML = "";
-      let url = (keyword || status || br_no || property_type)
-        ? `${searchUrlstatus}?page=${page}&limit=${limit}&property_type=${encodeURIComponent(property_type)}&br_no=${encodeURIComponent(br_no)}&status=${encodeURIComponent(status)}&keyword=${encodeURIComponent(keyword)}`
-        : `${apiBaseUrl}?page=${page}&limit=${limit}`;
+      let url = (keyword || status || br_no || property_type) ?
+        `${searchUrlstatus}?page=${page}&limit=${limit}&property_type=${encodeURIComponent(property_type)}&br_no=${encodeURIComponent(br_no)}&status=${encodeURIComponent(status)}&keyword=${encodeURIComponent(keyword)}` :
+        `${apiBaseUrl}?page=${page}&limit=${limit}`;
       try {
         const res = await fetch(url, {
           method: 'GET',
           headers: apiHeaders,
-        });
 
-            // token หมดอายุ
-        // if (res.status === 401) {
-        //     localStorage.removeItem('jwtToken');
-        //     window.location.href = "<?= base_url('login') ?>";
-        //     return;
-        // }
+        });
+        if (res.status === 401) {
+          await Swal.fire({
+            icon: 'warning',
+            title: 'หมดเวลาการใช้งาน',
+            text: 'กรุณาเข้าสู่ระบบใหม่อีกครั้ง',
+            confirmButtonText: 'ตกลง'
+          });
+         window.location.href = "<?= base_url('login') ?>";
+          localStorage.removeItem('jwtToken');
+          return;
+        }
 
         if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
         const result = await res.json();
         spinner.style.display = "none";
-        
+
         if (result.status === 'success') {
           if (result.data && result.data.length > 0) {
             tbody.innerHTML = "";
@@ -567,7 +581,7 @@
             // updatePaginationInfo();
           } else {
             tbody.innerHTML = `<tr><td colspan="14" class="text-center text-danger">ไม่พบข้อมูล</td></tr>`;
-            currentPage = 1;  
+            currentPage = 1;
             totalPages = 0;
             totalRows = 0;
           }
@@ -589,9 +603,9 @@
         "002": "ดอนเมือง",
         "003": "สุวรรณภูมิ",
       };
-      const statusBadge = pc.use_status === 'A'
-        ? '<span class="badge bg-success">ใช้งาน</span>'
-        : '<span class="badge bg-danger">ไม่ใช้งาน</span>';
+      const statusBadge = pc.use_status === 'A' ?
+        '<span class="badge bg-success">ใช้งาน</span>' :
+        '<span class="badge bg-danger">ไม่ใช้งาน</span>';
 
       row.innerHTML = `
     <td>${pc.pc_id || ''}</td>
@@ -634,7 +648,7 @@
     }
 
     //ฟังก์ชัน Ping
-    window.pingPc = function (ip) {
+    window.pingPc = function(ip) {
       const statusSpan = document.getElementById("pingStatus");
       if (!ip) {
         statusSpan.innerHTML = "⚠️ ไม่มี IP";
@@ -689,169 +703,226 @@
 
     // Event: Pagination
     document.getElementById("firstPage").addEventListener("click", () => {
-      if (currentPage > 1) fetchPCs({ page: 1, keyword: searchInput.value, status: statusFilter.value, br_no: brnoFilter.value, property_type: typeFilter.value });
+      if (currentPage > 1) fetchPCs({
+        page: 1,
+        keyword: searchInput.value,
+        status: statusFilter.value,
+        br_no: brnoFilter.value,
+        property_type: typeFilter.value
+      });
     });
     document.getElementById("prevPage").addEventListener("click", () => {
-      if (currentPage > 1) fetchPCs({ page: currentPage - 1, keyword: searchInput.value, status: statusFilter.value, br_no: brnoFilter.value, property_type: typeFilter.value });
+      if (currentPage > 1) fetchPCs({
+        page: currentPage - 1,
+        keyword: searchInput.value,
+        status: statusFilter.value,
+        br_no: brnoFilter.value,
+        property_type: typeFilter.value
+      });
     });
     document.getElementById("nextPage").addEventListener("click", () => {
-      if (currentPage < totalPages) fetchPCs({ page: currentPage + 1, keyword: searchInput.value, status: statusFilter.value, br_no: brnoFilter.value, property_type: typeFilter.value });
+      if (currentPage < totalPages) fetchPCs({
+        page: currentPage + 1,
+        keyword: searchInput.value,
+        status: statusFilter.value,
+        br_no: brnoFilter.value,
+        property_type: typeFilter.value
+      });
     });
     document.getElementById("lastPage").addEventListener("click", () => {
-      if (currentPage < totalPages) fetchPCs({ page: totalPages, keyword: searchInput.value, status: statusFilter.value, br_no: brnoFilter.value, property_type: typeFilter.value });
+      if (currentPage < totalPages) fetchPCs({
+        page: totalPages,
+        keyword: searchInput.value,
+        status: statusFilter.value,
+        br_no: brnoFilter.value,
+        property_type: typeFilter.value
+      });
     });
 
     // Event: ค้นหา/กรอง/รีเซ็ต
-    searchInput.addEventListener('input', () => fetchPCs({ page: 1, keyword: searchInput.value, status: statusFilter.value, br_no: brnoFilter.value, property_type: typeFilter.value }));
-    statusFilter.addEventListener('change', () => fetchPCs({ page: 1, keyword: searchInput.value, status: statusFilter.value, br_no: brnoFilter.value, property_type: typeFilter.value }));
-    brnoFilter.addEventListener('change', () => fetchPCs({ page: 1, keyword: searchInput.value, status: statusFilter.value, br_no: brnoFilter.value, property_type: typeFilter.value }));
-    typeFilter.addEventListener('change', () => fetchPCs({ page: 1, keyword: searchInput.value, status: statusFilter.value, br_no: brnoFilter.value, property_type: typeFilter.value }));
+    searchInput.addEventListener('input', () => fetchPCs({
+      page: 1,
+      keyword: searchInput.value,
+      status: statusFilter.value,
+      br_no: brnoFilter.value,
+      property_type: typeFilter.value
+    }));
+    statusFilter.addEventListener('change', () => fetchPCs({
+      page: 1,
+      keyword: searchInput.value,
+      status: statusFilter.value,
+      br_no: brnoFilter.value,
+      property_type: typeFilter.value
+    }));
+    brnoFilter.addEventListener('change', () => fetchPCs({
+      page: 1,
+      keyword: searchInput.value,
+      status: statusFilter.value,
+      br_no: brnoFilter.value,
+      property_type: typeFilter.value
+    }));
+    typeFilter.addEventListener('change', () => fetchPCs({
+      page: 1,
+      keyword: searchInput.value,
+      status: statusFilter.value,
+      br_no: brnoFilter.value,
+      property_type: typeFilter.value
+    }));
     resetBtn.addEventListener("click", () => {
       searchInput.value = "";
       statusFilter.value = "A";
       // statusFilter.value = "";
       brnoFilter.value = "";
       typeFilter.value = "";
-      fetchPCs({ page: 1 });
+      fetchPCs({
+        page: 1
+      });
     });
 
 
-function highlightRow(index) {
-  const rows = tbody.querySelectorAll("tr");
-  rows.forEach((tr, i) => tr.classList.toggle("table-light", i === index));
-  // rows.forEach((tr, i) => tr.classList.toggle("table-primary", i === index));
-  selectedRowIndex = index;
-  if (index >= 0) {
-    rows[index].focus();
-    rows[index].scrollIntoView({ behavior: "smooth", block: "nearest" });
-  }
-}
+    function highlightRow(index) {
+      const rows = tbody.querySelectorAll("tr");
+      rows.forEach((tr, i) => tr.classList.toggle("table-light", i === index));
+      // rows.forEach((tr, i) => tr.classList.toggle("table-primary", i === index));
+      selectedRowIndex = index;
+      if (index >= 0) {
+        rows[index].focus();
+        rows[index].scrollIntoView({
+          behavior: "smooth",
+          block: "nearest"
+        });
+      }
+    }
 
-function makeRowsFocusable() {
-  tbody.querySelectorAll("tr").forEach(tr => tr.setAttribute("tabindex", "0"));
-  selectedRowIndex = -1;
-}
+    function makeRowsFocusable() {
+      tbody.querySelectorAll("tr").forEach(tr => tr.setAttribute("tabindex", "0"));
+      selectedRowIndex = -1;
+    }
 
-// ตรวจสอบว่า modal กำลังเปิดอยู่หรือไม่ (รองรับ Bootstrap class .modal.show / body.modal-open)
-const isModalOpen = () => !!document.querySelector(".modal.show") || document.body.classList.contains("modal-open");
+    // ตรวจสอบว่า modal กำลังเปิดอยู่หรือไม่ (รองรับ Bootstrap class .modal.show / body.modal-open)
+    const isModalOpen = () => !!document.querySelector(".modal.show") || document.body.classList.contains("modal-open");
 
-// ---------- MutationObserver: รอ tbody เปลี่ยน (ดีกว่า setTimeout) ----------
-let pendingOpenFirstRow = false;
-const tbodyObserver = new MutationObserver((mutations) => {
-  if (!pendingOpenFirstRow) return;
-  for (const m of mutations) {
-    if (m.addedNodes && m.addedNodes.length) {
-      pendingOpenFirstRow = false;
+    // ---------- MutationObserver: รอ tbody เปลี่ยน (ดีกว่า setTimeout) ----------
+    let pendingOpenFirstRow = false;
+    const tbodyObserver = new MutationObserver((mutations) => {
+      if (!pendingOpenFirstRow) return;
+      for (const m of mutations) {
+        if (m.addedNodes && m.addedNodes.length) {
+          pendingOpenFirstRow = false;
+          const firstRow = tbody.querySelector("tr");
+          if (firstRow && !isModalOpen()) {
+            highlightRow(0);
+            const viewBtn = firstRow.querySelector(".view-btn");
+            if (viewBtn && !viewBtn.disabled) viewBtn.click();
+          }
+          break;
+        }
+      }
+    });
+    tbodyObserver.observe(tbody, {
+      childList: true
+    });
+
+    // ---------- Enter ใน searchInput: เรียก fetch แล้วเปิดแถวแรก (รองรับทั้ง Promise และ non-Promise) ----------
+    searchInput.addEventListener("keydown", async function(e) {
+      if (e.key !== "Enter") return;
+      e.preventDefault();
+
+      // เตรียมให้ observer รอแถวใหม่
+      pendingOpenFirstRow = true;
+
+      // เรียก fetchPCs (ถ้าเป็น Promise เรารอ ถ้าไม่ก็ปล่อยให้ observer ทำงาน)
+      try {
+        const res = fetchPCs({
+          page: 1,
+          keyword: searchInput.value,
+          status: statusFilter.value,
+          br_no: brnoFilter.value,
+          property_type: typeFilter.value
+        });
+        if (res && typeof res.then === "function") {
+          // ถ้า fetchPCs คืน Promise ให้รอจนเสร็จ (หรือจับ error แล้ว fallback)
+          await res.catch(() => {
+            /* ignore */
+          });
+        }
+      } catch (err) {
+        // ignore
+      }
+
+      // ถ้า table ถูกเติม synchronous แล้ว ให้เปิดทันที (fallback)
       const firstRow = tbody.querySelector("tr");
       if (firstRow && !isModalOpen()) {
+        pendingOpenFirstRow = false;
         highlightRow(0);
         const viewBtn = firstRow.querySelector(".view-btn");
         if (viewBtn && !viewBtn.disabled) viewBtn.click();
       }
-      break;
-    }
-  }
-});
-tbodyObserver.observe(tbody, { childList: true });
-
-// ---------- Enter ใน searchInput: เรียก fetch แล้วเปิดแถวแรก (รองรับทั้ง Promise และ non-Promise) ----------
-searchInput.addEventListener("keydown", async function(e) {
-  if (e.key !== "Enter") return;
-  e.preventDefault();
-
-  // เตรียมให้ observer รอแถวใหม่
-  pendingOpenFirstRow = true;
-
-  // เรียก fetchPCs (ถ้าเป็น Promise เรารอ ถ้าไม่ก็ปล่อยให้ observer ทำงาน)
-  try {
-    const res = fetchPCs({
-      page: 1,
-      keyword: searchInput.value,
-      status: statusFilter.value,
-      br_no: brnoFilter.value,
-      property_type: typeFilter.value
     });
-    if (res && typeof res.then === "function") {
-      // ถ้า fetchPCs คืน Promise ให้รอจนเสร็จ (หรือจับ error แล้ว fallback)
-      await res.catch(() => {/* ignore */});
-    }
-  } catch (err) {
-    // ignore
-  }
 
-  // ถ้า table ถูกเติม synchronous แล้ว ให้เปิดทันที (fallback)
-  const firstRow = tbody.querySelector("tr");
-  if (firstRow && !isModalOpen()) {
-    pendingOpenFirstRow = false;
-    highlightRow(0);
-    const viewBtn = firstRow.querySelector(".view-btn");
-    if (viewBtn && !viewBtn.disabled) viewBtn.click();
-  }
-});
-
-// ---------- Keyboard navigation (Arrow Up/Down + Enter) ----------
-document.addEventListener("keydown", function(e) {
-  // ถ้ามี modal เปิดอยู่และ focus อยู่ใน modal -> ปล่อยให้ modal จัดการเอง
-  if (isModalOpen()) {
-    const modalEl = document.querySelector(".modal.show");
-    if (modalEl && modalEl.contains(document.activeElement)) return;
-    // ถ้า modal เปิดอยู่แต่ focus ไม่อยู่ใน modal เราจะไม่ทำอะไร (ป้องกันการเปิด modal ซ้อน)
-    return;
-  }
-
-  // ถ้า user กำลังพิมพ์ใน input/textarea ที่อยู่นอกตาราง ให้ข้ามการจับปุ่ม
-  const active = document.activeElement;
-  const isTyping = active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA" || active.isContentEditable);
-  if (isTyping && !tbody.contains(active)) return;
-
-  const rows = Array.from(tbody.querySelectorAll("tr"));
-  if (!rows.length) return;
-
-  if (e.key === "ArrowDown") {
-    e.preventDefault();
-    let nextIndex = selectedRowIndex + 1;
-    if (nextIndex >= rows.length) nextIndex = 0;
-    highlightRow(nextIndex);
-  } else if (e.key === "ArrowUp") {
-    e.preventDefault();
-    let prevIndex = selectedRowIndex - 1;
-    if (prevIndex < 0) prevIndex = rows.length - 1;
-    highlightRow(prevIndex);
-  } else if (e.key === "Enter") {
-    e.preventDefault();
-    if (selectedRowIndex >= 0) {
-      const viewBtn = rows[selectedRowIndex].querySelector(".view-btn");
-      if (viewBtn && !viewBtn.disabled && !isModalOpen()) {
-        viewBtn.click();
+    // ---------- Keyboard navigation (Arrow Up/Down + Enter) ----------
+    document.addEventListener("keydown", function(e) {
+      // ถ้ามี modal เปิดอยู่และ focus อยู่ใน modal -> ปล่อยให้ modal จัดการเอง
+      if (isModalOpen()) {
+        const modalEl = document.querySelector(".modal.show");
+        if (modalEl && modalEl.contains(document.activeElement)) return;
+        // ถ้า modal เปิดอยู่แต่ focus ไม่อยู่ใน modal เราจะไม่ทำอะไร (ป้องกันการเปิด modal ซ้อน)
+        return;
       }
-    }
-  }
-});
 
-document.addEventListener("click", function (e) {
-  const btn = e.target.closest(".view-btn");
-  if (!btn) return;
-  //ปิดปุ่ม view
-  btn.disabled = true;
+      // ถ้า user กำลังพิมพ์ใน input/textarea ที่อยู่นอกตาราง ให้ข้ามการจับปุ่ม
+      const active = document.activeElement;
+      const isTyping = active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA" || active.isContentEditable);
+      if (isTyping && !tbody.contains(active)) return;
 
-  //คืนปุ่ม view ให้
-  const allModals = document.querySelectorAll(".modal");
-  allModals.forEach(modal => {
-    modal.addEventListener("hidden.bs.modal", function () {
-      document.querySelectorAll(".view-btn:disabled").forEach(btn => btn.disabled = false);
+      const rows = Array.from(tbody.querySelectorAll("tr"));
+      if (!rows.length) return;
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        let nextIndex = selectedRowIndex + 1;
+        if (nextIndex >= rows.length) nextIndex = 0;
+        highlightRow(nextIndex);
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        let prevIndex = selectedRowIndex - 1;
+        if (prevIndex < 0) prevIndex = rows.length - 1;
+        highlightRow(prevIndex);
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        if (selectedRowIndex >= 0) {
+          const viewBtn = rows[selectedRowIndex].querySelector(".view-btn");
+          if (viewBtn && !viewBtn.disabled && !isModalOpen()) {
+            viewBtn.click();
+          }
+        }
+      }
     });
-  });
 
-});
+    document.addEventListener("click", function(e) {
+      const btn = e.target.closest(".view-btn");
+      if (!btn) return;
+      //ปิดปุ่ม view
+      btn.disabled = true;
 
-// ---------- เรียกใช้หลัง render ตารางเสร็จ ----------
-function afterRenderTable() {
-  makeRowsFocusable();
-  selectedRowIndex = -1;
-}
+      //คืนปุ่ม view ให้
+      const allModals = document.querySelectorAll(".modal");
+      allModals.forEach(modal => {
+        modal.addEventListener("hidden.bs.modal", function() {
+          document.querySelectorAll(".view-btn:disabled").forEach(btn => btn.disabled = false);
+        });
+      });
+
+    });
+
+    // ---------- เรียกใช้หลัง render ตารางเสร็จ ----------
+    function afterRenderTable() {
+      makeRowsFocusable();
+      selectedRowIndex = -1;
+    }
 
 
-    
+
     // Map ข้อมูลเข้า form edit
     function fillEditForm(pc) {
       const map = [
@@ -859,11 +930,31 @@ function afterRenderTable() {
       ];
       map.forEach(key => {
         const el = document.getElementById('edit_' + key);
-        if (el) el.value = pc[key]; 
+        if (!el) return;
+        let value = pc[key] ?? '';
+
+        if (key === 'buy_date' && value) {
+          // API may return datetime in 'YYYY-MM-DD HH:MM:SS' format
+          value = value.replace(' ', 'T').slice(0, 16);
+        }
+
+        el.value = value;
       });
     }
+
+    function handleUnauthorized() {
+      Swal.fire({
+        icon: 'warning',
+        title: 'หมดเวลาการใช้งาน',
+        text: 'กรุณาเข้าสู่ระบบใหม่อีกครั้ง',
+        confirmButtonText: 'ตกลง'
+      });
+      localStorage.removeItem('jwtToken');
+      window.location.href = "<?= site_url('logout') ?>"
+    }
+
     // Event แก้ไข
-    tbody.addEventListener("click", function (event) {
+    tbody.addEventListener("click", async function(event) {
       const viewBtn = event.target.closest(".view-btn");
       if (viewBtn) {
         fetchPCDetail(viewBtn.getAttribute("data-id"));
@@ -871,26 +962,36 @@ function afterRenderTable() {
       }
       const editBtn = event.target.closest(".edit-btn");
       if (editBtn) {
-        fetch(`${apiBaseUrl}/${editBtn.getAttribute("data-id")}`, {
+        try {
+          const res = await fetch(`${apiBaseUrl}/${editBtn.getAttribute("data-id")}`, {
             method: 'GET',
             headers: apiHeaders,
-          })
-          .then(res => res.json())
-          .then(result => {
-            if (result.status === 'success') {
-              fillEditForm(result.data);
-              new bootstrap.Modal(document.getElementById("editPcModal")).show();
+          });
 
-            } else {
-              toastr.error("ไม่พบข้อมูล", "แจ้งเตือน");
-            }
-          })
-          .catch(() => toastr.error("โหลดข้อมูลผิดพลาด", "Error"));
+          if (res.status === 401) {
+            handleUnauthorized();
+            return;
+          }
+          if (!res.ok) {
+            throw new Error(`HTTP Error ${res.status}`);
+          }
+
+          const result = await res.json();
+          if (result.status === 'success') {
+            fillEditForm(result.data);
+            new bootstrap.Modal(document.getElementById("editPcModal")).show();
+          } else {
+            toastr.error(result.message || "ไม่พบข้อมูล", "แจ้งเตือน");
+          }
+        } catch (err) {
+          toastr.error("โหลดข้อมูลผิดพลาด", "Error");
+          console.error(err);
+        }
       }
     });
 
     // Event: บันทึกข้อมูลแก้ไข
-    editForm.addEventListener('submit', async function (e) {
+    editForm.addEventListener('submit', async function(e) {
       e.preventDefault();
 
       const editBtn = document.getElementById('save_editPc'); // ปุ่ม submit
@@ -927,7 +1028,13 @@ function afterRenderTable() {
         if (result.status === 'success') {
           bootstrap.Modal.getInstance(document.getElementById("editPcModal")).hide();
           toastr.success("บันทึกแก้ไขข้อมูลเรียบร้อยแล้ว", "สำเร็จ");
-          fetchPCs({ page: currentPage, keyword: searchInput.value, status: statusFilter.value, br_no: brnoFilter.value, property_type: typeFilter.value });
+          fetchPCs({
+            page: currentPage,
+            keyword: searchInput.value,
+            status: statusFilter.value,
+            br_no: brnoFilter.value,
+            property_type: typeFilter.value
+          });
         } else {
           toastr.error(result.message || 'แก้ไขข้อมูลไม่สำเร็จ');
         }
@@ -940,67 +1047,68 @@ function afterRenderTable() {
     });
 
     window.currentPcIp = null;
-    //ดึงรายละเอียด PC และ log ไปใช้งานในModal
+//fetch ดึงรายละเอียด PC และ log ไปใช้งานในModal
     async function fetchPCDetail(pcId) {
       try {
         const res = await fetch(`${apiBaseUrl}/${pcId}`, {
           method: 'GET',
           headers: apiHeaders,
         });
-        if (!res.ok) throw new Error(`ไม่สามารถโหลดรายละเอียด PC ${pcId}`);
         const result = await res.json();
-       
+        if (res.status === 401) { 
+          await Swal.fire({
+            icon: 'warning',
+            title: 'หมดเวลาการใช้งาน',
+            text: 'กรุณาเข้าสู่ระบบใหม่อีกครั้ง',
+            confirmButtonText: 'ตกลง'
+          });
+          window.location.href = "<?= base_url('login') ?>";
+          localStorage.removeItem('jwtToken');
+          return;
+        }
+        if (!res.ok) throw new Error(`ไม่สามารถโหลดรายละเอียด PC ${pcId}`);
         if (result.status === 'success') {
+          const pc = result.data;
+          window.currentPcIp = pc.ip_address || pc.ip;
+          document.getElementById("pcDetailBody").innerHTML = renderDetailHTML(result.data);
+          document.getElementById("pingStatus").innerHTML = "-";
+          document.getElementById("pingStatus").className = "ms-2 text-muted";
 
-            const pc = result.data;
-            window.currentPcIp = pc.ip_address || pc.ip;
-            document.getElementById("pcDetailBody").innerHTML = renderDetailHTML(result.data);
-            document.getElementById("pingStatus").innerHTML = "-";
-            document.getElementById("pingStatus").className = "ms-2 text-muted";
-
-             // ตั้งค่า ping button (ถ้ามี)
+          // ตั้งค่า ping button (ถ้ามี)
           const pingBtn = document.getElementById("pingBtn");
           if (pingBtn) {
-              pingBtn.onclick = function () { pingPc(window.currentPcIp); };
+            pingBtn.onclick = function() {
+              pingPc(window.currentPcIp);
+            };
           }
-
           // ping อัตโนมัติ
           if (window.currentPcIp) {
-              pingPc(window.currentPcIp);
+            pingPc(window.currentPcIp);
           }
-
-
-          // ✅ ตั้งค่า RDP Download button แบบไม่โดน Browser block
-            const rdpBtn = document.getElementById("rdpDownloadBtn");
-            if (rdpBtn && window.currentPcIp) {
-                rdpBtn.onclick = function () {
-                    const link = document.createElement("a");
-                    link.href = `<?= base_url('remote/rdp') ?>/${window.currentPcIp}`;
-                    link.download = `${window.currentPcIp}.rdp`;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                };
+          // ดึงประวัติย้อนหลัง LogPC หลัง render รายละเอียดเสร็จ
+          try {
+            const historyRes = await fetch(`${historyUrl}/${pcId}`, {
+              method: 'GET',
+              headers: apiHeaders,
+            });
+            if (historyRes.status === 401) {
+              handleUnauthorized();
+              return;
             }
-
-         
-            // ดึงประวัติย้อนหลัง LogPC หลัง render รายละเอียดเสร็จ
-            fetch(`${historyUrl}/${pcId}`, {
-                method: 'GET',
-                headers: apiHeaders,
-              })
-              .then(res => res.json())
-              .then(historyResult => {
-                if (historyResult.status === 'success') {
-                  renderPCHistory(historyResult.data);
-                } else {
-                  renderPCHistory([]);
-                }
-              })
-              .catch(() => renderPCHistory([]));
-
-            new bootstrap.Modal(document.getElementById("pcDetailModal")).show();
-     
+            if (!historyRes.ok) {
+              throw new Error(`HTTP Error ${historyRes.status}`);
+            }
+            const historyResult = await historyRes.json();
+            if (historyResult.status === 'success') {
+              renderPCHistory(historyResult.data);
+            } else {
+              renderPCHistory([]);
+            }
+          } catch (error) {
+            renderPCHistory([]);
+            console.error('History load error:', error);
+          }
+          new bootstrap.Modal(document.getElementById("pcDetailModal")).show();
         } else {
           tbody.innerHTML = `<tr><td colspan="4" class="text-center text-danger">ไม่พบข้อมูล</td></tr>`;
         }
@@ -1093,152 +1201,146 @@ function afterRenderTable() {
     }
 
     //เพิ่มข้อมูล pc
-  document.getElementById('addPcForm').addEventListener('submit', async function (e) {
-    e.preventDefault();
+    document.getElementById('addPcForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
 
-    const form = e.target;
-    const formData = new FormData(form);
+      const form = e.target;
+      const formData = new FormData(form);
 
-    const data = {};
+      const data = {};
 
-    formData.forEach((value, key) => {
-      if (key === 'buy_date') {
-        if (value && value !== "") {
-          // value จาก <input type="date"> = "YYYY-MM-DD"
-          // เวลา default = ตอนบันทึก หรือ 00:00:00
-          const now = new Date();
-          const time = now.toTimeString().split(' ')[0]; // HH:MM:SS
-          data[key] = `${value} ${time}`; // ส่งเป็น "YYYY-MM-DD HH:MM:SS"
+      formData.forEach((value, key) => {
+        if (key === 'buy_date') {
+          if (value && value !== "") {
+            // value จาก <input type="date"> = "YYYY-MM-DD"
+            // เวลา default = ตอนบันทึก หรือ 00:00:00
+            const now = new Date();
+            const time = now.toTimeString().split(' ')[0]; // HH:MM:SS
+            data[key] = `${value} ${time}`; // ส่งเป็น "YYYY-MM-DD HH:MM:SS"
+          } else {
+            data[key] = null; // ถ้าไม่เลือก → ส่ง null
+          }
         } else {
-          data[key] = null; // ถ้าไม่เลือก → ส่ง null
+          data[key] = value === "" ? null : value;
         }
-      } else {
-        data[key] = value === "" ? null : value;
+      });
+
+
+      // ปุ่มบันทึก
+      const saveBtn = document.getElementById('save_addPc');
+      if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = `
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> กำลังบันทึก...
+        `;
       }
+      try {
+        const response = await fetch(`${apiBaseUrl}/create`, {
+          method: 'POST',
+          headers: {
+            ...apiHeaders,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          fetchPCs();
+          bootstrap.Modal.getInstance(document.getElementById("addPcModal")).hide();
+          toastr.success("บันทึกเพิ่มข้อมูลเรียบร้อยแล้ว", "สำเร็จ");
+          form.reset();
+        } else {
+          toastr.error(result.message || 'เพิ่มข้อมูลไม่สำเร็จ', 'Error');
+        }
+      } catch (error) {
+        toastr.error(`Error: ${error.message}`, 'Error');
+      } finally {
+        if (saveBtn) {
+          saveBtn.disabled = false;
+          saveBtn.innerHTML = 'บันทึกเพิ่มข้อมูล';
+        }
+      }
+    });
+    fetchPCs();
+
+    // ping ip หน้าเพิ่มข้อมูล
+    document.getElementById('btnPing').addEventListener('click', function() {
+      const ip = document.getElementById('add_ip_address')?.value.trim() || '';
+      const btnPing = document.getElementById('btnPing');
+      const originalText = btnPing.innerHTML;
+      if (ip === '') {
+        toastr.warning('กรุณากรอก IP Address ก่อน');
+        return;
+      }
+
+      // disable ปุ่ม 
+      btnPing.disabled = true;
+      btnPing.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> กำลัง Ping...';
+
+      fetch(`${pingurl}/${ip}`, {
+          method: 'GET',
+          headers: apiHeaders,
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === "online") {
+            toastr.success('ตรวจสอบ IP มีการใช้งานแล้ว', 'Ping สำเร็จ');
+          } else {
+            toastr.error('ตรวจสอบ IP ยังไม่มีการใช้งาน (Timeout)', 'Ping ไม่สำเร็จ');
+          }
+        })
+        .catch(() => {
+          toastr.error('เกิดข้อผิดพลาดในการ Ping', 'Error');
+        })
+        .finally(() => {
+          btnPing.disabled = false;
+          btnPing.innerHTML = originalText;
+        });
     });
 
 
-    // ปุ่มบันทึก
-    const saveBtn = document.getElementById('save_addPc');
-    if (saveBtn) {
-      saveBtn.disabled = true;
-      saveBtn.innerHTML = `
-            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> กำลังบันทึก...
-        `;
-    }
-    try {
-      const response = await fetch(`${apiBaseUrl}/create`, {
-        method: 'POST',
-        headers: {
-          ...apiHeaders,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-      });
 
-      const result = await response.json();
-
-      if (response.ok) {
-        fetchPCs();
-        bootstrap.Modal.getInstance(document.getElementById("addPcModal")).hide();
-        toastr.success("บันทึกเพิ่มข้อมูลเรียบร้อยแล้ว", "สำเร็จ");
-        form.reset();
-      } else {
-        toastr.error(result.message || 'เพิ่มข้อมูลไม่สำเร็จ', 'Error');
-      }
-    } catch (error) {
-      toastr.error(`Error: ${error.message}`, 'Error');
-    } finally {
-      if (saveBtn) {
-        saveBtn.disabled = false;
-        saveBtn.innerHTML = 'บันทึกเพิ่มข้อมูล';
-      }
-    }
-  });
-  fetchPCs();
-
-    // ping ip หน้าเพิ่มข้อมูล
-  document.getElementById('btnPing').addEventListener('click', function() {
-    const ip = document.getElementById('add_ip_address')?.value.trim() || '';
-    const btnPing = document.getElementById('btnPing'); 
-    const originalText = btnPing.innerHTML;
-    if (ip === '') {
-      toastr.warning('กรุณากรอก IP Address ก่อน');
-      return;
-    }
-
-    // disable ปุ่ม 
-    btnPing.disabled = true;
-    btnPing.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> กำลัง Ping...';
-
-    fetch(`${pingurl}/${ip}`, {
-        method: 'GET',
-        headers: apiHeaders,
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.status === "online") {
-          toastr.success('ตรวจสอบ IP มีการใช้งานแล้ว', 'Ping สำเร็จ');
-        } else {
-          toastr.error('ตรวจสอบ IP ยังไม่มีการใช้งาน (Timeout)', 'Ping ไม่สำเร็จ');
-        }
-      })
-      .catch(() => {
-        toastr.error('เกิดข้อผิดพลาดในการ Ping', 'Error');
-      })
-      .finally(() => {  
-        btnPing.disabled = false;
-        btnPing.innerHTML = originalText;
-      });
-  });
-
-
-
-    resetAddPcBtn.addEventListener("click", function () {
+    resetAddPcBtn.addEventListener("click", function() {
       addPcForm.reset();
     });
   });
 
-    
- document.addEventListener("click", function (e) {
-  const btn = e.target.closest(".copy-ip-btn");
-  if (!btn) return;
 
-  const ip = btn.getAttribute("data-ip");
-  if (!ip) return;
+  document.addEventListener("click", function(e) {
+    const btn = e.target.closest(".copy-ip-btn");
+    if (!btn) return;
 
-  // ✅ ตรวจสอบว่ามี clipboard API ไหม
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(ip)
-      .then(() => {
+    const ip = btn.getAttribute("data-ip");
+    if (!ip) return;
+
+    // ✅ ตรวจสอบว่ามี clipboard API ไหม
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(ip)
+        .then(() => {
+          btn.innerHTML = '<i class="fa-solid fa-check text-success"></i>';
+          setTimeout(() => {
+            btn.innerHTML = '<i class="fa-regular fa-copy"></i>';
+          }, 1500);
+        })
+        .catch(() => alert("คัดลอกไม่สำเร็จ"));
+    } else {
+      // ✅ fallback แบบเก่า ใช้ textarea ชั่วคราว
+      const tempInput = document.createElement("textarea");
+      tempInput.value = ip;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      try {
+        document.execCommand("copy");
         btn.innerHTML = '<i class="fa-solid fa-check text-success"></i>';
         setTimeout(() => {
           btn.innerHTML = '<i class="fa-regular fa-copy"></i>';
         }, 1500);
-      })
-      .catch(() => alert("คัดลอกไม่สำเร็จ"));
-  } else {
-    // ✅ fallback แบบเก่า ใช้ textarea ชั่วคราว
-    const tempInput = document.createElement("textarea");
-    tempInput.value = ip;
-    document.body.appendChild(tempInput);
-    tempInput.select();
-    try {
-      document.execCommand("copy");
-      btn.innerHTML = '<i class="fa-solid fa-check text-success"></i>';
-      setTimeout(() => {
-        btn.innerHTML = '<i class="fa-regular fa-copy"></i>';
-      }, 1500);
-    } catch (err) {
-      alert("คัดลอกไม่สำเร็จ");
+      } catch (err) {
+        alert("คัดลอกไม่สำเร็จ");
+      }
+      document.body.removeChild(tempInput);
     }
-    document.body.removeChild(tempInput);
-  }
-});
-
-  
-
-
-
-
+  });
 </script>

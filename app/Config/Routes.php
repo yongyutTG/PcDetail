@@ -1,4 +1,19 @@
 <?php
+
+use CodeIgniter\Router\RouteCollection;
+
+/**
+ * @var RouteCollection $routes
+ */
+//$routes = Services::routes();
+
+$routes->setDefaultNamespace('App\Controllers');
+$routes->setDefaultController('Home');
+$routes->setDefaultMethod('index');
+$routes->setTranslateURIDashes(false);
+$routes->set404Override();
+$routes->setAutoRoute(true);
+
 $routes->get('/', 'Pc\AuthPc::login');
 $routes->get('login', 'Pc\AuthPc::login');    // หน้า login
 $routes->post('auth/chk_login', 'Pc\AuthPc::chk_login');
@@ -49,9 +64,19 @@ $routes->post('jwt/login', 'Pc\JwtController::login');
 $routes->get('jwt/verify', 'Pc\JwtController::verifyToken');
 $routes->post('jwt/verify', 'Pc\JwtController::verifyToken');
 
-$routes->get('remote/rdp/(:segment)', 'Remote::rdp/$1');
 
 
+// Endpoint สำหรับตรวจสอบ session timeout
+// $routes->get('session/check','Pc\SessionController::check');
+
+// $routes->group('', ['filter' => 'sessiontimeout'], function($routes){
+    
+//     $routes->get('all-listPC', 'Pc\listPC::index');
+//     }
+// );
+
+//LogViewer
+$routes->get('log-viewer', 'Pc\LogViewer::index');
 
 //User+rejister
 $routes->get('auth/getUsers', 'Pc\AuthPc::getUsers');
@@ -59,3 +84,7 @@ $routes->get('auth/getUserById/(:num)', 'Pc\AuthPc::getUserById/$1');
 $routes->post('auth/updateUser', 'Pc\AuthPc::updateUser');
 $routes->delete('auth/deleteUser/(:num)', 'Pc\AuthPc::deleteUser/$1');
 
+// $routes->group('api',['filter'=>'apilogger'],function($routes){
+//     $routes->get('login', 'Pc\AuthPc::login');  
+
+// });

@@ -39,6 +39,9 @@ if ($row && isset($row->db_date)) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
@@ -62,43 +65,7 @@ if ($row && isset($row->db_date)) {
 
     <!-- <link rel="stylesheet" href="css/login.css"> -->
     <script src="<?= base_url('js/app.js') ?>"></script>
-    <!-- <script>
-        (function() {
-            const loginUrl = '<?= site_url('login') ?>';
-            const redirectToLogin = () => {
-                try {
-                    localStorage.removeItem('jwtToken');
-                } catch (e) {}
-                toastr.warning('Token หมดอายุ กรุณาเข้าสู่ระบบใหม่', 'หมดเวลา', {
-                    timeOut: 2000,
-                    progressBar: true,
-                    closeButton: true
-                });
-                setTimeout(() => window.location.href = loginUrl, 2000);
-            };
-
-            if (window.fetch) {
-                const originalFetch = window.fetch.bind(window);
-                window.fetch = function(input, init) {
-                    return originalFetch(input, init).then(async res => {
-                        if (res && res.status === 401) {
-                            redirectToLogin();
-                            return Promise.reject(new Error('Unauthorized'));
-                        }
-                        return res;
-                    });
-                };
-            }
-
-            if (window.jQuery) {
-                $(document).ajaxError(function(event, jqxhr) {
-                    if (jqxhr && jqxhr.status === 401) {
-                        redirectToLogin();
-                    }
-                });
-            }
-        })();
-    </script> -->
+ 
     <title>PC Detail</title>
 
 </head>
@@ -334,4 +301,39 @@ if ($row && isset($row->db_date)) {
             toastr.close();
         });
     }
+</script>
+
+<script>
+
+// setInterval(async () => {
+
+//     try {
+
+//         const response =
+//             await fetch("<?= site_url('session/check') ?>");
+
+//         if (response.status === 401) {
+
+//             alert("Session Timeout");
+
+//             window.location.href =
+//                 "<?= site_url('login') ?>";
+
+//             return;
+//         }
+
+//         const data =
+//             await response.json();
+
+//         console.log(data.status);
+
+//     }
+//     catch(err){
+
+//         console.error(err);
+
+//     }
+
+// },30000);
+
 </script>

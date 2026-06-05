@@ -9,22 +9,12 @@ use CodeIgniter\Filters\Honeypot;
 use CodeIgniter\Filters\InvalidChars;
 use CodeIgniter\Filters\SecureHeaders;
 
-class Filters extends BaseConfig
-{
-    public array $globals = [
-        'before' => [
-            // 'csrf'
-        ],
-    ];
-
-
-
+class Filters extends BaseConfig{
     public array $aliases = [
-        // 'csrf'     => \CodeIgniter\Filters\CSRF::class,
+        'csrf'     => \CodeIgniter\Filters\CSRF::class, // ป้องกัน CSRF
+        'jwtauth'  => \App\Filters\JWTAuth::class,   //ยืนยันตัวตนด้วย JWT
+        //'apilogger' => \App\Filters\ApiLoggerFilter::class, //บันทึกการเรียก API
 
-        // 'auth'     => \App\Filters\AuthFilter::class,
-        'apikey'   => \App\Filters\ApiKeyAuth::class,
-        'jwtauth'  => \App\Filters\JWTAuth::class,
 
     ];
 

@@ -15,10 +15,8 @@ class LogViewer extends Controller
         }
 
         $logContent = file_get_contents($latestLogFile);
-        return view('log_view', ['logContent' => nl2br($logContent)])
-            .view('templates/header', ['title' => 'Log Viewer'])
-            . view('templates/navbar', ['title' => 'Log Viewer'])
-            . view('pages/home', ['title' => 'Log Viewer'])
+        return view('templates/header', ['title' => 'Log Viewer'])
+            . view('log_view', ['logContent' => nl2br($logContent)])
             . view('templates/footer', ['title' => 'Log Viewer']);
     }
 

@@ -171,13 +171,12 @@ async function scanIP() {
     scanned++;
     if (data && data.length > 0) {
       const result = data[0];
-
-      // ✅ เรียก API เพื่อเอาข้อมูลชื่อเครื่อง/ผู้ใช้
       try {
         const jwtToken = localStorage.getItem('jwtToken');
         const headers = {};
         if (jwtToken) {
           headers['Authorization'] = `Bearer ${jwtToken}`;
+          
         }
         const pcRes = await fetch(`${apiIpBaseUrl}?ip=${ip}`, {
           headers

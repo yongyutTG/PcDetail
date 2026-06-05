@@ -12,9 +12,7 @@ class JwtController extends ResourceController{
     private $secretKey;
     public function __construct(){
         $this->secretKey = getenv('JWT_SECRET_KEY');
-        // Allow small clock skew (seconds). Configure via .env: JWT_LEEWAY
-        $leeway = getenv('JWT_LEEWAY') ?: 60;
-        \Firebase\JWT\JWT::$leeway = (int) $leeway;
+        $this->expire = getenv('JWT_EXPIRE');
     }
 
     // login และสร้าง JWT token
@@ -54,8 +52,9 @@ class JwtController extends ResourceController{
             ], 401);
         }
 
+
         $issuedAt = time();
-        $expirationTime = $issuedAt + 3600;
+        $expirationTime = $issuedAt + $this->expire;
 
         $payload = [
             'iat' => $issuedAt,
@@ -73,7 +72,7 @@ class JwtController extends ResourceController{
         return $this->respond([
             'status' => 'success',
             'token' => $token,
-            'expires_in' => 3600
+            'expires_in' => $this->expire
         ]);
     }
 
@@ -82,41 +81,40 @@ class JwtController extends ResourceController{
         $authHeader = $this->request->getHeader("Authorization");
         if (!$authHeader) {
             return $this->respond([
-                'status' => 'error',
-                'message' => 'Authorization header missing'
+                'status' => false,
+                'code' => 'TOKEN_MISSING',
+                'message' => 'Please login again'
             ], 401);
         }
-
-        $token = explode(" ", $authHeader->getValue())[1]; // แยก Bearer ออกจาก Token
-
-
-        // ตรวจสอบว่า Header 
         $headerValue = $authHeader->getValue();
         if (!preg_match('/Bearer\s(\S+)/', $headerValue, $matches)) {
             return $this->respond([
-                'status' => 'error',
-                'message' => 'Invalid Authorization format'
+                'status' => false,
+                'code' => 'INVALID_TOKEN',
+                'message' => 'Please login again'
             ], 401);
         }
-
         $token = $matches[1];
-
-        
         try {
-            $decoded = JWT::decode($token, new Key($this->secretKey, 'HS256'));
+            $decoded = JWT::decode(
+                $token,
+                new Key($this->secretKey, 'HS256')
+            );
             return $this->respond([
-                'status' => 'success',
+                'status' => true,
                 'data' => $decoded
             ]);
         } catch (ExpiredException $e) {
             return $this->respond([
-                'status' => 'error',
-                'message' => 'Token expired'
+                'status' => false,
+                'code' => 'TOKEN_EXPIRED',
+                'message' => 'Please login again'
             ], 401);
         } catch (\Exception $e) {
             return $this->respond([
-                'status' => 'error',
-                'message' => $e->getMessage()
+                'status' => false,
+                'code' => 'INVALID_TOKEN',
+                'message' => 'Please login again'
             ], 401);
         }
     }

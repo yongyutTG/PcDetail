@@ -10,29 +10,40 @@ use Firebase\JWT\Key;
 
 class JWTAuth implements FilterInterface
 {
-    public function before(RequestInterface $request, $arguments = null)
-    {
-        $secretKey  = getenv('JWT_SECRET_KEY');
+    public function before(RequestInterface $request, $arguments = null){
+        $secretKey = getenv('JWT_SECRET_KEY');
         $authHeader = $request->getHeaderLine('Authorization');
 
         if (!$authHeader) {
-            return service('response')->setJSON([
-                'status' => 'error',
-                'message' => 'ไม่พบ Token ติดต่อผู้ให้บริการ'
-            ])->setStatusCode(401);
+            return service('response')
+                ->setJSON(['message' => 'Unauthorized'])
+                ->setStatusCode(401);
         }
 
-        try {
-            $token = explode(" ", $authHeader)[1]; // ดึง Token ออกจาก "Bearer <token>"
-            $decoded = JWT::decode($token, new Key($secretKey, 'HS256'));
+        if (!preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
+            return service('response')
+                ->setJSON(['message' => 'Unauthorized'])
+                ->setStatusCode(401);
+        }
 
-            // ใช้ข้อมูลจาก Token เช่น user_id
-            $request->user = $decoded;
+        $token = $matches[1];
+
+        try {
+
+            $decoded = JWT::decode(
+                $token,
+                new Key($secretKey, 'HS256')
+            );
+
+            service('request')->userData = $decoded;
+
         } catch (\Exception $e) {
-            return service('response')->setJSON([
-                'status' => 'error',
-                'message' => 'Token ไม่ถูกต้อง: ' . $e->getMessage()
-            ])->setStatusCode(401);
+
+            log_message('error', $e->getMessage());
+
+            return service('response')
+                ->setJSON(['message' => 'Unauthorized'])
+                ->setStatusCode(401);
         }
     }
 

@@ -4,6 +4,7 @@ use App\Models\Pc\UserModel;
 use CodeIgniter\CLI\Console;
 use Firebase\JWT\JWT;
 
+
 class AuthPc extends BaseController {
     protected $userModel;
     public function __construct() {
@@ -21,14 +22,21 @@ class AuthPc extends BaseController {
         $userModel = new UserModel();
         $input_username = $this->request->getPost('USER_NAME');
         $clientHash = $this->request->getPost('U_PASSWORD');  //MD5
+        
+        log_message('info', "[LOGIN ATTEMPT] Username: {$input_username} from IP: " . $this->request->getIPAddress());
+        
         $user_login = $userModel->getActiveUserByUsername($input_username);
+
+        
         if (!$user_login) {
+            log_message('warning', "[LOGIN FAILED] Username not found: {$input_username}");
             return $this->response->setJSON([
                 'status' => 'error',
                 'message' => 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง'
             ]);
         }
         if (!password_verify($clientHash, $user_login['U_PASSWORD'])) {
+            log_message('warning', "[LOGIN FAILED] Invalid password for user: {$input_username}");
             return $this->response->setJSON([
                 'status' => 'error',
                 'message' => 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง'
@@ -43,12 +51,15 @@ class AuthPc extends BaseController {
             'EMAIL' => $user_login['email'],
             'GROUP_NAME' => $user_login['GROUP_NAME'],
             'SUP_ADMIN' => $user_login['SUP_ADMIN'],
-            'logged_in' => true
+            'logged_in' => true,
+             'last_activity' => time()
         ]);
+        
+        log_message('info', "[LOGIN SUCCESS] User {$input_username} (ID: {$user_login['USER_ID']}) logged in from IP: " . $this->request->getIPAddress());
 
         $jwtSecret = getenv('JWT_SECRET_KEY');
         $issuedAt = time();
-        $expirationTime = $issuedAt + 3600;
+        $expirationTime = $issuedAt + getenv('JWT_EXPIRE');
         $payload = [
             'iat' => $issuedAt,
             'exp' => $expirationTime,
@@ -78,7 +89,11 @@ class AuthPc extends BaseController {
         $session = session();
         $input_userChang = $this->request->getJSON(true) ?? $this->request->getPost();
         $UsernameChang = $session->get('USER_NAME');
+        
+        log_message('info', "[CHANGE PASSWORD] Attempt by user: {$UsernameChang}");
+        
         if (!$UsernameChang) {
+            log_message('warning', "[CHANGE PASSWORD] Session expired during password change");
             return $this->response->setJSON([
                 'status' => 'error',
                 'message' => 'Session หมดอายุ กรุณาเข้าสู่ระบบใหม่'
@@ -87,6 +102,7 @@ class AuthPc extends BaseController {
         $userModel = new UserModel();
         $output_userChangePassword = $userModel->getActiveUserByUsername($UsernameChang);
         if (!$output_userChangePassword) {
+            log_message('error', "[CHANGE PASSWORD] User not found: {$UsernameChang}");
             return $this->response->setJSON([
                 'status' => 'error',
                 'message' => 'ไม่พบข้อมูลผู้ใช้'
@@ -96,6 +112,7 @@ class AuthPc extends BaseController {
         $newPasswordHashjs = $input_userChang['new_password']; // md5 จาก JS
         // ตรวจสอบรหัสผ่านเดิม
         if (!password_verify($oldPasswordHashjs, $output_userChangePassword['U_PASSWORD'])) {
+            log_message('warning', "[CHANGE PASSWORD] Old password incorrect for user: {$UsernameChang}");
             return $this->response->setJSON([
                 'status' => 'error',
                 'message' => 'รหัสผ่านเดิมไม่ถูกต้อง'
@@ -104,6 +121,9 @@ class AuthPc extends BaseController {
         // สร้าง hash ใหม่
         $hashedPassword = password_hash($newPasswordHashjs, PASSWORD_DEFAULT);
         $userModel->update($output_userChangePassword['USER_ID'], ['U_PASSWORD' => $hashedPassword]);
+        
+        log_message('info', "[CHANGE PASSWORD] Success for user: {$UsernameChang}");
+        
         return $this->response->setJSON([
             'status' => 'success',
             'message' => 'เปลี่ยนรหัสผ่านเรียบร้อยแล้ว'
@@ -115,22 +135,28 @@ class AuthPc extends BaseController {
         $input_userForgot = $this->request->getPost('forgot_input');
         $empid    = $this->request->getPost('forgot_empid');
         $email    = $this->request->getPost('forgot_email');
+        
+        log_message('info', "[FORGOT PASSWORD] Attempt - Username: {$input_userForgot}, EmpID: {$empid}, Email: {$email}");
+        
         $userModel = new UserModel();
         $output_userForgot = $userModel->getActiveUserByUsername($input_userForgot);
         // ตรวจสอบ
         if (!$output_userForgot) {
+            log_message('warning', "[FORGOT PASSWORD] User not found: {$input_userForgot}");
             return $this->response->setJSON([
                 'status' => 'error',
                 'message' => 'ไม่พบชื่อผู้ใช้งานนี้ในระบบ'
             ]);
         }
          if (strtolower(trim($output_userForgot['EMP_ID'])) !== strtolower(trim($empid))) {
+            log_message('warning', "[FORGOT PASSWORD] EmpID mismatch for user: {$input_userForgot}");
             return $this->response->setJSON([
                 'status' => 'error',
                 'message' => 'ไม่พบเลขพนักงานนี้ในระบบ'
             ]);
         }    
         if (strtolower(trim($output_userForgot['email'])) !== strtolower(trim($email))) {
+            log_message('warning', "[FORGOT PASSWORD] Email mismatch for user: {$input_userForgot}");
             return $this->response->setJSON([
                 'status' => 'error',
                 'message' => 'อีเมลที่กรอกไม่ตรงกับข้อมูลในระบบ'
@@ -162,12 +188,14 @@ class AuthPc extends BaseController {
         $email->setSubject($subject);
         $email->setMessage($message);
         if ($email->send()) {
+            log_message('info', "[FORGOT PASSWORD] Email sent successfully to: {$to} for user: {$input_userForgot}");
             return $this->response->setJSON([
                 'status' => 'success',
                 'message' => 'รหัสผ่านใหม่ถูกส่งไปที่อีเมลของคุณแล้ว'
             ]);
         } else {
             $data = $email->printDebugger(['headers', 'subject', 'body']);
+            log_message('error', "[FORGOT PASSWORD] Email send failed for user: {$input_userForgot}. Error: " . json_encode($data));
             return $this->response->setJSON([
             'status' => 'error',
             'message' => 'ไม่สามารถส่งอีเมลได้ กรุณาลองใหม่อีกครั้ง',
@@ -176,20 +204,14 @@ class AuthPc extends BaseController {
         }
     }
 
-    // ต่ออายุ session
-    public function extendSession()
-    {
-        $session = session();
-        $session->set('last_activity', time());
-        return $this->response->setStatusCode(200);
-    }
-
     // Logout
     public function logout()
     {
+        $username = session()->get('USER_NAME');
+        $userId = session()->get('USER_ID');
+        log_message('info', "[LOGOUT] User {$username} (ID: {$userId}) logged out from IP: " . $this->request->getIPAddress());
+        
         session()->destroy();
-        //localStorage.removeItem('token');
-       
         return redirect()->to('login');
     }
 
@@ -307,7 +329,6 @@ class AuthPc extends BaseController {
         return $this->response->setJSON(['status'=>'success','message'=>'ลบสำเร็จ']);
     }
 }
-
 
 
 

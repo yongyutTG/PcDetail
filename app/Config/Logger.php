@@ -75,12 +75,26 @@ class Logger extends BaseConfig
      *
      * @var array<class-string, array<string, int|list<string>|string>>
      */
-    public array $handlers = [
-        'CodeIgniter\Log\Handlers\FileHandler' => [
-            'handles' => ['critical', 'alert', 'error', 'debug', 'info', 'notice', 'warning'],
-            'path' => WRITEPATH . 'logs/',
-            'level' => 'debug',
-            'threshold' => '4'
+   public array $handlers = [
+
+    FileHandler::class => [
+
+        'handles' => [
+
+            'emergency',
+            'alert',
+            'critical',
+            'error',
+            'warning',
+            'notice',
+            'info',
+            'debug'
+
         ],
-    ];
+
+        'path' => WRITEPATH . 'logs/',
+
+    ],
+
+];
 }

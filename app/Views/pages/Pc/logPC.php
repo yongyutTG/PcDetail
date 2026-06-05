@@ -65,7 +65,11 @@
     const searchInput = document.getElementById('keywordSearch');
     const resetBtn = document.getElementById('resetBtn');
     const jwtToken = localStorage.getItem('jwtToken');
-    const apiHeaders = {};
+    const apiHeaders = {
+      'Accept': 'application/json', 
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': '<?= csrf_hash() ?>'
+    };
     if (jwtToken) {
       apiHeaders['Authorization'] = `Bearer ${jwtToken}`;
     }
@@ -85,6 +89,17 @@
         : `${historyUrl}?page=${page}&limit=${limit}`;
       try {
         const res = await fetch(url, { headers: apiHeaders });
+          if (res.status === 401) { 
+          await Swal.fire({
+            icon: 'warning',
+            title: 'หมดเวลาการใช้งาน',
+            text: 'กรุณาเข้าสู่ระบบใหม่อีกครั้ง',
+            confirmButtonText: 'ตกลง'
+          });
+          window.location.href = "<?= base_url('login') ?>";
+          localStorage.removeItem('jwtToken');
+          return;
+        }
         if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
         const result = await res.json();
         spinner.style.display = "none";

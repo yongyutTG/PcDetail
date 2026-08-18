@@ -4,10 +4,8 @@ namespace App\Controllers\Pc;
 use CodeIgniter\RESTful\ResourceController;
 use App\Models\Pc\PcModel;
 
-class ApiPcController extends ResourceController
-{
+class ApiPcController extends ResourceController{
     protected $PcModel;
-
     public function __construct(){
         $this->PcModel = new PcModel(); 
     }
@@ -16,6 +14,7 @@ class ApiPcController extends ResourceController
     public function index(){
         $page   = (int) ($this->request->getGet('page') ?? 1);
         $limit  = (int) ($this->request->getGet('limit') ?? 17);
+        $limit = max(1, min($limit, 100));
         $offset = ($page - 1) * $limit;
 
         $totalRows  = $this->PcModel->countAllDetails();
@@ -39,6 +38,7 @@ class ApiPcController extends ResourceController
     public function getDetailsByIp(){
         $page   = (int) ($this->request->getGet('page') ?? 1);
         $limit  = (int) ($this->request->getGet('limit') ?? 17);
+        $limit = max(1, min($limit, 100));
         $offset = ($page - 1) * $limit;
 
         $ip  = $this->request->getGet('ip');   // ip เดียว
@@ -78,22 +78,22 @@ class ApiPcController extends ResourceController
         }
     }
     public function history($id = null){
-            if (!$id) {
-                return $this->failValidationError('ต้องระบุ pc_id');
-            }
-
-            $data = $this->PcModel->getHistoryById($id);
-
-            if ($data && count($data) > 0) {
-                return $this->respond([
-                    'status'  => 'success',
-                    'message' => 'ดึงข้อมูลประวัติสำเร็จ',
-                    'data'    => $data
-                ]);
-            }
-
-            return $this->failNotFound('ไม่พบประวัติของเครื่องนี้');
+        if (!$id) {
+            return $this->failValidationError('ต้องระบุ pc_id');
         }
+
+        $data = $this->PcModel->getHistoryById($id);
+
+        if ($data && count($data) > 0) {
+            return $this->respond([
+                'status'  => 'success',
+                'message' => 'ดึงข้อมูลประวัติสำเร็จ',
+                'data'    => $data
+            ]);
+        }
+
+        return $this->failNotFound('ไม่พบประวัติของเครื่องนี้');
+    }
 
 
     
@@ -102,16 +102,12 @@ class ApiPcController extends ResourceController
         if (!$data) {
             return $this->fail('No data provided');
         }
-
         // หา pc_id ใหม่
         $builder = $this->PcModel->builder();
         $maxId = $builder->selectMax('pc_id')->get()->getRowArray()['pc_id'] ?? 0;
         $newId = $maxId + 1;
-
         $insertData = array_merge(['pc_id' => $newId], $data);
-        
-        // ดึง userid จาก session
-        $userId = session()->get('USER_NAME'); // หรือ session()->get('USER_ID')
+        $userId = session()->get('USER_NAME'); 
 
         if ($this->PcModel->insert($insertData)) {
              //บันทึก history
@@ -192,15 +188,33 @@ class ApiPcController extends ResourceController
         return $this->fail('Failed to update PC');
     }
 
-    public function delete($id = null){
-        // ฟังก์ชันสำหรับลบข้อมูลตาม ID
-        // สามารถเพิ่มโค้ดสำหรับการลบข้อมูลได้ที่นี่
-    }
+    // public function delete($id = null)
+    // {
+    //     if (!$id) {
+    //         return $this->failValidationError('ต้องระบุ pc_id');
+    //     }
+
+    //     $oldData = $this->PcModel->find($id);
+
+    //     if (!$oldData) {
+    //         return $this->failNotFound('ไม่พบข้อมูล');
+    //     }
+
+    //     if ($this->PcModel->delete($id)) {
+    //         return $this->respondDeleted([
+    //             'status' => 'success',
+    //             'message' => 'ลบข้อมูลสำเร็จ'
+    //         ]);
+    //     }
+
+    //     return $this->fail('ลบข้อมูลไม่สำเร็จ');
+    // }
 
 
     public function searchstatus(){
         $page    = (int) ($this->request->getGet('page') ?? 1);
         $limit   = (int) ($this->request->getGet('limit') ?? 17);
+        $limit = max(1, min($limit, 100));
         $property_type = $this->request->getGet('property_type') ?? '';
         $br_no  = $this->request->getGet('br_no') ?? '';
         $status  = $this->request->getGet('status') ?? '';
@@ -227,6 +241,12 @@ class ApiPcController extends ResourceController
     public function ping($ip){
             // รันคำสั่ง ping (windows ใช้ -n 1, linux ใช้ -c 1)
             $os = strtoupper(substr(PHP_OS, 0, 3));
+            if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+            return $this->failValidationError('IP ไม่ถูกต้อง');
+                }
+
+            $ip = escapeshellarg($ip);
+
             $pingCmd = ($os === "WIN") ? "ping -n 1 $ip" : "ping -c 1 $ip";
 
             exec($pingCmd, $output, $result);
@@ -250,6 +270,7 @@ class ApiPcController extends ResourceController
     public function historyLog(){
         $page   = (int) ($this->request->getGet('page') ?? 1);
         $limit  = (int) ($this->request->getGet('limit') ?? 17);
+        $limit = max(1, min($limit, 100));
         $offset = ($page - 1) * $limit;
 
         $totalRows  = $this->PcModel->countAllDetailsLog();
@@ -271,6 +292,7 @@ class ApiPcController extends ResourceController
     public function searchstatusLog(){
         $page    = (int) ($this->request->getGet('page') ?? 1);
         $limit   = (int) ($this->request->getGet('limit') ?? 17);
+        $limit = max(1, min($limit, 100));
         $keyword = $this->request->getGet('keyword') ?? '';
 
         $offset = ($page - 1) * $limit;
@@ -303,10 +325,3 @@ class ApiPcController extends ResourceController
         }
         
     }
-
-
-
-
-
-
-

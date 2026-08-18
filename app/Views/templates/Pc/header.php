@@ -11,7 +11,6 @@ if ($row && isset($row->db_date)) {
 } else {
     $data['dbDate'] = '-';
 }
-
 ?>
 
 <head>
@@ -40,7 +39,7 @@ if ($row && isset($row->db_date)) {
 
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+
 
 
 
@@ -61,11 +60,15 @@ if ($row && isset($row->db_date)) {
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 
 
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="<?= base_url('css/style.css') ?>">
 
-    <!-- <link rel="stylesheet" href="css/login.css"> -->
-    <script src="<?= base_url('js/app.js') ?>"></script>
- 
+    <!-- โหลด Api -->
+    <script>
+    window.BASE_URL = "<?= base_url() ?>";
+    window.CSRF_TOKEN = "<?= csrf_hash() ?>";
+    </script>
+    <script src="<?= base_url('assets/js/api.js') ?>"></script>
+
     <title>PC Detail</title>
 
 </head>
@@ -158,7 +161,8 @@ if ($row && isset($row->db_date)) {
                             </li>
                             <li>
                                 <a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                    data-bs-target="#changPasswordModal"><i class="bi bi-key-fill"></i> เปลี่ยนรหัสผ่าน</a>
+                                    data-bs-target="#changPasswordModal"><i class="bi bi-key-fill"></i>
+                                    เปลี่ยนรหัสผ่าน</a>
                             </li>
                             <li>
                                 <a class="dropdown-item text-danger" href="javascript:void(0)"
@@ -195,12 +199,14 @@ if ($row && isset($row->db_date)) {
 </div>
 
 /* ================== Modal change password ================== */
-<div class="modal fade" id="changPasswordModal" tabindex="-1" aria-labelledby="changPasswordModalLabel" aria-hidden="true">
+<div class="modal fade" id="changPasswordModal" tabindex="-1" aria-labelledby="changPasswordModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header custom-header">
                 <h5 class="modal-title" id="changPasswordModalLabel"><i class="bi bi-key-fill"></i> เปลี่ยนรหัสผ่าน</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="ปิด"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="ปิด"></button>
             </div>
             <div class="modal-body">
                 <form id="changePasswordForm">
@@ -228,112 +234,129 @@ if ($row && isset($row->db_date)) {
 
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const form = document.getElementById("changePasswordForm");
+document.addEventListener("DOMContentLoaded", function() {
+    const form = document.getElementById("changePasswordForm");
+    form.addEventListener("submit", async function(e) {
+        e.preventDefault();
+        const oldPass = form.old_password.value.trim();
+        const newPass = form.new_password.value.trim();
+        const confirmPass = form.confirm_password.value.trim();
+        if (newPass !== confirmPass) {
+            toastr.error("รหัสผ่านใหม่ไม่ตรงกัน");
+            return;
+        }
 
-        form.addEventListener("submit", async function(e) {
-            e.preventDefault();
+        // เข้ารหัสก่อนส่ง
+        const md5oldPass = md5(oldPass);
+        const md5newPass = md5(newPass);
 
-            const oldPass = form.old_password.value.trim();
-            const newPass = form.new_password.value.trim();
-            const confirmPass = form.confirm_password.value.trim();
+        try {
+            const response = await fetch("<?= site_url('user/changePassword') ?>", {
+                method: "POST",
+                headers: apiHeaders,
+                body: JSON.stringify({
+                    old_password: md5oldPass,
+                    new_password: md5newPass
+                }),
+            });
 
+            const result = await response.json();
 
-
-            if (newPass !== confirmPass) {
-                toastr.error("รหัสผ่านใหม่ไม่ตรงกัน");
-                return;
+            if (result.status === "success") {
+                toastr.success(result.message);
+                form.reset();
+                const modal = bootstrap.Modal.getInstance(document.getElementById(
+                    "changPasswordModal"));
+                modal.hide();
+            } else {
+                toastr.error(result.message);
             }
-
-            // เข้ารหัสก่อนส่ง
-            const md5oldPass = md5(oldPass);
-            const md5newPass = md5(newPass);
-
-            try {
-                const response = await fetch("<?= site_url('user/changePassword') ?>", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        old_password: md5oldPass,
-                        new_password: md5newPass
-                    }),
-                });
-
-                const result = await response.json();
-
-                if (result.status === "success") {
-                    toastr.success(result.message);
-                    form.reset();
-                    const modal = bootstrap.Modal.getInstance(document.getElementById("changPasswordModal"));
-                    modal.hide();
-                } else {
-                    toastr.error(result.message);
-                }
-            } catch (error) {
-                toastr.error("เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์");
-            }
-        });
+        } catch (error) {
+            toastr.error("เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์");
+        }
     });
+});
 </script>
 
 <script>
-    function confirmLogout() {
-        toastr.info(
-            '<div style="text-align:center;">คุณต้องการออกจากระบบหรือไม่ ?<br><br>' +
-            '<button type="button" id="btnYes" class="btn btn-sm btn-danger">ออกจากระบบ</button> ' +
-            '<button type="button" id="btnNo" class="btn btn-sm btn-secondary">ยกเลิก</button>' +
-            '</div>',
-            'ยืนยัน', {
-                closeButton: true,
+function confirmLogout() {
+    toastr.info(
+        '<div style="text-align:center;">คุณต้องการออกจากระบบหรือไม่ ?<br><br>' +
+        '<button type="button" id="btnYes" class="btn btn-sm btn-danger">ออกจากระบบ</button> ' +
+        '<button type="button" id="btnNo" class="btn btn-sm btn-secondary">ยกเลิก</button>' +
+        '</div>',
+        'ยืนยัน', {
+            closeButton: true,
+        }
+    );
+    $(document).on("click", "#btnYes", function() {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        window.location.href = "<?= site_url('login') ?>";
+    });
+    $(document).on("click", "#btnNo", function() {
+        toastr.close();
+    });
+}
+</script>
 
+<script>
+let sessionTimeoutShown = false;
+setInterval(checkSession, 30000);
 
-            }
-        );
-        $(document).on("click", "#btnYes", function() {
-            localStorage.removeItem('jwtToken');
-            window.location.href = "<?= site_url('logout') ?>";
+async function checkSession() {
+    try {
+        const res = await fetch("<?= base_url('check-session') ?>", {
+            method: "GET",
         });
+        if (res.status === 401) {
+            console.log("Session timeout (401)");
+            showSessionExpired();
+            return;
+        }
+        const result = await res.json();
+        if (result.status === "timeout") {
+            console.log("Session Timeout");
+            showSessionExpired();
+            return;
+        }
+        if (result.status === "active") {
+            const loginTime = new Date().toLocaleString("th-TH", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit"
+            });
+            console.log("Session Active:", {
+                datetime: loginTime
+            });
+        }
 
-
-        $(document).on("click", "#btnNo", function() {
-            toastr.close();
-        });
+    } catch (error) {
+        console.error(error);
     }
-</script>
+}
 
-<script>
-
-// setInterval(async () => {
-
-//     try {
-
-//         const response =
-//             await fetch("<?= site_url('session/check') ?>");
-
-//         if (response.status === 401) {
-
-//             alert("Session Timeout");
-
-//             window.location.href =
-//                 "<?= site_url('login') ?>";
-
-//             return;
-//         }
-
-//         const data =
-//             await response.json();
-
-//         console.log(data.status);
-
-//     }
-//     catch(err){
-
-//         console.error(err);
-
-//     }
-
-// },30000);
-
+function showSessionExpired() {
+    if (sessionTimeoutShown) return;
+    sessionTimeoutShown = true;
+    Swal.fire({
+        icon: 'warning',
+        title: 'Session หมดอายุ',
+        text: 'ไม่มีการใช้งานเกิน 30 นาที กรุณาเข้าสู่ระบบใหม่',
+        confirmButtonText: 'ตกลง',
+        allowOutsideClick: false,
+        allowEscapeKey: false
+    }).then(() => {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        window.location.href = "<?= site_url('login') ?>";
+    });
+    log_message(
+        'info',
+        "[SessionTimeout] for user: {$input_username}"
+    );
+}
 </script>

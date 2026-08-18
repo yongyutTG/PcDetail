@@ -1,30 +1,41 @@
 <?php
 
 namespace App\Controllers\Pc;
-use CodeIgniter\Controller;
-use App\Controllers\BaseController;
 
-// class SessionController extends BaseController
-class SessionController extends Controller
+use App\Controllers\Pc\BaseController;
+
+class SessionController extends BaseController
 {
-    public function check()
+     public function check()
     {
         $session = session();
 
-        if (
-            !$session->get('logged_in')
-        ) {
+        $timeout =(int) (getenv('SESSION_IDLE_TIMEOUT'));   // 300 วินาที = 5 นาที
 
-            return $this->response
-                ->setStatusCode(401)
-                ->setJSON([
-                    'status' => 'timeout'
-                ]);
+        if (! $session->get('logged_in')) {
+            return $this->response->setJSON([
+                'status' => 'timeout',
+                'message' => 'Session not found'
+            ])->setStatusCode(401);
         }
 
-        return $this->response
-            ->setJSON([
-                'status' => 'active'
-            ]);
+        $lastActivity = $session->get('last_activity');
+
+        if ($lastActivity && (time() - $lastActivity > $timeout)) {
+            $session->destroy();
+
+            return $this->response->setJSON([
+                'status' => 'timeout',
+                'message' => 'Session expired'
+            ])->setStatusCode(401);
+        }
+
+        // $session->set('last_activity', time());
+
+        return $this->response->setJSON([
+            'status' => 'active',
+            'message' => 'Session active',
+            'user' => $session->get('USER_NAME')
+        ]);
     }
 }

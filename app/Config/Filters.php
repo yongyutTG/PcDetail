@@ -9,14 +9,21 @@ use CodeIgniter\Filters\Honeypot;
 use CodeIgniter\Filters\InvalidChars;
 use CodeIgniter\Filters\SecureHeaders;
 
-class Filters extends BaseConfig{
+class Filters extends BaseConfig
+{
     public array $aliases = [
         'csrf'     => \CodeIgniter\Filters\CSRF::class, // ป้องกัน CSRF
         'jwtauth'  => \App\Filters\JWTAuth::class,   //ยืนยันตัวตนด้วย JWT
-        //'apilogger' => \App\Filters\ApiLoggerFilter::class, //บันทึกการเรียก API
-
-
+        'sessionTimeout' => \App\Filters\SessionTimeoutFilter::class, //ตรวจสอบการหมดอายุของ session
+        'toolbar'  => \CodeIgniter\Filters\DebugToolbar::class,
     ];
 
-    
-   }
+    public array $globals = [
+        'before' => [
+            // 'csrf',
+        ],
+        'after' => [
+            'toolbar',
+        ],
+    ];
+}

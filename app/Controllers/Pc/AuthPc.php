@@ -1,33 +1,39 @@
 <?php
+
 namespace App\Controllers\Pc;
+
 use App\Models\Pc\UserModel;
 use CodeIgniter\CLI\Console;
 use Firebase\JWT\JWT;
 
 
-class AuthPc extends BaseController {
+class AuthPc extends BaseController
+{
     protected $userModel;
-    public function __construct() {
+    public function __construct()
+    {
         $this->userModel = new UserModel();
     }
     //หน้า login
-    public function login(){
-        return 
-        view('templates/Pc/header-login')
-        .view('pages/Pc/auth/login')
-        .view('templates/Pc/footer');
+    public function login()
+    {
+        return
+            view('templates/Pc/header-login')
+            . view('pages/Pc/auth/login')
+            . view('templates/Pc/footer');
     }
-    public function chk_login(){
+    public function chk_login()
+    {
         $session = session();
         $userModel = new UserModel();
         $input_username = $this->request->getPost('USER_NAME');
         $clientHash = $this->request->getPost('U_PASSWORD');  //MD5
-        
+
         log_message('info', "[LOGIN ATTEMPT] Username: {$input_username} from IP: " . $this->request->getIPAddress());
-        
+
         $user_login = $userModel->getActiveUserByUsername($input_username);
 
-        
+
         if (!$user_login) {
             log_message('warning', "[LOGIN FAILED] Username not found: {$input_username}");
             return $this->response->setJSON([
@@ -43,6 +49,7 @@ class AuthPc extends BaseController {
             ]);
         }
         $userModel->updateLoginTime($user_login['USER_ID']);
+
         $session->set([
             'USER_ID' => $user_login['USER_ID'],
             'USER_NAME' => $user_login['USER_NAME'],
@@ -52,46 +59,85 @@ class AuthPc extends BaseController {
             'GROUP_NAME' => $user_login['GROUP_NAME'],
             'SUP_ADMIN' => $user_login['SUP_ADMIN'],
             'logged_in' => true,
-             'last_activity' => time()
+            'last_activity' => time()
         ]);
-        
+
         log_message('info', "[LOGIN SUCCESS] User {$input_username} (ID: {$user_login['USER_ID']}) logged in from IP: " . $this->request->getIPAddress());
 
+        
         $jwtSecret = getenv('JWT_SECRET_KEY');
+        $refreshSecret = getenv('JWT_REFRESH_SECRET_KEY');
+
+        $accessExpire = (int) getenv('JWT_ACCESS_EXPIRE') ?: 900;
+        $refreshExpire = (int) getenv('JWT_REFRESH_EXPIRE') ?: 1800;
+
         $issuedAt = time();
-        $expirationTime = $issuedAt + getenv('JWT_EXPIRE');
-        $payload = [
-            'iat' => $issuedAt,
-            'exp' => $expirationTime,
+
+        $accessPayload = [
+            'iat'  => $issuedAt,
+            'exp'  => $issuedAt + $accessExpire,
+            'type' => 'access',
             'data' => [
-                'id' => $user_login['USER_ID'],
+                'id'       => $user_login['USER_ID'],
                 'username' => $user_login['USER_NAME'],
-                'role' => $user_login['GROUP_NAME'],
+                'role'     => $user_login['GROUP_NAME'],
             ]
         ];
-        $token = JWT::encode($payload, $jwtSecret, 'HS256');
 
-       //ถ้าเป็น admin → ไปหน้า admin
+        $refreshPayload = [
+            'iat'  => $issuedAt,
+            'exp'  => $issuedAt + $refreshExpire,
+            'type' => 'refresh',
+            'data' => [
+                'id' => $user_login['USER_ID'],
+            ]
+        ];
+
+        $accessToken = JWT::encode(
+            $accessPayload,
+            $jwtSecret,
+            'HS256'
+        );
+
+        $refreshToken = JWT::encode(
+            $refreshPayload,
+            $refreshSecret,
+            'HS256'
+        );
+
+        log_message(
+            'info',
+            "[LOGIN JWT GENERATED] Access/refreshToken Token created for user: {$input_username}"
+        );
+      
+        //ถ้าเป็น admin → ไปหน้า admin
         if (strtolower($user_login['USER_NAME']) === 'it0007') {
             $redirectUrl = base_url('admin');
+            log_message('info', "[LOGIN REDIRECT]  Admin {$input_username} redirected to listUser page");
         } else {
             $redirectUrl = base_url('all-listPC');
+            log_message('info', "[LOGIN REDIRECT] Username {$input_username} redirected to listPC page");
         }
-        return $this->response->setJSON([
-            'status'   => 'success',
-            'message'  => 'เข้าสู่ระบบสำเร็จ',
-            'redirect' => $redirectUrl,
-            'token'    => $token
+       return $this->response->setJSON([
+            'status'             => 'success',
+            'message'            => 'เข้าสู่ระบบสำเร็จ',
+            'redirect'           => $redirectUrl,
+            'token_type'         => 'Bearer',
+            'access_token'       => $accessToken,
+            'refresh_token'      => $refreshToken,
+            'expires_in'         => $accessExpire,
+            'refresh_expires_in' => $refreshExpire
         ]);
     }
-    
-    public function changePassword(){
+
+    public function changePassword()
+    {
         $session = session();
         $input_userChang = $this->request->getJSON(true) ?? $this->request->getPost();
         $UsernameChang = $session->get('USER_NAME');
-        
+
         log_message('info', "[CHANGE PASSWORD] Attempt by user: {$UsernameChang}");
-        
+
         if (!$UsernameChang) {
             log_message('warning', "[CHANGE PASSWORD] Session expired during password change");
             return $this->response->setJSON([
@@ -121,9 +167,9 @@ class AuthPc extends BaseController {
         // สร้าง hash ใหม่
         $hashedPassword = password_hash($newPasswordHashjs, PASSWORD_DEFAULT);
         $userModel->update($output_userChangePassword['USER_ID'], ['U_PASSWORD' => $hashedPassword]);
-        
+
         log_message('info', "[CHANGE PASSWORD] Success for user: {$UsernameChang}");
-        
+
         return $this->response->setJSON([
             'status' => 'success',
             'message' => 'เปลี่ยนรหัสผ่านเรียบร้อยแล้ว'
@@ -131,13 +177,14 @@ class AuthPc extends BaseController {
     }
 
     //รีเซ็ตรหัสผ่าน"
-    public function forgotPassword() {
+    public function forgotPassword()
+    {
         $input_userForgot = $this->request->getPost('forgot_input');
         $empid    = $this->request->getPost('forgot_empid');
         $email    = $this->request->getPost('forgot_email');
-        
+
         log_message('info', "[FORGOT PASSWORD] Attempt - Username: {$input_userForgot}, EmpID: {$empid}, Email: {$email}");
-        
+
         $userModel = new UserModel();
         $output_userForgot = $userModel->getActiveUserByUsername($input_userForgot);
         // ตรวจสอบ
@@ -148,32 +195,32 @@ class AuthPc extends BaseController {
                 'message' => 'ไม่พบชื่อผู้ใช้งานนี้ในระบบ'
             ]);
         }
-         if (strtolower(trim($output_userForgot['EMP_ID'])) !== strtolower(trim($empid))) {
+        if (strtolower(trim($output_userForgot['EMP_ID'])) !== strtolower(trim($empid))) {
             log_message('warning', "[FORGOT PASSWORD] EmpID mismatch for user: {$input_userForgot}");
             return $this->response->setJSON([
                 'status' => 'error',
                 'message' => 'ไม่พบเลขพนักงานนี้ในระบบ'
             ]);
-        }    
+        }
         if (strtolower(trim($output_userForgot['email'])) !== strtolower(trim($email))) {
             log_message('warning', "[FORGOT PASSWORD] Email mismatch for user: {$input_userForgot}");
             return $this->response->setJSON([
                 'status' => 'error',
                 'message' => 'อีเมลที่กรอกไม่ตรงกับข้อมูลในระบบ'
             ]);
-        }    
+        }
 
-         //กรณีไรับค่ารหัสผ่านใหม่จาก user
-       $newPassword_gen = substr(str_shuffle('abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 8);       
+        //กรณีไรับค่ารหัสผ่านใหม่จาก user
+        $newPassword_gen = substr(str_shuffle('abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 8);
         $newPassword = md5($newPassword_gen);
         // Hash ซ้อนอีกชั้น
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-    
+
         $userModel->update($output_userForgot['USER_ID'], ['U_PASSWORD' => $hashedPassword]);
         $loginUrl = base_url('login');
-        $registerDate = date("d/m/Y H:i"); 
+        $registerDate = date("d/m/Y H:i");
         $to = $email;
-        
+
         $subject = "รีเซ็ตรหัสผ่านใหม่สำหรับระบบ PC Detail";
         $message = "
                     <p>สวัสดีผู้ใช้งาน {$input_userForgot}</p>
@@ -197,10 +244,10 @@ class AuthPc extends BaseController {
             $data = $email->printDebugger(['headers', 'subject', 'body']);
             log_message('error', "[FORGOT PASSWORD] Email send failed for user: {$input_userForgot}. Error: " . json_encode($data));
             return $this->response->setJSON([
-            'status' => 'error',
-            'message' => 'ไม่สามารถส่งอีเมลได้ กรุณาลองใหม่อีกครั้ง',
-            'debug' => $input_userForgot
-        ]);
+                'status' => 'error',
+                'message' => 'ไม่สามารถส่งอีเมลได้ กรุณาลองใหม่อีกครั้ง',
+                'debug' => $input_userForgot
+            ]);
         }
     }
 
@@ -210,7 +257,7 @@ class AuthPc extends BaseController {
         $username = session()->get('USER_NAME');
         $userId = session()->get('USER_ID');
         log_message('info', "[LOGOUT] User {$username} (ID: {$userId}) logged out from IP: " . $this->request->getIPAddress());
-        
+
         session()->destroy();
         return redirect()->to('login');
     }
@@ -218,30 +265,41 @@ class AuthPc extends BaseController {
 
 
     // หน้า register
-    public function register(){
+    public function register()
+    {
         return view('pages/Pc/auth/register')
             . view('templates/Pc/header');
         //  . view('templates/Pc/footer');
     }
-    public function attemptRegister(){
+    public function attemptRegister()
+    {
         $userModel = new UserModel();
         $input_userRegister = $this->request->getPost('USER_NAME');
         $Passwordemail = $this->request->getPost('EMAIL');
+        $empId = $this->request->getPost('EMP_ID');
         $output_userRegister = $userModel->getActiveUserByUsername($input_userRegister);
-            // ตรวจสอบ
+
+
+        // ตรวจสอบ
         if ($output_userRegister) {
             return $this->response->setJSON([
                 'status' => 'error',
-                 'message' => 'มีชื่อผู้ใช้งานนี้แล้ว กรุณาเลือกชื่อใหม่'
+                'message' => 'มีชื่อผู้ใช้งานนี้แล้ว กรุณาเลือกชื่อใหม่'
             ]);
         }
-       
+        if ($userModel->chk_empid($empId) === false) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => 'ไม่พบเลขพนักงานนี้ในระบบ'
+            ]);
+        }
+        log_message('info', "[REGISTER] Attempt to register new user: {$input_userRegister} with EmpID: {$empId} and Email: {$Passwordemail}");
+
         $newUserId = $userModel->getNextUserId();
         $RegisterPassword_gen = substr(str_shuffle('abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 8);
         $clientHash = md5($RegisterPassword_gen);
         // Hash ซ้อนอีกชั้น
-        $finalHash = password_hash($clientHash, PASSWORD_DEFAULT);
-        ;
+        $finalHash = password_hash($clientHash, PASSWORD_DEFAULT);;
         $userData = [
             'USER_ID' => $newUserId,
             'USER_NAME' => $input_userRegister,
@@ -291,9 +349,9 @@ class AuthPc extends BaseController {
         }
     }
 
-
     //ข้อมูลผู้ใช้งาน GROUP_ID = 10
-    public function getUsers(){
+    public function getUsers()
+    {
         $userModel = new UserModel();
         $users = $userModel
             ->where('GROUP_ID', 10)
@@ -306,29 +364,31 @@ class AuthPc extends BaseController {
     }
 
     // ดึงข้อมูลผู้ใช้งานตาม ID
-    public function getUserById($id) {
+    public function getUserById($id)
+    {
         $user = $this->userModel->find($id);
         if ($user) {
-            return $this->response->setJSON(['status'=>'success','data'=>$user]);
+            return $this->response->setJSON(['status' => 'success', 'data' => $user]);
         } else {
-            return $this->response->setJSON(['status'=>'error','message'=>'ไม่พบผู้ใช้งาน']);
+            return $this->response->setJSON(['status' => 'error', 'message' => 'ไม่พบผู้ใช้งาน']);
         }
     }
-     // แก้ไขผู้ใช้งาน
-    public function updateUser() {
+    // แก้ไขผู้ใช้งาน
+    public function updateUser()
+    {
         $data_updateUser = $this->request->getPost();
         $id = $data_updateUser['USER_ID'];
         unset($data_updateUser['USER_ID']);
         $this->userModel->update($id, $data_updateUser);
-        return $this->response->setJSON(['status'=>'success','message'=>'แก้ไขสำเร็จ']);
+        log_message('info', "[UPDATE USER] User ID {$id} updated with data: " . json_encode($data_updateUser));
+        return $this->response->setJSON(['status' => 'success', 'message' => 'แก้ไขสำเร็จ']);
     }
 
-     // ลบผู้ใช้งาน
-    public function deleteUser($id) {
+    // ลบผู้ใช้งาน
+    public function deleteUser($id)
+    {
         $this->userModel->delete($id);
-        return $this->response->setJSON(['status'=>'success','message'=>'ลบสำเร็จ']);
+        log_message('info', "[DELETE USER] User ID {$id} deleted.");
+        return $this->response->setJSON(['status' => 'success', 'message' => 'ลบสำเร็จ']);
     }
 }
-
-
-

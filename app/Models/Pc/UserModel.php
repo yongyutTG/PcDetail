@@ -15,29 +15,7 @@ class UserModel extends Model
     ];
 
 
-// ตรวจสอบ user สำหรับ login
-//     public function getActiveUserByUsername($username){
-//     $sql = "SELECT 
-//                 u.USER_NAME,
-//                 u.USER_ID,
-//                 u.EMP_ID,
-//                 u.GROUP_ID,
-//                 u.SUP_ADMIN,
-//                 u.U_PASSWORD,
-//                 t.user_name,
-//                 g.GROUP_NAME
-//             FROM usr_user u
-//             LEFT JOIN bk_h_teller_control t 
-//                 ON t.user_id = u.USER_NAME
-//             LEFT JOIN usr_group g
-//                 ON g.GROUP_ID = u.GROUP_ID
-//             WHERE u.USER_NAME = ?
-//               AND u.IS_ACTIVE = '1'";
-
-//     $query = $this->db->query($sql, [$username]);
-//     return $query->getRowArray(); // คืนค่าเป็น array
-// }
-
+    //ตรวจสอบว่าเคย register pc detail นี้แล้วหรือไม่
     public function getActiveUserByUsername($username){
     $sql = "SELECT 
                 u.USER_NAME,
@@ -62,6 +40,16 @@ class UserModel extends Model
     $query = $this->db->query($sql, [$username]);
     return $query->getRowArray(); // คืนค่าเป็น array
 }
+
+    //ตรวจสอบว empid มีอยู่ใน mem_h_member หรือไม่
+    public function chk_empid($empId)
+    {
+        $sql = "SELECT COUNT(*) AS count FROM mem_h_member WHERE empid = ?
+        and tried_flg = 'S09'";
+        $query = $this->db->query($sql, [$empId]);
+        $result = $query->getRowArray();
+        return $result['count'] > 0; // คืนค่า true ถ้ามีอยู่, false ถ้าไม่มี
+    }
 
     // 🔹 หาค่า USER_ID ล่าสุด +1
     public function getNextUserId()

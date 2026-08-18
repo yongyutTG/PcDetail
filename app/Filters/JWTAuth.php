@@ -49,6 +49,7 @@ class JWTAuth implements FilterInterface
 
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
     {
-        // ไม่ต้องทำอะไรในส่วนนี้
+        // $response->setHeader('api-supported-versions', '1');
+    
     }
 }

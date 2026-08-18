@@ -8,64 +8,46 @@ use CodeIgniter\Filters\FilterInterface;
 
 class SessionTimeoutFilter implements FilterInterface
 {
-    private $timeout = 120; // 2 นาที
-    
-
-    public function before(RequestInterface $request, $arguments = null)
+    public function before(
+        RequestInterface $request,
+        $arguments = null
+    )
     {
         $session = session();
 
-        if (!$session->get('logged_in')) {
+        if (! $session->get('logged_in')) {
 
-            if ($request->isAJAX()) {
-
-                return service('response')
-                    ->setStatusCode(401)
-                    ->setJSON([
-                        'status' => 'timeout'
-                    ]);
-            }
-
-            return redirect()->to('/login');
+            return redirect()
+                ->to(base_url('login'));
         }
 
-        $lastActivity = $session->get('last_activity');
+        $idleTimeout =(int) (getenv('SESSION_IDLE_TIMEOUT'));   
+
+        $lastActivity =
+            $session->get('last_activity');
 
         if (
             $lastActivity &&
-            (time() - $lastActivity > $this->timeout)
+            (time() - $lastActivity)
+            > $idleTimeout
         ) {
 
             $session->destroy();
 
-            if ($request->isAJAX()) {
-
-                return service('response')
-                    ->setStatusCode(401)
-                    ->setJSON([
-                        'status' => 'timeout'
-                    ]);
-            }
-
-            return redirect()->to('/login');
+            return redirect()
+                ->to(base_url('login'));
         }
 
-        /*
-         update activity เฉพาะ request ปกติ
-         ไม่ update endpoint check session
-        */
-
-        if ($request->getPath() !== 'session/check') {
-            $session->set(
-                'last_activity',
-                time()
-            );
-        }
+        $session->set(
+            'last_activity',
+            time()
+        );
     }
 
     public function after(
         RequestInterface $request,
         ResponseInterface $response,
         $arguments = null
-    ) {}
+    ) {
+    }
 }

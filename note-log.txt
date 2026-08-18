@@ -1,0 +1,113 @@
+ถ้าจะออกแบบ Log สำหรับระบบธุรกิจ / API / CI4 ผมแนะนำให้คิดเป็น Module + Action + Detail เพราะเวลาย้อนดู log จะง่ายกว่าการเก็บข้อความลอย ๆ
+structure
+WHO
+ทำอะไร
+กับอะไร
+เมื่อไร
+จากไหน
+ผลลัพธ์อะไร
+
+1. ออกแบบ Module
+
+Module = ส่วนของระบบ
+
+ตัวอย่างสำหรับระบบของคุณ:
+
+Module	ใช้กับ
+AUTH	Login / Logout
+MEMBER	สมาชิก
+USER	จัดการผู้ใช้
+ROLE	สิทธิ์
+PC	เครื่องคอม / Asset
+LOAN	ระบบกู้
+SAVING	ออมทรัพย์
+API	API call
+REPORT	Export / Print
+SESSION	Timeout
+SYSTEM	Config
+
+
+
+2. ออกแบบ Action
+
+Action ควรเป็นมาตรฐานเดียวกันทั้งระบบ
+
+Action	ใช้เมื่อ
+CREATE	เพิ่ม
+UPDATE	แก้ไข
+DELETE	ลบ
+VIEW	ดูข้อมูล
+SEARCH	ค้นหา
+LOGIN	Login
+LOGOUT	Logout
+EXPORT	Export
+IMPORT	Import
+APPROVE	อนุมัติ
+REJECT	ปฏิเสธ
+PRINT	พิมพ์
+TIMEOUT	Session หมดอายุ
+FAILED	ทำไม่สำเร็จ
+
+แนะนำ:
+
+CREATE
+UPDATE
+DELETE
+VIEW
+LOGIN
+FAILED
+3. Structure JSON Log
+
+ผมแนะนำให้ทุก log มี schema เดียวกัน
+
+{
+  "datetime":"2026-06-07 22:00:00",
+  "request_id":"REQ-123",
+  "user_id":19,
+  "username":"IT0007",
+  "module":"MEMBER",
+  "action":"UPDATE",
+  "reference":"MEM0001",
+  "ip":"172.17.1.106",
+  "status":"SUCCESS",
+  "detail":{
+      "field":"fullname"
+  }
+}
+4. ความหมายแต่ละ Field
+Field	เอาไว้ทำอะไร
+datetime	เวลา
+request_id	trace request
+user_id	คนทำ
+username	คนทำ
+module	ระบบไหน
+action	ทำอะไร
+reference	object ที่ถูกแก้
+ip	IP
+status	SUCCESS/FAILED
+detail	รายละเอียด
+5. ตัวอย่างใช้งานจริง
+Login
+service('audit')->save(
+
+   'LOGIN',
+
+   'AUTH',
+
+   [
+
+      'reference' => $username,
+
+      'status' => 'SUCCESS'
+
+   ]
+
+);
+
+Result:
+
+{
+ "module":"AUTH",
+ "action":"LOGIN",
+ "reference":"IT0007"
+}

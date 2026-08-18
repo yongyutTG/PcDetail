@@ -1,4 +1,5 @@
 writable/*
 vendor/
 .env
+.txt
 

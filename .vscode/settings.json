@@ -1,0 +1,8 @@
+{
+    "editor.formatOnSave": true,
+    "files.autoSave": "off",
+    "php-cs-fixer.exclude": [],
+    "dataworkspace.excludedProjects": [
+        "test3/test3.sqlproj"
+    ]
+}

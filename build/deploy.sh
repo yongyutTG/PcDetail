@@ -11,7 +11,7 @@ git reset --hard origin/main    #รีเซ็ต branch ปัจจุบั
 git clean -fd  #ใช้ลบไฟล์ที่ Git ไม่รู้จัก
 
 echo "===== Composer Install ====="
-#composer install --no-dev --optimize-autoloader --no-interaction
+composer install --no-dev --optimize-autoloader --no-interaction
 
 echo "Reload NGINX"
 sudo systemctl reload nginx

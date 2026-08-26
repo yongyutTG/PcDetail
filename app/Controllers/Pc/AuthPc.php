@@ -68,8 +68,8 @@ class AuthPc extends BaseController
         $jwtSecret = getenv('JWT_SECRET_KEY');
         $refreshSecret = getenv('JWT_REFRESH_SECRET_KEY');
 
-        $accessExpire = (int) getenv('JWT_ACCESS_EXPIRE') ?: 900;
-        $refreshExpire = (int) getenv('JWT_REFRESH_EXPIRE') ?: 1800;
+        $accessExpire = (int) getenv('JWT_ACCESS_EXPIRE') ?: 180;
+        $refreshExpire = (int) getenv('JWT_REFRESH_EXPIRE') ?: 604800;
 
         $issuedAt = time();
 

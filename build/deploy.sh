@@ -1,9 +1,7 @@
 #!/bin/bash
 set -e
-
 echo "===== START DEPLOY ====="
 cd /var/www/html/PcDetail
-
 echo "Code ล่าสุดจาก GitHub"
 #git pull origin main;  
 git fetch origin  #ดึงข้อมูลล่าสุดจาก remote repository
@@ -11,6 +9,7 @@ git reset --hard origin/main    #รีเซ็ต branch ปัจจุบั
 git clean -fd -e composer.phar -e .env
 
 echo "===== Composer Install ====="
+
 php composer.phar install --no-dev --optimize-autoloader --no-interaction
 
 echo "Reload PHP-FPM and NGINX"

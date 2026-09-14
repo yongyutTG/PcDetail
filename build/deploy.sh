@@ -1,14 +1,21 @@
 #!/bin/bash
 set -e
+
 echo "===== START DEPLOY ====="
 cd /var/www/html/PcDetail
+
 echo "Code ล่าสุดจาก GitHub"
-#git pull origin main;  
-git fetch origin  #ดึงข้อมูลล่าสุดจาก remote repository
-git reset --hard origin/main    #รีเซ็ต branch ปัจจุบันให้ตรงกับ origin/main
+git fetch origin
+git reset --hard origin/main
 git clean -fd -e composer.phar -e .env
 
 echo "===== Composer Install ====="
+if [ ! -f composer.phar ]; then
+  echo "Download Composer 2.8.6"
+  php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+  php composer-setup.php --version=2.8.6
+  rm composer-setup.php
+fi
 
 php composer.phar install --no-dev --optimize-autoloader --no-interaction
 

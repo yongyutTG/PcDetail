@@ -4,6 +4,7 @@ set -e
 echo "===== START DEPLOY ====="
 cd /var/www/html/PcDetail
 
+
 echo "Code ล่าสุดจาก GitHub"
 git fetch origin
 git reset --hard origin/main

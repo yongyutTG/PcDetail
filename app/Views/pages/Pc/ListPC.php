@@ -579,6 +579,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let totalPages = 0;
     let totalRecords = 0;
     let selectedRowIndex = -1;
+    let originalEditData = null;
 
     document.getElementById('keywordSearch').focus();
     //ฟังก์ชันโหลดข้อมูลทั้งหมด PCหน้าแรก (รองรับค้นหา/กรอง/เปลี่ยนหน้า)
@@ -956,6 +957,41 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
+    function normalizeEditValue(key, value) {
+        if (value === undefined || value === null || value === '' || value === '1900-01-01 00:00:00') {
+            return '';
+        }
+
+        if (key === 'buy_date') {
+            return String(value).replace('T', ' ').slice(0, 16);
+        }
+
+        return String(value).trim();
+    }
+
+    function normalizeEditData(data) {
+        const map = [
+            'user_name', 'computer_name', 'login_user', 'terminal_server', 'terminal_login',
+            'location', 'band', 'model', 'ip_address', 'ram', 'harddisk', 'cpu', 'os', 'office', 'solfware',
+            'printer', 'printer_share_name', 'outlet_port', 'use_status', 'remark', 'br_no', 'serial_no',
+            'buy_date', 'property_code', 'property_type', 'monitor'
+        ];
+        const normalized = {};
+
+        map.forEach(key => {
+            normalized[key] = normalizeEditValue(key, data[key]);
+        });
+
+        return normalized;
+    }
+
+    function hasEditChanges(data) {
+        if (!originalEditData) return true;
+
+        const currentData = normalizeEditData(data);
+        return Object.keys(originalEditData).some(key => originalEditData[key] !== currentData[key]);
+    }
+
     // Map ข้อมูลเข้า form edit
     function fillEditForm(pc) {
         const map = [
@@ -976,6 +1012,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
             el.value = value;
         });
+
+        originalEditData = normalizeEditData(pc);
     }
 
     // Event แก้ไข
@@ -1030,12 +1068,21 @@ document.addEventListener("DOMContentLoaded", function() {
             if (key === 'buy_date') {
                 if (value) {
                     data[key] = value.replace('T', ' ') + ':00.000';
+                } else {
+                    data[key] = null;
                 }
             } else {
-                data[key] = value;
+                data[key] = value === "" ? null : value;
             }
         });
 
+        if (!hasEditChanges(data)) {
+            bootstrap.Modal.getInstance(document.getElementById("editPcModal")).hide();
+            toastr.info("ไม่มีการเปลี่ยนแปลงข้อมูล", "แจ้งเตือน");
+            editBtn.disabled = false;
+            editBtn.innerHTML = originalText;
+            return;
+        }
 
         try {
             const res = await apiFetch(`${apiBaseUrl}/${pcId}`, {
@@ -1045,14 +1092,18 @@ document.addEventListener("DOMContentLoaded", function() {
             const result = await res.json();
             if (result.status === 'success') {
                 bootstrap.Modal.getInstance(document.getElementById("editPcModal")).hide();
-                toastr.success("บันทึกแก้ไขข้อมูลเรียบร้อยแล้ว", "สำเร็จ");
-                fetchPCs({
-                    page: currentPage,
-                    keyword: searchInput.value,
-                    status: statusFilter.value,
-                    br_no: brnoFilter.value,
-                    property_type: typeFilter.value
-                });
+                if (result.no_changes) {
+                    toastr.info(result.message || "ไม่มีการเปลี่ยนแปลงข้อมูล", "แจ้งเตือน");
+                } else {
+                    toastr.success("บันทึกแก้ไขข้อมูลเรียบร้อยแล้ว", "สำเร็จ");
+                    fetchPCs({
+                        page: currentPage,
+                        keyword: searchInput.value,
+                        status: statusFilter.value,
+                        br_no: brnoFilter.value,
+                        property_type: typeFilter.value
+                    });
+                }
             } else {
                 toastr.error(result.message || 'แก้ไขข้อมูลไม่สำเร็จ');
             }

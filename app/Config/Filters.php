@@ -20,10 +20,10 @@ class Filters extends BaseConfig
 
     public array $globals = [
         'before' => [
-            // 'csrf',
+             'csrf',
         ],
         'after' => [
-            'toolbar',
+            // 'toolbar',
         ],
     ];
 }

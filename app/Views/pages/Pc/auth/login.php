@@ -84,6 +84,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 <script>
+const csrfTokenName = "<?= csrf_token() ?>";
+const csrfTokenHash = "<?= csrf_hash() ?>";
+
+function appendCsrfToken(formData) {
+    formData.append(csrfTokenName, csrfTokenHash);
+    return formData;
+}
+
 // ตั้งค่า toastr
 toastr.options = {
     "closeButton": true,
@@ -130,6 +138,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 const formData = new FormData();
                 formData.append("USER_NAME", userInput.value);
                 formData.append("U_PASSWORD", md5Password);
+                appendCsrfToken(formData);
 
                 const res = await fetch("<?= base_url('auth/chk_login') ?>", {
                     method: "POST",
@@ -222,6 +231,7 @@ document.addEventListener("DOMContentLoaded", function() {
             formData.append("forgot_input", UsernameInput.value);
             formData.append("forgot_empid", empidInput.value);
             formData.append("forgot_email", emailInput.value);
+            appendCsrfToken(formData);
 
             const res = await fetch("<?= base_url('auth/forgot-password') ?>", {
                 method: "POST",

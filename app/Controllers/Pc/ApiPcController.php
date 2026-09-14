@@ -138,6 +138,25 @@ class ApiPcController extends ResourceController{
 
         $oldData = $this->PcModel->find($id);
         if (!$oldData) return $this->failNotFound("PC not found");
+        $fields = [
+            'user_name', 'computer_name', 'login_user', 'terminal_server', 'terminal_login',
+            'location', 'band', 'model', 'ip_address', 'ram', 'harddisk', 'cpu', 'os', 'office',
+            'solfware', 'printer', 'printer_share_name', 'outlet_port', 'use_status', 'remark',
+            'br_no', 'serial_no', 'buy_date', 'property_code', 'property_type', 'monitor'
+        ];
+
+        $normalizeValue = function ($field, $val) {
+            if ($val === null || $val === '' || $val === '1900-01-01 00:00:00') {
+                return '';
+            }
+
+            if ($field === 'buy_date') {
+                return substr(str_replace('T', ' ', (string) $val), 0, 16);
+            }
+
+            return trim((string) $val);
+        };
+
         // ตรวจสอบการเปลี่ยนแปลง ถ้ามีการเปลี่ยนแปลงโดยจากค่าเก่าใน oldVal ไม่เคยมีข้อมูลหรือเป็นค่าว่าง หรือ null
         // ฟังก์ชันช่วยแปลงค่าก่อนเก็บใน history
         $formatValue = function ($val) {
@@ -155,33 +174,40 @@ class ApiPcController extends ResourceController{
 
         // ตรวจสอบการเปลี่ยนแปลง
         $changes = [];
-        foreach ($data as $key => $newVal) {
+        foreach ($fields as $key) {
+            $newVal = $data[$key] ?? null;
             $oldVal = $oldData[$key] ?? null;
 
-            if ($oldVal != $newVal) {
+            if ($normalizeValue($key, $oldVal) !== $normalizeValue($key, $newVal)) {
                 $changes[] = "เปลี่ยนแปลง {$key} จาก {$formatValue($oldVal)} เป็น {$formatValue($newVal)}";
             }
         }
 
+        if (empty($changes)) {
+            return $this->respond([
+                'status'     => 'success',
+                'message'    => 'ไม่มีการเปลี่ยนแปลงข้อมูล',
+                'no_changes' => true,
+                'changes'    => []
+            ]);
+        }
+
         // อัปเดตข้อมูลใน pc_detail_master
         if ($this->PcModel->updateDataById($id, $data)) {
-            if (!empty($changes)) {
-                $userId = session()->get('USER_NAME'); // ดึงจาก session
-                $historyModel->insert([
-                    'pc_id'       => $id,
-                    'date_update' => date('Y-m-d H:i:s'),
-                    'detail'      => implode(", ", $changes),
-                    'userid'      => $userId,
-                    'last_update' => date('Y-m-d H:i:s')
-                ]);
-            }
+            $userId = session()->get('USER_NAME'); // ดึงจาก session
+            $historyModel->insert([
+                'pc_id'       => $id,
+                'date_update' => date('Y-m-d H:i:s'),
+                'detail'      => implode(", ", $changes),
+                'userid'      => $userId,
+                'last_update' => date('Y-m-d H:i:s')
+            ]);
 
             return $this->respondUpdated([
-                'status'  => 'success',
-                'message' => !empty($changes)
-                    ? 'PC updated history successfully'
-                    : 'PC updated successfully (no changes)',
-                'changes' => $changes
+                'status'     => 'success',
+                'message'    => 'PC updated history successfully',
+                'no_changes' => false,
+                'changes'    => $changes
             ]);
         }
 

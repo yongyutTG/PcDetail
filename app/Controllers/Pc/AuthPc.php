@@ -50,6 +50,7 @@ class AuthPc extends BaseController
         }
         $userModel->updateLoginTime($user_login['USER_ID']);
 
+        $session->regenerate(true);
         $session->set([
             'USER_ID' => $user_login['USER_ID'],
             'USER_NAME' => $user_login['USER_NAME'],
@@ -111,7 +112,8 @@ class AuthPc extends BaseController
         );
       
         //ถ้าเป็น admin → ไปหน้า admin
-        if (strtolower($user_login['USER_NAME']) === 'it0007') {
+        $isAdmin = \App\Libraries\AdminAccess::allows($user_login['USER_NAME']);
+        if ($isAdmin) {
             $redirectUrl = base_url('admin');
             log_message('info', "[LOGIN REDIRECT]  Admin {$input_username} redirected to listUser page");
         } else {
@@ -122,6 +124,7 @@ class AuthPc extends BaseController
             'status'             => 'success',
             'message'            => 'เข้าสู่ระบบสำเร็จ',
             'redirect'           => $redirectUrl,
+            'is_admin'           => $isAdmin,
             'token_type'         => 'Bearer',
             'access_token'       => $accessToken,
             'refresh_token'      => $refreshToken,
@@ -241,8 +244,7 @@ class AuthPc extends BaseController
                 'message' => 'รหัสผ่านใหม่ถูกส่งไปที่อีเมลของคุณแล้ว'
             ]);
         } else {
-            $data = $email->printDebugger(['headers', 'subject', 'body']);
-            log_message('error', "[FORGOT PASSWORD] Email send failed for user: {$input_userForgot}. Error: " . json_encode($data));
+            log_message('error', '[FORGOT PASSWORD] Email delivery failed');
             return $this->response->setJSON([
                 'status' => 'error',
                 'message' => 'ไม่สามารถส่งอีเมลได้ กรุณาลองใหม่อีกครั้ง',
@@ -273,6 +275,16 @@ class AuthPc extends BaseController
     }
     public function attemptRegister()
     {
+        if (!$this->validate([
+            'USER_NAME' => 'required|max_length[100]',
+            'EMP_ID' => 'permit_empty|max_length[50]',
+            'EMAIL' => 'required|valid_email',
+            'IS_ACTIVE' => 'required|in_list[0,1]',
+            'GROUP_ID' => 'required|in_list[1,10]',
+        ])) {
+            return $this->response->setStatusCode(422)
+                ->setJSON(['status' => 'error', 'message' => 'Invalid user data']);
+        }
         $userModel = new UserModel();
         $input_userRegister = $this->request->getPost('USER_NAME');
         $Passwordemail = $this->request->getPost('EMAIL');
@@ -308,10 +320,10 @@ class AuthPc extends BaseController
             'IS_ACTIVE' => $this->request->getPost('IS_ACTIVE'),
             'GROUP_ID' => $this->request->getPost('GROUP_ID'),
             'SUP_ADMIN' => null,
-            'CREATED_USERID' => $this->request->getPost('CREATED_USERID'),
-            'UPDATED_USERID' => $this->request->getPost('UPDATED_USERID'),
-            'CREATED_DATE' => $this->request->getPost('CREATED_DATE'),
-            'UPDATED_DATE' => $this->request->getPost('UPDATED_DATE'),
+            'CREATED_USERID' => session()->get('USER_ID'),
+            'UPDATED_USERID' => session()->get('USER_ID'),
+            'CREATED_DATE' => date('Y-m-d H:i:s'),
+            'UPDATED_DATE' => date('Y-m-d H:i:s'),
         ];
         try {
             $userModel->insert($userData);
@@ -334,11 +346,9 @@ class AuthPc extends BaseController
                     'message' => 'สมัครผู้ใช้งานเรียบร้อย และส่งรหัสผ่านไปที่อีเมลแล้ว'
                 ]);
             } else {
-                $debug = $email->printDebugger(['headers', 'subject', 'body']);
                 return $this->response->setJSON([
                     'status' => 'warning',
                     'message' => 'สมัครผู้ใช้งานสำเร็จ แต่ส่งอีเมลไม่สำเร็จ',
-                    'debug' => $debug
                 ]);
             }
         } catch (\Exception $e) {
@@ -353,7 +363,7 @@ class AuthPc extends BaseController
     public function getUsers()
     {
         $userModel = new UserModel();
-        $users = $userModel
+        $users = $userModel->select('USER_ID, USER_NAME, EMP_ID, IS_ACTIVE, GROUP_ID, CREATED_DATE, UPDATED_DATE')
             ->where('GROUP_ID', 10)
             ->orderBy('USER_ID', 'DESC')
             ->findAll();
@@ -366,7 +376,7 @@ class AuthPc extends BaseController
     // ดึงข้อมูลผู้ใช้งานตาม ID
     public function getUserById($id)
     {
-        $user = $this->userModel->find($id);
+        $user = $this->userModel->select('USER_ID, USER_NAME, EMP_ID, IS_ACTIVE, GROUP_ID, CREATED_DATE, UPDATED_DATE')->find($id);
         if ($user) {
             return $this->response->setJSON(['status' => 'success', 'data' => $user]);
         } else {
@@ -376,11 +386,28 @@ class AuthPc extends BaseController
     // แก้ไขผู้ใช้งาน
     public function updateUser()
     {
-        $data_updateUser = $this->request->getPost();
-        $id = $data_updateUser['USER_ID'];
-        unset($data_updateUser['USER_ID']);
-        $this->userModel->update($id, $data_updateUser);
-        log_message('info', "[UPDATE USER] User ID {$id} updated with data: " . json_encode($data_updateUser));
+        $input = $this->request->getPost();
+        $rules = [
+            'USER_ID' => 'required|is_natural_no_zero',
+            'USER_NAME' => 'required|max_length[100]',
+            'EMP_ID' => 'permit_empty|max_length[50]',
+            'IS_ACTIVE' => 'required|in_list[0,1]',
+            'GROUP_ID' => 'required|in_list[1,10]',
+        ];
+        if (!$this->validate($rules)) {
+            return $this->response->setStatusCode(422)->setJSON(['status' => 'error', 'message' => 'Invalid user data']);
+        }
+        $id = (int) $input['USER_ID'];
+        if (!$this->userModel->find($id)) {
+            return $this->response->setStatusCode(404)->setJSON(['status' => 'error', 'message' => 'User not found']);
+        }
+        $data = array_intersect_key($input, array_flip(['USER_NAME', 'EMP_ID', 'IS_ACTIVE', 'GROUP_ID']));
+        $data['UPDATED_USERID'] = session()->get('USER_ID');
+        $data['UPDATED_DATE'] = date('Y-m-d H:i:s');
+        if (!$this->userModel->update($id, $data)) {
+            return $this->response->setStatusCode(422)->setJSON(['status' => 'error', 'message' => 'Update failed']);
+        }
+        log_message('info', '[UPDATE USER] Updated user ID ' . $id);
         return $this->response->setJSON(['status' => 'success', 'message' => 'แก้ไขสำเร็จ']);
     }
 

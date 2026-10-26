@@ -168,4 +168,6 @@ class Cache extends BaseConfig
         'redis'     => RedisHandler::class,
         'wincache'  => WincacheHandler::class,
     ];
+    // Defaults introduced by the PHP 8.4 / CodeIgniter upgrade.
+    public array $cacheStatusCodes = [];
 }

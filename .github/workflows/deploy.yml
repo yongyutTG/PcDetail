@@ -1,13 +1,69 @@
 name: CI-CD CI4 Deploy
 
 on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
   push:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
+  test:
+    name: Test PHP and JavaScript
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP matching production
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: intl, mbstring, gd, zip, dom, fileinfo, xml, xmlreader, xmlwriter, sqlite3
+          tools: composer:v2
+          coverage: none
+
+      - name: Setup Node.js for browser regression tests
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate Composer configuration
+        run: composer validate --no-check-publish
+
+      - name: Install dependencies including PHPUnit
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Prepare test directories
+        run: mkdir -p writable/cache writable/logs writable/session
+
+      - name: Check PHP syntax
+        run: find app tests -name '*.php' -print0 | xargs -0 -n1 php -l
+
+      # Tests use mocked models or an isolated in-memory SQLite database.
+      - name: Run PHP regression tests
+        run: php vendor/bin/phpunit --no-coverage --no-logging --do-not-cache-result
+
+      - name: Test XSS protection and token refresh
+        run: |
+          node tests/security/rendering.test.js
+          node tests/security/api-refresh.test.js
+
   deploy:
+    name: Deploy after tests pass
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: self-hosted
+    concurrency:
+      group: pcdetail-production
+      cancel-in-progress: false
 
     steps:
       - name: Checkout
@@ -15,5 +71,4 @@ jobs:
 
       - name: Deploy
         run: |
-          cd /var/www/html/PcDetail
-          sh build/deploy.sh
+          bash "$GITHUB_WORKSPACE/build/deploy.sh"

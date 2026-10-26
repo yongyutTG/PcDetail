@@ -221,7 +221,7 @@ registerForm.addEventListener("submit", async function(e) {
         const formData = new FormData(registerForm);
         // formData.set("U_PASSWORD", md5Password);
 
-        const res = await fetch("<?= base_url('admin/attemptRegister') ?>", {
+        const res = await pcFetch("<?= base_url('admin/attemptRegister') ?>", {
             method: "POST",
             body: formData
         });
@@ -255,7 +255,7 @@ registerForm.addEventListener("submit", async function(e) {
 });
 
 function openEditModal(userId) {
-    fetch(`<?= base_url('auth/getUserById') ?>/${userId}`)
+    pcFetch(`<?= base_url('auth/getUserById') ?>/${userId}`)
         .then(res => res.json())
         .then(data => {
             if (data.status === "success") {
@@ -283,7 +283,7 @@ function openEditModal(userId) {
 
 async function loadUsers() {
     try {
-        const res = await fetch("<?= base_url('auth/getUsers') ?>");
+        const res = await pcFetch("<?= base_url('auth/getUsers') ?>");
         const data = await res.json();
 
         const tbody = document.getElementById("tableBody");
@@ -291,6 +291,7 @@ async function loadUsers() {
 
         if (data.status === "success" && data.data.length > 0) {
             data.data.forEach((user, index) => {
+                user = escapeRecord(user);
                 const tr = document.createElement("tr");
                 tr.innerHTML = `
             <td>${index + 1}</td>
@@ -340,7 +341,7 @@ editForm.addEventListener("submit", async function(e) {
     try {
         const formData = new FormData(editForm);
 
-        const res = await fetch("<?= base_url('auth/updateUser') ?>", {
+        const res = await pcFetch("<?= base_url('auth/updateUser') ?>", {
             method: "POST",
             body: formData
         });
@@ -398,7 +399,7 @@ tbody.addEventListener("click", function(e) {
 function confirmDelete(userId) {
     if (!confirm("คุณแน่ใจหรือไม่ว่าจะลบผู้ใช้งานนี้?")) return;
 
-    fetch(`<?= base_url('auth/deleteUser') ?>/${userId}`, {
+    pcFetch(`<?= base_url('auth/deleteUser') ?>/${userId}`, {
             method: "DELETE"
         })
         .then(res => res.json())

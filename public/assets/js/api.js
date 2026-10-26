@@ -1,65 +1,72 @@
-async function apiFetch(url, options = {}) {
-    let accessToken = localStorage.getItem('access_token');
-    let refreshToken = localStorage.getItem('refresh_token');
+let refreshPromise = null;
+let loginRedirectStarted = false;
 
-    options.headers = {
-        'Accept': 'application/json',
-        ...(options.headers || {}),
-        'X-CSRF-TOKEN': window.CSRF_TOKEN,
-        'Authorization': `Bearer ${accessToken}`
-    };
-
-    let res = await fetch(url, options);
-    if (res.status === 401) {
-        const errorData = await res.clone().json().catch(() => ({}));
-        console.log("API 401:", errorData);
-
-        if (errorData.code === 'TOKEN_EXPIRED') {
-            console.log("Access Token หมดอายุ กำลัง refresh token...");
-        }
-
-        const refreshRes = await fetch(`${window.BASE_URL}jwt/refresh`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-                "X-CSRF-TOKEN": window.CSRF_TOKEN
-            },
-            body: JSON.stringify({
-                refresh_token: refreshToken
-            })
-        });
-
-        if (!refreshRes.ok) {
-            const refreshError = await refreshRes.json().catch(() => ({}));
-            console.log("Refresh failed:", refreshError);
-            Swal.fire({
-                icon: 'warning',
-                title: 'Token หมดอายุ',
-                text: 'กรุณาเข้าสู่ระบบใหม่'
-            }).then(() => {
-                localStorage.removeItem('access_token');
-                localStorage.removeItem('refresh_token');
-                window.location.href = `${window.BASE_URL}login`;
-            });
-            
-            $(document).on("click", "#btnYes", function() {
-                localStorage.removeItem('access_token');
-                localStorage.removeItem('refresh_token');
-                window.location.href = `${window.BASE_URL}login`;
-            });
-           
-            // หยุด function
-            return new Promise(() => {});
-            //throw new Error('Refresh token expired');
-        }
-
-        const refreshData = await refreshRes.json();
-        console.log("ได้ Access Token ใหม่แล้ว");
-        localStorage.setItem('access_token', refreshData.access_token);
-        options.headers['Authorization'] = `Bearer ${refreshData.access_token}`;
-        res = await fetch(url, options);
+function requireLogin() {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    if (!loginRedirectStarted) {
+        loginRedirectStarted = true;
+        window.location.href = window.BASE_URL + 'login';
     }
+    throw new Error('Authentication expired. Please login again.');
+}
 
-    return res;
+// Only a scheduling hint: the server still verifies signatures and account status.
+function tokenNeedsRefresh(token) {
+    if (!token) return true;
+    try {
+        const part = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+        const payload = JSON.parse(atob(part.padEnd(Math.ceil(part.length / 4) * 4, '=')));
+        return typeof payload.exp !== 'number' || payload.exp <= Date.now() / 1000 + 15;
+    } catch (_) {
+        return true;
+    }
+}
+
+function refreshAccessToken() {
+    if (refreshPromise) return refreshPromise;
+    refreshPromise = (async () => {
+        const refreshToken = localStorage.getItem('refresh_token');
+        if (!refreshToken) return requireLogin();
+        const response = await fetch(window.BASE_URL + 'jwt/refresh', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': window.CSRF_TOKEN
+            },
+            body: JSON.stringify({ refresh_token: refreshToken })
+        });
+        if (response.status === 401) return requireLogin();
+        if (!response.ok) throw new Error('Token refresh failed: HTTP ' + response.status);
+        const data = await response.json();
+        if (typeof data.access_token !== 'string' || !data.access_token) {
+            throw new Error('Invalid token refresh response');
+        }
+        localStorage.setItem('access_token', data.access_token);
+        return data.access_token;
+    })().finally(() => { refreshPromise = null; });
+    return refreshPromise;
+}
+
+async function apiFetch(url, options = {}) {
+    let token = localStorage.getItem('access_token');
+    if (tokenNeedsRefresh(token)) token = await refreshAccessToken();
+    const send = accessToken => {
+        const headers = new Headers(options.headers || {});
+        headers.set('Accept', 'application/json');
+        headers.set('X-CSRF-TOKEN', window.CSRF_TOKEN);
+        headers.set('Authorization', 'Bearer ' + accessToken);
+        return fetch(url, { ...options, headers });
+    };
+    let response = await send(token);
+    if (response.status !== 401) return response;
+
+    // Another request may already have refreshed while this response was in flight.
+    const latest = localStorage.getItem('access_token');
+    token = latest && latest !== token && !tokenNeedsRefresh(latest)
+        ? latest : await refreshAccessToken();
+    response = await send(token);
+    if (response.status === 401) return requireLogin();
+    return response;
 }

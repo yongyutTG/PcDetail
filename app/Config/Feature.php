@@ -27,4 +27,8 @@ class Feature extends BaseConfig
      * Use improved new auto routing instead of the default legacy version.
      */
     public bool $autoRoutesImproved = false;
+    // Defaults introduced by the PHP 8.4 / CodeIgniter upgrade.
+    public bool $oldFilterOrder = false;
+    public bool $limitZeroAsAll = true;
+    public bool $strictLocaleNegotiation = false;
 }

@@ -59,4 +59,6 @@ class View extends BaseView
      * @var list<class-string<ViewDecoratorInterface>>
      */
     public array $decorators = [];
+    // Defaults introduced by the PHP 8.4 / CodeIgniter upgrade.
+    public string $appOverridesFolder = 'overrides';
 }

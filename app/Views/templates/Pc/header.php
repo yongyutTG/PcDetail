@@ -14,6 +14,8 @@ if ($row && isset($row->db_date)) {
 ?>
 
 <head>
+    <script>window.CSRF_TOKEN = <?= json_encode(csrf_hash()) ?>;</script>
+    <script src="<?= base_url('assets/js/security.js') ?>"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -251,7 +253,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const md5newPass = md5(newPass);
 
         try {
-            const response = await fetch("<?= site_url('user/changePassword') ?>", {
+            const response = await pcFetch("<?= site_url('user/changePassword') ?>", {
                 method: "POST",
                 headers: apiHeaders,
                 body: JSON.stringify({
@@ -306,7 +308,7 @@ setInterval(checkSession, 30000);
 
 async function checkSession() {
     try {
-        const res = await fetch("<?= base_url('check-session') ?>", {
+        const res = await pcFetch("<?= base_url('check-session') ?>", {
             method: "GET",
         });
         if (res.status === 401) {

@@ -633,6 +633,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Render สร้างแถวในตาราง PC 
     function addTableRow(pc) {
+        pc = escapeRecord(pc);
         const row = document.createElement("tr");
         const branchNames = {
             "001": "ลาดพร้าว",
@@ -1192,6 +1193,7 @@ document.addEventListener("DOMContentLoaded", function() {
             return;
         }
         history.forEach(item => {
+            item = escapeRecord(item);
             const tr = document.createElement('tr');
             tr.innerHTML = `
         <td>${item.pc_id || '-'}</td>
@@ -1215,6 +1217,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //Render Pc modal
     function renderDetailHTML(pc) {
+        pc = escapeRecord(pc);
         const branchNames = {
             "001": "ลาดพร้าว",
             "002": "ดอนเมือง",

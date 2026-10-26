@@ -1,2 +1,6 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Deployment scripts must remain executable by Linux shells.
+*.sh text eol=lf
+spark text eol=lf

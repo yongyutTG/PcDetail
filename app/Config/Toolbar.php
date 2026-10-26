@@ -119,4 +119,10 @@ class Toolbar extends BaseConfig
     public array $watchedExtensions = [
         'php', 'css', 'js', 'html', 'svg', 'json', 'env',
     ];
+    // Defaults introduced by the PHP 8.4 / CodeIgniter upgrade.
+    public array $disableOnHeaders = [
+        'X-Requested-With' => 'xmlhttprequest', // AJAX requests
+        'HX-Request'       => 'true',           // HTMX requests
+        'X-Up-Version'     => null,             // Unpoly partial requests
+    ];
 }

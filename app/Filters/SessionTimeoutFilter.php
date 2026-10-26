@@ -21,7 +21,7 @@ class SessionTimeoutFilter implements FilterInterface
                 ->to(base_url('login'));
         }
 
-        $idleTimeout =(int) (getenv('SESSION_IDLE_TIMEOUT'));   
+        $idleTimeout = max(1, (int) env('SESSION_IDLE_TIMEOUT', 600));
 
         $lastActivity =
             $session->get('last_activity');

@@ -1,3 +1,6 @@
+<FilesMatch "^\.(env|git)">
+    Require all denied
+</FilesMatch>
 # Disable directory browsing
 Options -Indexes
 php_value memory_limit 512M

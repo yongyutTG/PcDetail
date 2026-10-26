@@ -12,14 +12,14 @@ $routes->setDefaultController('Home');
 $routes->setDefaultMethod('index');
 $routes->setTranslateURIDashes(false);
 $routes->set404Override();
-$routes->setAutoRoute(true);
+$routes->setAutoRoute(false);
 
 // หน้า Login และจัดการ Authentication
 $routes->get('/', 'Pc\AuthPc::login');
 $routes->get('login', 'Pc\AuthPc::login');
 $routes->post('auth/chk_login', 'Pc\AuthPc::chk_login');
 $routes->post('auth/forgot-password', 'Pc\AuthPc::forgotPassword');
-$routes->post('user/changePassword', 'Pc\AuthPc::changePassword');
+$routes->post('user/changePassword', 'Pc\AuthPc::changePassword', ['filter' => 'sessionTimeout']);
 
 
 
@@ -32,18 +32,24 @@ $routes->get('dashboard', 'Pc\Dashboard::index'); // หน้า Dashboard
 $routes->get('all-listPC', 'Pc\listPC::index'); // หน้า
 $routes->get('logPC', 'Pc\logPC::index'); // หน้า logPC
 $routes->get('ScanIP', 'Pc\ScanIP::index');   // เปิดหน้า Scan ทั้งหมด
-$routes->get('scanip/scan', 'Pc\ScanIP::scan');  // API สำหรับสแกน (ใช้ POST เท่านั้น)
+$routes->get('scanip/scan', 'Pc\ScanIP::scan');  // Read-only scan; authenticated and range-limited
 //หน้าadmin
-$routes->get('admin', 'Pc\AdminPc::register');
-$routes->post('admin/attemptRegister', 'Pc\AdminPc::attemptRegister');
+
+
 $routes->get('logout', 'Pc\AuthPc::logout');
 });
 
-//หน้า admin
+// Administrator endpoints (session AND server-side authorization).
+$routes->group('', ['filter' => 'admin'], function ($routes) {
+$routes->get('admin', 'Pc\AdminPc::register');
+$routes->post('admin/attemptRegister', 'Pc\AdminPc::attemptRegister');
+$routes->post('auth/attemptRegister', 'Pc\AuthPc::attemptRegister');
 $routes->get('auth/getUsers', 'Pc\AuthPc::getUsers');
 $routes->get('auth/getUserById/(:num)', 'Pc\AuthPc::getUserById/$1');
 $routes->post('auth/updateUser', 'Pc\AuthPc::updateUser');
 $routes->delete('auth/deleteUser/(:num)', 'Pc\AuthPc::deleteUser/$1');
+$routes->get('log-viewer', 'Pc\LogViewer::index');
+});
 
 //API Routes สำหรับจัดการข้อมูล PC โดยใช้ JWT Authentication
 //$routes->group('api-pc', ['filter' => 'apikey'], function ($routes) {
@@ -65,14 +71,13 @@ $routes->group('api-pc', ['filter' => 'jwtauth'], function ($routes) {
     $routes->get('recent-editions', 'Pc\ApiPcController::recentEditions');
 });
 
-$routes->post('jwt/create', 'Pc\JwtController::createToken');
+
 $routes->post('jwt/login', 'Pc\JwtController::login');
 $routes->post('jwt/refresh', 'Pc\JwtController::refresh');
 $routes->get('jwt/verify', 'Pc\JwtController::verifyToken');
 $routes->post('jwt/verify', 'Pc\JwtController::verifyToken');
 
-//LogViewer
-$routes->get('log-viewer', 'Pc\LogViewer::index');
+
 
 // $routes->group('api',['filter'=>'apilogger'],function($routes){
 //     $routes->get('login', 'Pc\AuthPc::login');  

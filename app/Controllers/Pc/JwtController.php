@@ -35,7 +35,7 @@ class JwtController extends ResourceController
             return $this->fail('กรุณาส่ง username และ password', 400);
         }
 
-        $userModel = new UserModel();
+        $userModel = model(UserModel::class);
         $user = $userModel->getActiveUserByUsername($username);
 
         if (! $user) {
@@ -116,10 +116,10 @@ class JwtController extends ResourceController
                 ], 401);
             }
 
-            $userModel = new UserModel();
+            $userModel = model(UserModel::class);
             $user = $userModel->find($userId);
 
-            if (! $user) {
+            if (!$user || (string) ($user['IS_ACTIVE'] ?? '') !== '1') {
                 return $this->respond([
                     'status' => 'error',
                     'code' => 'USER_NOT_FOUND',

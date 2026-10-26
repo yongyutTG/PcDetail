@@ -99,4 +99,7 @@ class Session extends BaseConfig
      * DB Group for the database session.
      */
     public ?string $DBGroup = null;
+    // Defaults introduced by the PHP 8.4 / CodeIgniter upgrade.
+    public int $lockRetryInterval = 100_000;
+    public int $lockMaxRetries = 300;
 }

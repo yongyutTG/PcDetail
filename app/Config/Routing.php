@@ -111,4 +111,8 @@ class Routing extends BaseRouting
      * @var array<string, string>
      */
     public array $moduleRoutes = [];
+    // Defaults introduced by the PHP 8.4 / CodeIgniter upgrade.
+    public bool $useControllerAttributes = true;
+    public bool $multipleSegmentsOneParam = false;
+    public bool $translateUriToCamelCase = true;
 }

@@ -154,8 +154,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     toastr.success(data.message, "สำเร็จ");
 
                     // ✅ ตรวจสอบว่าเป็น admin ไหม
-                    if (userInput.value.toLowerCase() === "it0007") {
-                        // ต้องการให้ดึงค่าจาก env หรือ database มาเช็คก็ได้ครับทำไง
+                    if (data.is_admin === true) {
 
                         // แสดง popup ให้เลือกหน้า
                         Swal.fire({

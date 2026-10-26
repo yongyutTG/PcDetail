@@ -1,5 +1,5 @@
 <?php
-namespace App\Controllers;
+namespace App\Controllers\Pc;
 
 use CodeIgniter\Controller;
 
@@ -15,9 +15,7 @@ class LogViewer extends Controller
         }
 
         $logContent = file_get_contents($latestLogFile);
-        return view('templates/header', ['title' => 'Log Viewer'])
-            . view('log_view', ['logContent' => nl2br($logContent)])
-            . view('templates/footer', ['title' => 'Log Viewer']);
+        return $this->response->setContentType('text/plain')->setBody($logContent);
     }
 
     private function getLatestLogFile($path)

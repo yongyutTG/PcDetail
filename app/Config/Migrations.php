@@ -47,4 +47,6 @@ class Migrations extends BaseConfig
      * - Y_m_d_His_
      */
     public string $timestampFormat = 'Y-m-d-His_';
+    // Defaults introduced by the PHP 8.4 / CodeIgniter upgrade.
+    public bool $lock = false;
 }

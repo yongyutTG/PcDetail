@@ -173,4 +173,6 @@ class ContentSecurityPolicy extends BaseConfig
      * Replace nonce tag automatically
      */
     public bool $autoNonce = true;
+    // Defaults introduced by the PHP 8.4 / CodeIgniter upgrade.
+    public ?string $reportTo = null;
 }

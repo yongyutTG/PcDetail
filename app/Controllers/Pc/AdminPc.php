@@ -43,7 +43,18 @@ class AdminPc extends BaseController
         return view('templates/admin/header-admin')
             . view('pages/Pc/admin/admin');
     }
-    public function attemptRegister(){
+    public function attemptRegister()
+    {
+        if (!$this->validate([
+            'USER_NAME' => 'required|max_length[100]',
+            'EMP_ID' => 'permit_empty|max_length[50]',
+            'EMAIL' => 'required|valid_email',
+            'IS_ACTIVE' => 'required|in_list[0,1]',
+            'GROUP_ID' => 'required|in_list[1,10]',
+        ])) {
+            return $this->response->setStatusCode(422)
+                ->setJSON(['status' => 'error', 'message' => 'Invalid user data']);
+        }
         $userModel = new UserModel();
         $username = $this->request->getPost('USER_NAME');
         $Passwordemail = $this->request->getPost('EMAIL');
@@ -74,10 +85,10 @@ class AdminPc extends BaseController
             'IS_ACTIVE' => $this->request->getPost('IS_ACTIVE'),
             'GROUP_ID' => $this->request->getPost('GROUP_ID'),
             'SUP_ADMIN' => null,
-            'CREATED_USERID' => $this->request->getPost('CREATED_USERID'),
-            'UPDATED_USERID' => $this->request->getPost('UPDATED_USERID'),
-            'CREATED_DATE' => $this->request->getPost('CREATED_DATE'),
-            'UPDATED_DATE' => $this->request->getPost('UPDATED_DATE'),
+            'CREATED_USERID' => session()->get('USER_ID'),
+            'UPDATED_USERID' => session()->get('USER_ID'),
+            'CREATED_DATE' => date('Y-m-d H:i:s'),
+            'UPDATED_DATE' => date('Y-m-d H:i:s'),
         ];
         try {
             $userModel->insert($userData);
@@ -107,11 +118,9 @@ class AdminPc extends BaseController
                     'message' => 'สมัครผู้ใช้งานเรียบร้อย และส่งรหัสผ่านไปที่อีเมลแล้ว'
                 ]);
             } else {
-                $debug = $email->printDebugger(['headers', 'subject', 'body']);
                 return $this->response->setJSON([
                     'status' => 'warning',
                     'message' => 'สมัครผู้ใช้งานสำเร็จ แต่ส่งอีเมลไม่สำเร็จ',
-                    'debug' => $debug
                 ]);
             }
         } catch (\Exception $e) {
@@ -126,7 +135,7 @@ class AdminPc extends BaseController
     //ข้อมูลผู้ใช้งาน GROUP_ID = 10
     public function getUsers(){
         $userModel = new UserModel();
-        $users = $userModel
+        $users = $userModel->select('USER_ID, USER_NAME, EMP_ID, IS_ACTIVE, GROUP_ID, CREATED_DATE, UPDATED_DATE')
             ->where('GROUP_ID', 10)
             ->orderBy('USER_ID', 'DESC')
             ->findAll();

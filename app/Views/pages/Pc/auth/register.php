@@ -156,7 +156,7 @@
       const formData = new FormData(registerForm);
       formData.set("U_PASSWORD", md5Password);
 
-      const res = await fetch("<?= base_url('auth/attemptRegister') ?>", {
+      const res = await pcFetch("<?= base_url('auth/attemptRegister') ?>", {
         method: "POST",
         body: formData
       });
@@ -192,7 +192,7 @@
 
   async function loadUsers() {
     try {
-      const res = await fetch("<?= base_url('auth/getUsers') ?>");
+      const res = await pcFetch("<?= base_url('auth/getUsers') ?>");
       const data = await res.json();
 
       const tbody = document.getElementById("tableBody");
@@ -200,6 +200,7 @@
 
       if (data.status === "success" && data.data.length > 0) {
         data.data.forEach((user, index) => {
+          user = escapeRecord(user);
           const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>${index + 1}</td>

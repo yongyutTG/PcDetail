@@ -35,8 +35,18 @@ class JWTAuth implements FilterInterface
                 new Key($secretKey, 'HS256')
             );
 
-            service('request')->userData = $decoded;
+            if (($decoded->type ?? '') !== 'access' || empty($decoded->data->id)) {
+                throw new \UnexpectedValueException('Invalid access token');
+            }
+            $user = model(\App\Models\Pc\UserModel::class)->find($decoded->data->id);
+            if (!$user || (string) ($user['IS_ACTIVE'] ?? '') !== '1') {
+                throw new \UnexpectedValueException('Inactive account');
+            }
+            // The verified account is checked above; no dynamic request properties are needed.
 
+        } catch (\Firebase\JWT\ExpiredException $e) {
+            return service('response')->setStatusCode(401)
+                ->setJSON(['message' => 'Access token expired', 'code' => 'TOKEN_EXPIRED']);
         } catch (\Exception $e) {
 
             log_message('error', $e->getMessage());

@@ -7,6 +7,7 @@ use Mpdf\Mpdf;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class PdfExportController extends BaseController{
+    protected $loan_model;
     public function __construct() {
         // เรียกข้อมูลจาก Model
         $this->loan_model = new LoanCompareModel();

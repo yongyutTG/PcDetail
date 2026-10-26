@@ -18,36 +18,28 @@ class ScanIP extends Controller
     public function scan()
     {
        
-        $baseIp = $this->request->getGet('base');
-        $start  = (int) $this->request->getGet('start');
-        $end    = (int) $this->request->getGet('end');
-         $page  = (int)$this->request->getGet('page') ?? 1;
-        $limit = 30;
-
-        log_message('debug', "Scan request: base={$baseIp}, start={$start}, end={$end}");
-
+        if (!session()->get('logged_in')) {
+            return $this->response->setStatusCode(401)->setJSON(['message' => 'Unauthorized']);
+        }
+        try {
+            $addresses = \App\Libraries\ScanRange::addresses(
+                $this->request->getGet('base'),
+                $this->request->getGet('start'),
+                $this->request->getGet('end')
+            );
+        } catch (\InvalidArgumentException $e) {
+            return $this->response->setStatusCode(400)->setJSON(['message' => $e->getMessage()]);
+        }
         $results = [];
-
-        for ($i = $start; $i <= $end; $i++) {
-            $ip = $baseIp . '.' . $i;
-
+        foreach ($addresses as $ip) {
+            $argument = escapeshellarg($ip);
+            $command = stripos(PHP_OS, 'WIN') === 0
+                ? "ping -n 1 -w 50 $argument" : "ping -c 1 -W 1 $argument";
             $output = [];
             $retval = 1;
-
-                if (stripos(PHP_OS, 'WIN') === 0) {
-                    exec("ping -n 1 -w 50 $ip", $output, $retval);
-                    } else {
-                    exec("ping -c 1 -W 1 $ip", $output, $retval);
-                    }
-
-            log_message('debug', "Scan {$ip} result={$retval}");
-
-            $results[] = [
-                'ip' => $ip,
-                'status' => ($retval === 0) ? 'online' : 'offline'
-            ];
+            exec($command, $output, $retval);
+            $results[] = ['ip' => $ip, 'status' => $retval === 0 ? 'online' : 'offline'];
         }
-
         return $this->response->setJSON($results);
     }
 }

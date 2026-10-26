@@ -74,4 +74,6 @@ class Format extends BaseConfig
     {
         return Services::format()->getFormatter($mime);
     }
+    // Defaults introduced by the PHP 8.4 / CodeIgniter upgrade.
+    public int $jsonEncodeDepth = 512;
 }

@@ -116,6 +116,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function addTableRow(pc) {
+        pc = escapeRecord(pc);
         const row = document.createElement("tr");
         row.innerHTML = `
         <td>${pc.pc_id || ''}</td>

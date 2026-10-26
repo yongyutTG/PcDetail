@@ -172,7 +172,7 @@ async function scanIP() {
     if (data && data.length > 0) {
       const result = data[0];
       try {
-        const jwtToken = localStorage.getItem('jwtToken');
+        const jwtToken = localStorage.getItem('access_token');
         const headers = {};
         if (jwtToken) {
           headers['Authorization'] = `Bearer ${jwtToken}`;
@@ -241,6 +241,7 @@ function renderPage(page = 1) {
     tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">ไม่มีผลลัพธ์</td></tr>`;
   } else {
     pageItems.forEach(result => {
+      result = escapeRecord(result);
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>${result.ip}</td>

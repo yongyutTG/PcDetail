@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title><?= $title ?? 'My App' ?></title>
+    <link rel="icon" type="image/png" href="<?= base_url('images/logo_coop.png') ?>">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

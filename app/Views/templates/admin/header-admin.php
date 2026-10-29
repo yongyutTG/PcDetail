@@ -95,6 +95,7 @@ if ($row && isset($row->db_date)) {
         })();
     </script>
     <title>PC Detail</title>
+    <link rel="icon" type="image/png" href="<?= base_url('images/logo_coop.png') ?>">
 
 </head>
 

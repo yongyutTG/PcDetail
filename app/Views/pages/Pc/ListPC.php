@@ -16,7 +16,7 @@ $newPcId = $newPcId ?? 1;
                         <div class="card-body">
                             <div class="d-flex align-items-center gap-2 mb-3">
                                 <input type="text" id="keywordSearch" class="form-control" style="width:400px;"
-                                    placeholder="ค้นหา...">
+                                    placeholder="พิมพ์คำค้น แล้วกด Enter">
                                 <br>
                                 <label for="typeFilter" class="mb-0 fw-bold">ประเภทอุปกรณ์: </label>
                                 <select id="typeFilter"
@@ -563,6 +563,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const spinner = document.getElementById("loading-spinner");
     const tbody = document.getElementById('tableBody');
     const searchInput = document.getElementById('keywordSearch');
+    let submittedKeyword = '';
     const typeFilter = document.getElementById('typeFilter');
     const brnoFilter = document.getElementById('brnoFilter');
     const statusFilter = document.getElementById('statusFilter');
@@ -741,7 +742,7 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("firstPage").addEventListener("click", () => {
         if (currentPage > 1) fetchPCs({
             page: 1,
-            keyword: searchInput.value,
+            keyword: submittedKeyword,
             status: statusFilter.value,
             br_no: brnoFilter.value,
             property_type: typeFilter.value
@@ -750,7 +751,7 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("prevPage").addEventListener("click", () => {
         if (currentPage > 1) fetchPCs({
             page: currentPage - 1,
-            keyword: searchInput.value,
+            keyword: submittedKeyword,
             status: statusFilter.value,
             br_no: brnoFilter.value,
             property_type: typeFilter.value
@@ -759,7 +760,7 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("nextPage").addEventListener("click", () => {
         if (currentPage < totalPages) fetchPCs({
             page: currentPage + 1,
-            keyword: searchInput.value,
+            keyword: submittedKeyword,
             status: statusFilter.value,
             br_no: brnoFilter.value,
             property_type: typeFilter.value
@@ -768,7 +769,7 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("lastPage").addEventListener("click", () => {
         if (currentPage < totalPages) fetchPCs({
             page: totalPages,
-            keyword: searchInput.value,
+            keyword: submittedKeyword,
             status: statusFilter.value,
             br_no: brnoFilter.value,
             property_type: typeFilter.value
@@ -776,36 +777,30 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // Event: ค้นหา/กรอง/รีเซ็ต
-    searchInput.addEventListener('input', () => fetchPCs({
-        page: 1,
-        keyword: searchInput.value,
-        status: statusFilter.value,
-        br_no: brnoFilter.value,
-        property_type: typeFilter.value
-    }));
     statusFilter.addEventListener('change', () => fetchPCs({
         page: 1,
-        keyword: searchInput.value,
+        keyword: submittedKeyword,
         status: statusFilter.value,
         br_no: brnoFilter.value,
         property_type: typeFilter.value
     }));
     brnoFilter.addEventListener('change', () => fetchPCs({
         page: 1,
-        keyword: searchInput.value,
+        keyword: submittedKeyword,
         status: statusFilter.value,
         br_no: brnoFilter.value,
         property_type: typeFilter.value
     }));
     typeFilter.addEventListener('change', () => fetchPCs({
         page: 1,
-        keyword: searchInput.value,
+        keyword: submittedKeyword,
         status: statusFilter.value,
         br_no: brnoFilter.value,
         property_type: typeFilter.value
     }));
     resetBtn.addEventListener("click", () => {
         searchInput.value = "";
+        submittedKeyword = "";
         statusFilter.value = "A";
         // statusFilter.value = "";
         brnoFilter.value = "";
@@ -838,62 +833,19 @@ document.addEventListener("DOMContentLoaded", function() {
     const isModalOpen = () => !!document.querySelector(".modal.show") || document.body.classList.contains(
         "modal-open");
 
-    // ---------- MutationObserver: รอ tbody เปลี่ยน (ดีกว่า setTimeout) ----------
-    let pendingOpenFirstRow = false;
-    const tbodyObserver = new MutationObserver((mutations) => {
-        if (!pendingOpenFirstRow) return;
-        for (const m of mutations) {
-            if (m.addedNodes && m.addedNodes.length) {
-                pendingOpenFirstRow = false;
-                const firstRow = tbody.querySelector("tr");
-                if (firstRow && !isModalOpen()) {
-                    highlightRow(0);
-                    const viewBtn = firstRow.querySelector(".view-btn");
-                    if (viewBtn && !viewBtn.disabled) viewBtn.click();
-                }
-                break;
-            }
-        }
-    });
-    tbodyObserver.observe(tbody, {
-        childList: true
-    });
-
-    // ---------- Enter ใน searchInput: เรียก fetch แล้วเปิดแถวแรก (รองรับทั้ง Promise และ non-Promise) ----------
-    searchInput.addEventListener("keydown", async function(e) {
-        if (e.key !== "Enter") return;
+    // Search only after Enter; pagination keeps the last submitted keyword.
+    searchInput.addEventListener('keydown', function(e) {
+        if (e.key !== 'Enter' || e.isComposing) return;
         e.preventDefault();
-
-        // เตรียมให้ observer รอแถวใหม่
-        pendingOpenFirstRow = true;
-
-        // เรียก fetchPCs (ถ้าเป็น Promise เรารอ ถ้าไม่ก็ปล่อยให้ observer ทำงาน)
-        try {
-            const res = fetchPCs({
-                page: 1,
-                keyword: searchInput.value,
-                status: statusFilter.value,
-                br_no: brnoFilter.value,
-                property_type: typeFilter.value
-            });
-            if (res && typeof res.then === "function") {
-                // ถ้า fetchPCs คืน Promise ให้รอจนเสร็จ (หรือจับ error แล้ว fallback)
-                await res.catch(() => {
-                    /* ignore */
-                });
-            }
-        } catch (err) {
-            // ignore
-        }
-
-        // ถ้า table ถูกเติม synchronous แล้ว ให้เปิดทันที (fallback)
-        const firstRow = tbody.querySelector("tr");
-        if (firstRow && !isModalOpen()) {
-            pendingOpenFirstRow = false;
-            highlightRow(0);
-            const viewBtn = firstRow.querySelector(".view-btn");
-            if (viewBtn && !viewBtn.disabled) viewBtn.click();
-        }
+        if (e.repeat) return;
+        submittedKeyword = searchInput.value.trim();
+        fetchPCs({
+            page: 1,
+            keyword: submittedKeyword,
+            status: statusFilter.value,
+            br_no: brnoFilter.value,
+            property_type: typeFilter.value
+        });
     });
 
     // ---------- Keyboard navigation (Arrow Up/Down + Enter) ----------
@@ -1099,7 +1051,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     toastr.success("บันทึกแก้ไขข้อมูลเรียบร้อยแล้ว", "สำเร็จ");
                     fetchPCs({
                         page: currentPage,
-                        keyword: searchInput.value,
+                        keyword: submittedKeyword,
                         status: statusFilter.value,
                         br_no: brnoFilter.value,
                         property_type: typeFilter.value

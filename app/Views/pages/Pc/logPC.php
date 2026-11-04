@@ -11,7 +11,7 @@
                             </h6>
                             <div class="d-flex align-items-center gap-2 mb-3">
                                 <input type="text" id="keywordSearch" class="form-control" style="width: 550px;"
-                                    placeholder="ค้นหา...">
+                                    placeholder="พิมพ์คำค้น แล้วกด Enter">
                                 <br>
                                 <button type="button" id="resetBtn" class="btn btn-reset" style="min-width: 120px;">
                                     <i class="fas fa-redo"></i> รีเซ็ต
@@ -64,6 +64,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const spinner = document.getElementById("loading-spinner");
     const tbody = document.getElementById('tableBody');
     const searchInput = document.getElementById('keywordSearch');
+    let submittedKeyword = '';
     const resetBtn = document.getElementById('resetBtn');
     const searchUrlstatusLog = '<?= base_url('api-pc/searchstatusLog') ?>';
     const historyUrl = '<?= base_url('api-pc/historyLog') ?>';
@@ -175,33 +176,42 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("firstPage").addEventListener("click", () => {
         if (currentPage > 1) fetchLogPCs({
             page: 1,
-            keyword: searchInput.value
+            keyword: submittedKeyword
         });
     });
     document.getElementById("prevPage").addEventListener("click", () => {
         if (currentPage > 1) fetchLogPCs({
             page: currentPage - 1,
-            keyword: searchInput.value
+            keyword: submittedKeyword
         });
     });
     document.getElementById("nextPage").addEventListener("click", () => {
         if (currentPage < totalPages) fetchLogPCs({
             page: currentPage + 1,
-            keyword: searchInput.value
+            keyword: submittedKeyword
         });
     });
     document.getElementById("lastPage").addEventListener("click", () => {
         if (currentPage < totalPages) fetchLogPCs({
             page: totalPages,
-            keyword: searchInput.value
+            keyword: submittedKeyword
         });
     });
-    searchInput.addEventListener('input', () => fetchLogPCs({
-        page: 1,
-        keyword: searchInput.value
-    }));
+    // Search only after Enter; pagination keeps the last submitted keyword.
+    searchInput.addEventListener('keydown', function(e) {
+        if (e.key !== 'Enter' || e.isComposing) return;
+        e.preventDefault();
+        if (e.repeat) return;
+        submittedKeyword = searchInput.value.trim();
+        fetchLogPCs({
+            page: 1,
+            keyword: submittedKeyword
+        });
+    });
+
     resetBtn.addEventListener("click", () => {
         searchInput.value = "";
+        submittedKeyword = "";
         fetchLogPCs({
             page: 1
         });

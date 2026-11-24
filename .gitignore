@@ -1,5 +1,6 @@
 writable/*
 vendor/
 .env
+.env.docker
 .txt
 

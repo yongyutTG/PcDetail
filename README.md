@@ -61,6 +61,21 @@
 
 หากใช้ Apache/Nginx ให้ตั้ง document root ไปที่ `public/` และตั้ง `app.baseURL` ให้ตรงกับ URL ที่เปิดจริง XAMPP ที่ยังใช้ PHP รุ่นเก่าไม่สามารถรัน dependency ชุด PHP 8.4 นี้ได้; ดูรายละเอียดใน [คู่มือ PHP 8.4](docs/php84-upgrade.md)
 
+## เริ่มใช้งานด้วย Docker
+
+ต้องติดตั้ง Docker Desktop หรือ Docker Engine พร้อม Docker Compose และมี SQL Server ที่โปรเจกต์เชื่อมต่อได้อยู่แล้ว (Compose ชุดนี้ไม่ได้สร้างฐานข้อมูลใหม่)
+
+1. ตั้งค่าการเชื่อมต่อ SQL Server, secret และบัญชีผู้ดูแลใน `.env` ตามตัวอย่างด้านบน อย่าใส่ secret หรือรหัสผ่านลง Git
+2. สร้างและเริ่ม PHP-FPM กับ Nginx:
+
+   ```powershell
+   docker compose up -d --build
+   ```
+
+3. เปิด `http://localhost:8080/` หากพอร์ต 8080 ถูกใช้อยู่ ให้กำหนด `DOCKER_PORT` ก่อนเริ่ม เช่น `$env:DOCKER_PORT = '8081'`
+
+ดู log ด้วย `docker compose logs -f app nginx` และหยุดบริการด้วย `docker compose down` คอนเทนเนอร์ PHP ติดตั้ง PHP 8.4, Microsoft ODBC Driver 18 และส่วนขยาย `sqlsrv`/`pdo_sqlsrv`; การเชื่อมต่อฐานข้อมูลใช้ค่าจาก `.env` ภายในคอนเทนเนอร์
+
 ## ทดสอบ
 
 ```powershell

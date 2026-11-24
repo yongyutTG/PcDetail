@@ -1,0 +1,1 @@
+{DATE j-m-Y} // หน้า {PAGENO} ทั้งหมด {nbpg} หน้า
